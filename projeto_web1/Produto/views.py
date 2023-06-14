@@ -8,8 +8,6 @@ from Produto.models import Produtos
 
 
 
-
-
 def add(request):
     if request.method == "POST":
         form = ProdutoForm(request.POST);
