@@ -16,9 +16,9 @@ def add(request):
         
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/pessoa')
+            return HttpResponseRedirect('/Produto')
         
     else:
         form = ProdutoForm();
     
-    return render(request, "pessoas/add.html", {"form": form})
+    return render(request, "Produto/add.html", {"form": form})
