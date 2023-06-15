@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'Comanda',
     'Pedido',
     'Produto',
-    'Prato',
     'Funcionario',
     'Administrador',
     'Garcom',
