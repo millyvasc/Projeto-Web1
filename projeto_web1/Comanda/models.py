@@ -6,4 +6,4 @@ class Comanda(models.Model):
     mesa = models.IntegerField()
 
     def __str__(self):
-        return "Comanda = "+self.cod #Pra tentar mandar uma mensagem bonitinha tipo 'Comanda = 103'
+        return "Comanda "+str(self.cod) #Pra tentar mandar uma mensagem bonitinha tipo 'Comanda = 103'

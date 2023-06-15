@@ -10,4 +10,4 @@ class Pedido(models.Model):
     observacao = models.CharField(max_length=200)
 
     def __str__(self):
-        return "Pedido = "+self.cod
+        return "Pedido "+str(self.cod)
