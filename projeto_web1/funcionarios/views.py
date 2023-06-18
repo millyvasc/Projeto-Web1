@@ -12,12 +12,23 @@ from produtos.models import Produto
 
 class ProdutosView(ListView):
     model = Produto
-    template_name = 'produtos/index.html'
+    template_name = 'funcionarios/produtoList.html'
     context_object_name = 'produtos'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['produtos'] = Produto.objects.all()
+        context['dsProdutos'] = Produto.objects.all()
+        return context
+    
+    
+class FuncionariosView(ListView):
+    model = Funcionario
+    template_name = 'funcionarios/index.html'
+    context_object_name = 'funcionarios'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['dsFuncionarios'] = Funcionario.objects.all()
         return context
 
 
