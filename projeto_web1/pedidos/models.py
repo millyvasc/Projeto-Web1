@@ -8,6 +8,9 @@ class Pedido(models.Model):
     comanda = models.ForeignKey(Comanda, on_delete=models.CASCADE)
     valor = models.DecimalField(default = 0.00, max_digits=10, decimal_places=2)
     observacao = models.CharField(max_length=200)
+    status = models.IntegerField() # 0 = EM ABERTO 
+                                   # 1 = EM PREPARO 
+                                   # 2 = ENTREGUE
     
     def adicicionar(self, cod_produto, quantidade):
         produto = Produto.objects.get(pk=cod_produto)

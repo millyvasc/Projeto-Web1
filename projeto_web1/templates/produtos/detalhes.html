@@ -15,10 +15,11 @@
                     <span>R$ {{ produto.valorUnitario }}</span>
                 </div>
                 <p class="lead">{{ produto.descricao }}</p>
-                <div class="d-flex">
-                    <form action="/pedido/adicionar/{{1}}/{{produto.cod}}/{{quantidade}}}/">
+                <div class="d-flex"> <!-- NmeroMesa/pedido/produto/quant   -->
+                    <form action="/pedido/adicionar/1/1/{{produto.cod}}/{{quant}}/">
                         <fieldset>
-                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1"
+                            
+                            <input class="form-control text-center me-3" name="quant" id="inputQuantity" type="num" value="1"
                         style="max-width: 3rem" />
 
                         </fieldset>
