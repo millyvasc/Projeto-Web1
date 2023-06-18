@@ -9,7 +9,7 @@ urlpatterns = [
     path('cardapio/', include('produtos.urls')),
     path('pedido/', include('pedidos.urls')),
     path('funcionarios/', include('funcionarios.urls')),
-<<<<<<< HEAD
+
     
   
     
@@ -20,6 +20,5 @@ urlpatterns = [
     
    
     
-=======
->>>>>>> 28708b05a77014a5fa4f4afb637cbffbda9367d4
+
 ]
