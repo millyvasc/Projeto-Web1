@@ -17,12 +17,12 @@ def index(request):
 #     return render(request, "produtos/index.html", contexto)
 
 def listPratos(request): 
-    dsProdutos = Produto.objects.filter(tipo="prato").exclude(estoque=0)
+    dsProdutos = Produto.objects.filter(tipo__icontains="prato").exclude(estoque=0)
     return render(request, "produtos/index.html", {'dsProdutos': dsProdutos})
 
 
 def listBebidas(request): 
-    dsProdutos = Produto.objects.filter(tipo="bebida").exclude(estoque=0)
+    dsProdutos = Produto.objects.filter(tipo__icontains="bebida").exclude(estoque=0)
     return render(request, "produtos/index.html", {'dsProdutos': dsProdutos})
 
 
