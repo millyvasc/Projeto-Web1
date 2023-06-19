@@ -17,6 +17,7 @@
                 <p class="lead">{{ vProduto.descricao }}</p>
                 <div class="d-flex">
                     
+                    
                     <form action="/pedidos/adicionar/{{mesa}}/{{vProduto.cod}}/" method="POST"> {% csrf_token %}
                         <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="num" value="1"
                         style="max-width: 3rem" />

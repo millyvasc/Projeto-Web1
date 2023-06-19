@@ -31,3 +31,10 @@ def adicionar(request, mesa1, cod_produto):
     pedido.save()#salvo as modificações
     
     return redirect("/"+str(mesa1)+"/cardapio/") #retorno pro cardapio
+
+# Método para listar todos os pedidos da mesa
+def list_orders(request, mesa1):
+    # dsProducts = Produto.objects.get()
+    
+    return redirect("/"+str(mesa1)+"/carrinho/")
+    
