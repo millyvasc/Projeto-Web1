@@ -7,6 +7,7 @@ class Produto(models.Model):
     valorUnitario = models.DecimalField(max_digits=10, decimal_places=2)
     descricao = models.CharField(max_length=200)
     estoque = models.IntegerField()
+    tipo = models.CharField(max_length=10)
 
     def __str__(self):
         return self.nome
