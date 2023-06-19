@@ -7,4 +7,3 @@ urlpatterns = [
     path("pratos/", views.listPratos, name="listar_pratos"),
     path("bebidas/", views.listBebidas, name="listar_bebidas"),
 ]
-

@@ -4,11 +4,7 @@ from .views import home_page
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    
     path('admin/', admin.site.urls),
-    path('cardapio/', include('produtos.urls')),
+    path('<int:mesa>/cardapio/', include('produtos.urls')),
     path('funcionarios/', include('funcionarios.urls')),
-    
-  
-    
 ]
