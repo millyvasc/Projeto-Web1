@@ -9,5 +9,6 @@ class Produto(models.Model):
     estoque = models.IntegerField()
     tipo = models.CharField(max_length=10)
 
+    
     def __str__(self):
         return self.nome
