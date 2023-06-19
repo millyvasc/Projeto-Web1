@@ -1,0 +1,78 @@
+{% extends 'painel.html' %} {%block content%}
+
+<div class="btn-group-toggle" data-toggle="buttons">
+  <a href="add" class="btn btn-primary">Add Funcionário</a>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card mb-4">
+      <div class="card-header pb-0">
+        <h6>Funcionários</h6>
+      </div>
+      <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+                >
+                  ID
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Nome
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  CPF
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Telefone
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Endereço
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Senha
+                </th>
+                <th
+                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                >
+                  Tipo
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for funcionario in dsFuncionarios %}
+              <tr>
+                <td>{{funcionario.id}}</td>
+                <td>{{funcionario.nome}}</td>
+                <td>{{funcionario.CPF}}</td>
+                <td>{{funcionario.telefone}}</td>
+                <td>{{funcionario.endereco}}</td>
+                <td>{{funcionario.senha}}</td>
+                <td>{{funcionario.tipo}}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">Nenhum funcionário cadastrado.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
