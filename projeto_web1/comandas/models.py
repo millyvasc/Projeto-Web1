@@ -2,9 +2,9 @@ from django.db import models
 
 class Comanda(models.Model):
     cod = models.BigAutoField(primary_key=True) #BigAutoField, pra ser auto incrementável
-    valorTotal = models.DecimalField(max_digits=10, decimal_places=2)
+    valorTotal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     mesa = models.IntegerField()
-    status = models.IntegerField() # 0 = EM ABERTO 
+    status = models.IntegerField(default=0) # 0 = EM ABERTO 
                                    # 1 = Finalizado 
     
     def __str__(self):
