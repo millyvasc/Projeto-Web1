@@ -23,12 +23,14 @@ class ProdutoForm(ModelForm):
         fields = {'cod', 'nome', 'valorUnitario',
                   'descricao', 'estoque', 'tipo'}
 
-    def save(self):
-        produto = Produto.objects.create(
-            nome=self.cleaned_data["nome"],
-            valorUnitario=self.cleaned_data["valorUnitario"],
-            descricao=self.cleaned_data["descricao"],
-            estoque=self.cleaned_data["estoque"],
-            tipo=self.cleaned_data["tipo"]
-        )
-        return True
+    def save(self, commit=True):
+        produto = super().save(commit=False)
+        if not self.instance:  # Verificar se é criação de produto
+            produto.nome = self.cleaned_data["nome"]
+            produto.valorUnitario = self.cleaned_data["valorUnitario"]
+            produto.descricao = self.cleaned_data["descricao"]
+            produto.estoque = self.cleaned_data["estoque"]
+            produto.tipo = self.cleaned_data["tipo"]
+        if commit:
+            produto.save()
+        return produto
