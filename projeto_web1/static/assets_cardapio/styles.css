@@ -8018,6 +8018,7 @@ fieldset:disabled .btn {
 
 .d-flex {
   display: flex !important;
+  margin: 0.5%;
 }
 
 .d-inline-flex {
