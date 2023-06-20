@@ -1,9 +1,10 @@
-
 {% extends 'painel.html' %} {%block content%}
 
 <div class="btn-group-toggle" data-toggle="buttons">
-  <a href="add" class="btn btn-primary">Add Funcionário</a>
+  <a href="/produtos/produtos/add" class="btn btn-primary" style="background-color: rgb(10, 10, 174);">Add Produto</a>
 </div>
+
+<!-- /produtos/produtos/add -->
 
 <div class="row">
   <div class="col-12">
@@ -16,26 +17,20 @@
           <table class="table align-items-center mb-0">
             <thead>
               <tr>
-                <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                >
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                   ID
                 </th>
-                <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                >
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                   Nome
                 </th>
-                <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                >
-                  ValorUnitario
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                  Valor Unitário
                 </th>
-                <th
-                  class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                >
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                   Estoque
-                
+                </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" colspan="2">
+                  Ações
                 </th>
               </tr>
             </thead>
@@ -46,7 +41,9 @@
                 <td>{{produto.nome}}</td>
                 <td>{{produto.valorUnitario}}</td>
                 <td>{{produto.estoque}}</td>
-                
+                <td><a href="/produtos/produtos/editar/{{produto.cod}}">Editar</a></td>
+                <td><a href="/produtos/produtos/remover/{{produto.cod}}">Excluir</a></td>
+
               </tr>
               {% empty %}
               <tr>

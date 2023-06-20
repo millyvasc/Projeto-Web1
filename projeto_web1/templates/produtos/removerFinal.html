@@ -1,0 +1,13 @@
+{% extends 'painel.html' %}
+
+{% block content %}
+
+ID: {{produto.cod}}
+
+<hr>
+Tem certeza que deseja excluir {{produto.nome}}?
+<hr>
+<a href="/produtos/produtos/remover/final/{{produto.cod}}">SIM</a>
+<a href="/produtos/produtos/">NÃO</a>
+
+{% endblock %}

@@ -6,6 +6,10 @@ from produtos.forms import ProdutoForm  # IMPORTA
 from produtos.models import Produto
 from django.contrib.auth.decorators import login_required  # IMPORTA
 
+
+from django.views.generic import ListView
+from produtos.models import Produto
+
 # def index(request):
 #     dsProdutos = Produto.objects.all()
 #     return render(request, "produtos/index.html", {'dsProdutos': dsProdutos})
@@ -16,6 +20,9 @@ from django.contrib.auth.decorators import login_required  # IMPORTA
 #     dsBebidas = Produto.objects.filter(tipo__icontains="bebida").exclude(estoque=0)
 #     contexto = {'dsProdutos': dsProdutos, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
 #     return render(request, "produtos/index.html", contexto)
+
+
+# ------------------------------------- CARDAPIO -------------------------------------
 
 
 def index(request, mesa):
@@ -55,15 +62,50 @@ def verProduto(request, mesa, produto_cod):
     return render(request, "produtos/detalhes.html", contexto)
 
 
-def add(request):
+# ------------------------------------- PAINEL -------------------------------------
+class ProdutosView(ListView):
+    model = Produto
+    template_name = 'produtos/produtoList.html'
+    context_object_name = 'produtos'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['dsProdutos'] = Produto.objects.all()
+        return context
+
+
+def adicionar(request):
     if request.method == "POST":
         form = ProdutoForm(request.POST)
-
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/Produto')
-
+            return HttpResponseRedirect('/produtos/produtos/')
     else:
         form = ProdutoForm()
+    return render(request, "produtos/adicionar.html", {"form": form})
 
-    return render(request, "Produto/add.html", {"form": form})
+
+# @login_required
+def editar(request, produto_cod):
+    produto = Produto.objects.get(pk=produto_cod)
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, instance=produto)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("/produtos/produtos/")
+        # Produto.add(request.POST)
+    else:
+        form = ProdutoForm(instance=produto)
+    return render(request, "produtos/editar.html", {"form": form})
+
+
+# @login_required
+def remover(request, produto_cod):
+    produto = Produto.objects.get(pk=produto_cod)
+    return render(request, "produtos/removerFinal.html", {"produto": produto})
+
+
+# @login_required
+def removerFinal(request, produto_cod):
+    Produto.objects.get(pk=produto_cod).delete()
+    return HttpResponseRedirect("/produtos/produtos/")
