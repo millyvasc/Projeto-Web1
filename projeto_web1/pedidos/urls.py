@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path("adicionar/<int:mesa1>/<int:cod_produto>/", views.adicionar, name="adicionar"),
-    path("carrinho/", views.list_orders, name="list_orders"),
+    path("<int:mesa1>/carrinho/", views.list_carrinho, name="list_carrinho"),
     #path("<int:produto_cod>/", views.verProduto, name="detalhes"),
 ]

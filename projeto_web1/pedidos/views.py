@@ -6,13 +6,20 @@ from django.shortcuts import redirect, render
 
 def adicionar(request, mesa1, cod_produto):
     
-    
-    
+    #se não houver comanda aberta na mesa, abre
+    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
+    #dsComandaTamanho = 
+    if dsComanda.count()== 0:
+        comanda = Comanda()
+        comanda.mesa=mesa1
+        comanda.save()
     #busco a comanda da mesa que esta em aberto (status=0)
-    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
-    for i in dsComanda:
-        if i.status==0:
-            comanda = Comanda.objects.get(pk=i.cod)
+    else:
+        for i in dsComanda:
+            if i.status==0:
+                comanda = Comanda.objects.get(pk=i.cod)
+    
+    
     
     #busco o pedido em aberto daquela comanda
     dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
@@ -46,9 +53,44 @@ def adicionar(request, mesa1, cod_produto):
     
     return redirect("/"+str(mesa1)+"/cardapio/") #retorno pro cardapio
 
-# Método para listar todos os pedidos da mesa
-def list_orders(request, mesa1):
-    # dsProducts = Produto.objects.get()
+# Método para listar todos o carrinho
+def list_carrinho(request, mesa1):
     
-    return redirect("/"+str(mesa1)+"/carrinho/")
-    
+    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
+    if dsComanda.count()== 0: #verifico se não há comanda
+        return render(request, "pedidos/carrinhoVazio.html") #se não tiver
+    else:
+        for i in dsComanda: #se tiver busco
+            if i.status==0:
+                comanda = Comanda.objects.get(pk=i.cod)
+        
+        dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
+        if dsPedido.count()==0: #verifico se há pedidp
+            return render(request, "pedidos/carrinhoVazio.html")
+        else: #se houver, busca ele
+            for i in dsPedido:
+                if i.status==0:
+                    pedido = Pedido.objects.get(pk=i.cod)
+        
+            produtos = pedido.produtos.all() #pego todos os produtos do pedido
+            
+            #filtragem de apenas pratos
+            dsPratosAux = Produto.objects.filter(
+                tipo__icontains="prato")#busco todos os pratos
+            dsPratos=[]
+            for i in produtos:
+                for a in dsPratosAux:
+                    if i.cod==a.cod: #se um produto do pedido for prato adiciona
+                        dsPratos.append(i)
+            #filtragem de apenas pedidos     
+            dsBebidasAux = Produto.objects.filter(
+                tipo__icontains="bebida")
+            dsBebidas=[]
+            for i in produtos:
+                for a in dsBebidasAux:
+                    if i.cod==a.cod:
+                        dsBebidas.append(i)
+            
+            contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
+            
+            return render(request, "pedidos/carrinho.html", contexto)

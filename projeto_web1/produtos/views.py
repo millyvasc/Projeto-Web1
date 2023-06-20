@@ -32,15 +32,7 @@ def index(request, mesa):
     dsBebidas = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
     contexto = {'mesa': mesa, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
-    
-    #se não houver comanda aberta na mesa, abre
-    dsComanda = Comanda.objects.filter(status=0, mesa=mesa) 
-    #dsComandaTamanho = 
-    if dsComanda.count()== 0:
-        comanda = Comanda()
-        comanda.mesa=mesa
-        comanda.save()
-        
+       
     return render(request, "produtos/index.html", contexto)
 
 
