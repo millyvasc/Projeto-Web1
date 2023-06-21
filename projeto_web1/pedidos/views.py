@@ -169,5 +169,7 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
                 i.save()
     pedido.valor-=quantidadeDeletar*vProduto.valorUnitario
     pedido.save()
+    vProduto.estoque+=quantidadeDeletar
+    vProduto.save()
     
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/") #retorno pro cardapio
