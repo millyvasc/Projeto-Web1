@@ -1,27 +1,28 @@
 import re
-from django import forms  # adicionei
+from django import forms
 from django.forms import ModelForm
 from produtos.models import Produto
 from django import forms
 
 
 class ProdutoForm(ModelForm):
-    # opte por não utilizar fields = "__all__"
-    # uma vez que o cod não fará parte do form. Defina os campos em uma lista.
-    # nome = forms.CharField(widget=forms.TextInput(
-    #     attrs={"class": "form-control"}))
-    # estoque = forms.IntegerField(
-    #     widget=forms.NumberInput(attrs={"class": "form-control"}))
-
-    # ------------------------------------------------------
-    nome = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
+    tipo = forms.ChoiceField(
+        choices=[('prato', 'Prato'), ('bebida', 'Bebida')])
 
     class Meta:
         model = Produto
-        # fields = '__all__'
-        fields = {'cod', 'nome', 'valorUnitario',
-                  'descricao', 'estoque', 'tipo'}
+        fields = ['cod', 'nome', 'valorUnitario',
+                  'descricao', 'estoque', 'tipo']
+        widgets = {
+            'tipo': forms.Select(attrs={'class': 'custom-select'}),
+        }
+        labels = {
+            'nome': 'Nome',
+            'valorUnitario': 'Valor Unitário',
+            'descricao': 'Descrição',
+            'estoque': 'Estoque',
+            'tipo': 'Tipo',
+        }
 
     def save(self, commit=True):
         produto = super().save(commit=False)

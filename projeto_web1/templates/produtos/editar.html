@@ -1,9 +1,12 @@
 {% extends 'painel.html' %}
 
+
 {% block content %}
-<form action="" method="post">
-    {{form}}
+<h2 class="tituloForm">Editar produto</h2>
+
+<form action="" method="post" class="formProduto">
     {% csrf_token %}
-    <input type="submit" value="Editar">
+    {{ form.as_p }}
+    <input type="submit" value="Editar" class="btnProduto">
 </form>
 {% endblock %}

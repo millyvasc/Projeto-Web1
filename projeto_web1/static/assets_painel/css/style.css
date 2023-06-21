@@ -1,0 +1,56 @@
+.formProduto input,
+select {
+    display: inline;
+    width: 90%;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4rem;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d2d6da;
+    appearance: none;
+    border-radius: 0.5rem;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    float: inline-end;
+    display: flex;
+    flex-direction: column;
+    align-items: inherit;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.formProduto label {
+    width: 90%;
+    font-size: 0.875rem;
+    line-height: 1.4rem;
+    display: flex;
+    margin: auto;
+}
+
+.tituloForm {
+    color: #32363a;
+    display: flex;
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.btnProduto {
+    width: 100px !important;
+    background-color: rgb(103, 103, 249) !important;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.deleteProduto {
+    color: white;
+    margin: auto;
+    text-align: center;
+    margin-top: 25px !important;
+}
+
+
+/* #5e72e4 */

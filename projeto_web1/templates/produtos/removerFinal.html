@@ -2,12 +2,15 @@
 
 {% block content %}
 
-ID: {{produto.cod}}
+<div class="deleteProduto">
+    ID: {{produto.cod}}
 
-<hr>
-Tem certeza que deseja excluir {{produto.nome}}?
-<hr>
-<a href="/produtos/produtos/remover/final/{{produto.cod}}">SIM</a>
-<a href="/produtos/produtos/">NÃO</a>
+    <hr>
+    Tem certeza que deseja excluir {{produto.nome}}?
+    <hr>
+
+    <a href="/produtos/produtos/remover/final/{{produto.cod}}" class="btnProduto" style="margin: 50px">SIM</a>
+    <a href="/produtos/produtos/" class="btnProduto" style="margin: 50px">NÃO</a>
+</div>
 
 {% endblock %}
