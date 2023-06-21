@@ -1,7 +1,7 @@
 from comandas.models import Comanda
 from urllib3 import HTTPResponse
 from produtos.models import Produto
-from pedidos.models import Pedido
+from pedidos.models import Pedido, Pedido_Produto
 from django.shortcuts import redirect, render
 
 def adicionar(request, mesa1, cod_produto):
@@ -19,8 +19,6 @@ def adicionar(request, mesa1, cod_produto):
             if i.status==0:
                 comanda = Comanda.objects.get(pk=i.cod)
     
-    
-    
     #busco o pedido em aberto daquela comanda
     dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
     
@@ -37,19 +35,31 @@ def adicionar(request, mesa1, cod_produto):
     
     
     #pego a quantidade do form
-    quantidade = request.POST.get('quantidade')
+    quantidade = int(request.POST.get('quantidade'))
     
     print(str(quantidade))
     #busco o pedido
     produto = Produto.objects.get(pk=cod_produto)
     
-    #adiciono n vezes o produto em pedido
-    for a in range(int(quantidade)):
-        pedido.produtos.add(produto)
-        pedido.valor+=produto.valorUnitario #ja altero o valor
-    pedido.save()#salvo as modificações
-    produto.estoque-=int(quantidade)#baixa no escoque
+    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=produto.cod)
+    if produtosPedidos.count()==0: #guardo no banco se não houver daquele produto
+        produtos=Pedido_Produto()
+        produtos.cod_pedido=pedido
+        produtos.cod_produto=produto
+        produtos.quantidade=quantidade
+        produtos.save()
+    else:# se ja tiver, busco ele e modifico a quantidade
+        for i in produtosPedidos:
+            i.quantidade+=quantidade
+            i.save()
+    
+    
+    #altero os valores e estoque
+    pedido.valor+=(produto.valorUnitario*int(quantidade))
+    pedido.save()
+    produto.estoque-=quantidade
     produto.save()
+    
     
     return redirect("/"+str(mesa1)+"/cardapio/") #retorno pro cardapio
 
@@ -72,24 +82,30 @@ def list_carrinho(request, mesa1):
                 if i.status==0:
                     pedido = Pedido.objects.get(pk=i.cod)
         
-            produtos = pedido.produtos.all() #pego todos os produtos do pedido
+            #pego todos os produtos do pedido
+            produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
             
-            #filtragem de apenas pratos
+            
+            #filtragem :
             dsPratosAux = Produto.objects.filter(
                 tipo__icontains="prato")#busco todos os pratos
             dsPratos=[]
-            for i in produtos:
-                for a in dsPratosAux:
-                    if i.cod==a.cod: #se um produto do pedido for prato adiciona
-                        dsPratos.append(i)
-            #filtragem de apenas pedidos     
             dsBebidasAux = Produto.objects.filter(
                 tipo__icontains="bebida")
             dsBebidas=[]
-            for i in produtos:
+            
+            #busco os pratos
+            for i in produtosPedidos:
+                for a in dsPratosAux:
+                    if i.cod_produto.cod==a.cod:
+                        dsPratos.append(i.cod_produto)
+            #busco as bebidas
+            for i in produtosPedidos:
                 for a in dsBebidasAux:
-                    if i.cod==a.cod:
-                        dsBebidas.append(i)
+                    if i.cod_produto.cod==a.cod:
+                        print(str(i.quantidade))
+                        dsBebidas.append(i.cod_produto)
+            
             
             contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
             
