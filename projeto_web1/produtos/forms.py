@@ -35,3 +35,23 @@ class ProdutoForm(ModelForm):
         if commit:
             produto.save()
         return produto
+
+
+class ProdutoPhotoForm(forms.ModelForm):
+    required_css_class = 'required'
+    # photo = forms.ImageField(required=False)  # Uma foto so
+    photo = forms.ImageField(  # VARIAS FOTOS
+        required=False,
+        widget=forms.ClearableFileInput(attrs={'multiple': True})
+    )
+
+    class Meta:
+        model = Produto
+        fields = ('cod', 'nome', 'valorUnitario',
+                  'descricao', 'estoque', 'tipo', 'photo')
+
+    def __init__(self, *args, **kwargs):
+        super(ProdutoPhotoForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['photo'].widget.attrs['class'] = None

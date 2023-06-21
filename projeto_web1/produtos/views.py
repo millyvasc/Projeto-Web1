@@ -1,13 +1,12 @@
 from comandas.models import Comanda
 from django import template
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import loader
-from produtos.forms import ProdutoForm
-from produtos.models import Produto
+from produtos.forms import ProdutoForm, ProdutoPhotoForm
+from produtos.models import Photo, Produto
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
-from produtos.models import Produto
 
 # ------------------------------------- CARDAPIO -------------------------------------
 
@@ -103,3 +102,50 @@ def remover(request, produto_cod):
 def removerFinal(request, produto_cod):
     Produto.objects.get(pk=produto_cod).delete()
     return HttpResponseRedirect("/produtos/produtos/")
+
+
+# def adicionarFoto(request):
+#     template_name = 'produtos/adicionar.html'
+#     form = ProdutoPhotoForm(request.POST or None)
+
+#     if request.method == 'POST':
+#         # photo = request.FILES.get('photo')  # pega so um arquivo
+#         #
+#         photos = request.FILES.getlist('photo')  # pega vários arquivos.
+
+#         if form.is_valid():
+#             produto = form.save()
+
+#             for photo in photos:  # Tira se for so uma
+#                 Photo.objects.create(produto=produto, photo=photo)
+
+#             # return redirect('produtos:produto_detail', produto.pk)
+
+#             return HttpResponseRedirect("/produtos/produtos/")
+
+#     context = {'form': form}
+    # return render(request, template_name, context)
+
+
+def photo_create(request):
+    template_name = 'produtos/adicionar.html'
+    form = ProdutoPhotoForm(request.POST or None)
+
+    if request.method == 'POST':
+        photos = request.FILES.getlist('photo')  # pega vários arquivos.
+        if form.is_valid():
+            produto = form.save()
+            for photo in photos:
+                Photo.objects.create(produto=produto, photo=photo)
+            # return redirect('produtos:produto_detail', produto.cod) -> pk ou cod?
+
+            return HttpResponseRedirect("/produtos/produtos/")
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+# def produto_detail(request,  produto_cod):
+#     template_name = 'produtos/detalhes.html'
+#     obj = Produto.objects.get(pk=produto_cod)
+#     context = {'object': obj}
+#     return render(request, template_name, context)

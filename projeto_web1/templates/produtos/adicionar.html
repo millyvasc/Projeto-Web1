@@ -4,9 +4,10 @@
 
 <h2 class="tituloForm">Adicionar novo produto</h2>
 
-<form action="" method="post" class="formProduto">
+<form action="." method="POST" class="formProduto" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Cadastrar" class="btnProduto">
+
 </form>
 {% endblock %}

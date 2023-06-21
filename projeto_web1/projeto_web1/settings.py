@@ -41,7 +41,7 @@ ROOT_URLCONF = 'projeto_web1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR/"templates"], #direciona pra pasta de templates
+        'DIRS': [BASE_DIR/"templates"],  # direciona pra pasta de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -90,5 +90,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR.joinpath('media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -2,6 +2,10 @@ from django.urls import path
 from . import views
 from .views import ProdutosView
 
+from produtos import views as v
+
+app_name = 'produtos'
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("<int:produto_cod>/", views.verProduto, name="detalhes"),
@@ -9,10 +13,15 @@ urlpatterns = [
     path("bebidas/", views.listBebidas, name="listar_bebidas"),
 
     path('produtos/', ProdutosView.as_view(), name='produtos'),
-    path('produtos/add/', views.adicionar, name='adicionar'),
 
+    path('produtos/add/', views.adicionar, name='adicionar'),
     path('produtos/editar/<int:produto_cod>/', views.editar, name='editar'),
     path('produtos/remover/<int:produto_cod>/', views.remover, name='remover'),
     path('produtos/remover/final/<int:produto_cod>/',
          views.removerFinal, name='removerFinal'),
+
+
+
+    path('produtos/addFoto/', v.photo_create, name='adicionarFoto'),
+    # path('<int:produto_cod>/', v.produto_detail, name='produto_detail'),
 ]

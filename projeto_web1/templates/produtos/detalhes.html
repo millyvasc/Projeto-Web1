@@ -2,6 +2,18 @@
 
 {% block content %}
 
+<div>
+    {% for item in object.photos.all %}
+    {% if item.photo %}
+    <img src="{{ item.photo.url }}" alt="">
+
+    {% else %}
+    <p>No photo available for this item.</p>
+
+    {% endif %}
+    {% endfor %}
+</div>
+
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
@@ -16,22 +28,17 @@
                 </div>
                 <p class="lead">{{ vProduto.descricao }}</p>
                 <div class="d-flex">
-                    
-                    
+
+
                     <form action="/pedidos/adicionar/{{mesa}}/{{vProduto.cod}}/" method="POST"> {% csrf_token %}
-                        <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number" value="1"
-                        style="max-width: 3rem" max="{{vProduto.estoque}}"/>
+                        <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
+                            value="1" style="max-width: 3rem" max="{{vProduto.estoque}}" />
 
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart
                         </button>
                     </form>
-
-                    
-                    
-
-
                 </div>
             </div>
         </div>
@@ -69,5 +76,3 @@
 {% endif %}
 
 {% endblock %}
-
-<!-- PRODUTOS RELACIONADOS E FILTROS N TA MANTENDO O NMR DA MESA -->
