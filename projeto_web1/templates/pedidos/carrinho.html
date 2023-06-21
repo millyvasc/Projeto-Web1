@@ -19,14 +19,14 @@
                         <div class="text-center">
                             <!-- Nome do produto -->
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço do produto -->
-                            R$ {{ produto.valorUnitario }}
+                            <!-- Preço e quantidade do produto -->
+                            R$ {{ produto.valorUnitario }} <br>
+                            Quantidade: {{ produto.estoque }}
                         </div>
                     </div>
                     <!-- Ações do produto -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{produto.cod}}">Ver
-                                opções</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
                         </div>
                     </div>
                 </div>
@@ -55,14 +55,14 @@
                         <div class="text-center">
                             <!-- Nome do produto -->
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço do produto -->
-                            R$ {{ produto.valorUnitario }}
+                            <!-- Preço e quantidade do produto -->
+                            R$ {{ produto.valorUnitario }} <br>
+                            Quantidade: {{ produto.estoque }}
                         </div>
                     </div>
                     <!-- Ações do produto -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{{produto.cod}}">Ver
-                                opções</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
                         </div>
                     </div>
                 </div>
