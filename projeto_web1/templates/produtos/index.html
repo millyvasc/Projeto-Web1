@@ -12,7 +12,8 @@
             {% for produto in dsPratos %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"> <!--450x300-->
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
@@ -43,7 +44,8 @@
             {% for produto in dsBebidas %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"> <!--450x300-->
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>

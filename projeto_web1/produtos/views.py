@@ -1,6 +1,5 @@
 from django.conf import settings
 import os
-from django import template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -61,6 +60,7 @@ class ProdutosView(ListView):
         return context
 
 
+# @login_required
 def adicionar(request):
     template_name = 'produtos/adicionar.html'
     form = ProdutoForm(request.POST or None, request.FILES or None)
@@ -91,10 +91,14 @@ def editar(request, produto_cod):
         form = ProdutoForm(request.POST, request.FILES, instance=produto)
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
+            nome = form.cleaned_data['nome']
             if estoque >= 0:
                 produto = form.save(commit=False)
                 if 'img' in request.FILES:
-                    produto.img = request.FILES['img']
+                    nova_imagem = request.FILES['img']
+                    ext = os.path.splitext(nova_imagem.name)[1]
+                    novo_nome = f"{nome}{ext}"
+                    produto.img.save(novo_nome, nova_imagem)
                 produto.save()
                 return HttpResponseRedirect('/produtos/produtos/')
             else:
@@ -111,19 +115,11 @@ def remover(request, produto_cod):
 
 
 # @login_required
-# def removerFinal(request, produto_cod):
-#     Produto.objects.get(pk=produto_cod).delete()
-#     return HttpResponseRedirect("/produtos/produtos/")
-
-
 def removerFinal(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
-
-    # Excluir a imagem associada ao produto, se existir
     if produto.img:
         caminho_foto = os.path.join(settings.MEDIA_ROOT, str(produto.img))
         if os.path.exists(caminho_foto):
             os.remove(caminho_foto)
-
     produto.delete()
     return HttpResponseRedirect("/produtos/produtos/")

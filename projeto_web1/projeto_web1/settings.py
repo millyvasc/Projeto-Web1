@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'clientes',
     'caixas',
     'administradores',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
