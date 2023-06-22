@@ -1,10 +1,11 @@
-from comandas.models import Comanda
+from django.conf import settings
+import os
 from django import template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
-from produtos.forms import ProdutoForm, ProdutoPhotoForm
-from produtos.models import Photo, Produto
+from produtos.forms import ProdutoForm
+from produtos.models import Produto
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 
@@ -61,35 +62,45 @@ class ProdutosView(ListView):
 
 
 def adicionar(request):
-    if request.method == "POST":
-        form = ProdutoForm(request.POST)
+    template_name = 'produtos/adicionar.html'
+    form = ProdutoForm(request.POST or None, request.FILES or None)
+
+    if request.method == 'POST':
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
             if estoque >= 0:
-                form.save()
+                produto = form.save()
+                produto.img = request.FILES.get('img')
+                produto.save()
                 return HttpResponseRedirect('/produtos/produtos/')
             else:
                 form.add_error('estoque', 'O estoque não pode ser negativo.')
     else:
         form = ProdutoForm()
-    return render(request, "produtos/adicionar.html", {"form": form})
 
+    context = {'form': form}
+    return render(request, template_name, context)
 
 # @login_required
+
+
 def editar(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     if request.method == 'POST':
-        form = ProdutoForm(request.POST, instance=produto)
+        form = ProdutoForm(request.POST, request.FILES, instance=produto)
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
             if estoque >= 0:
-                form.save()
-                return HttpResponseRedirect("/produtos/produtos/")
+                produto = form.save(commit=False)
+                if 'img' in request.FILES:
+                    produto.img = request.FILES['img']
+                produto.save()
+                return HttpResponseRedirect('/produtos/produtos/')
             else:
                 form.add_error('estoque', 'O estoque não pode ser negativo.')
     else:
         form = ProdutoForm(instance=produto)
-    return render(request, "produtos/editar.html", {"form": form})
+    return render(request, 'produtos/editar.html', {'form': form})
 
 
 # @login_required
@@ -99,53 +110,19 @@ def remover(request, produto_cod):
 
 
 # @login_required
+# def removerFinal(request, produto_cod):
+#     Produto.objects.get(pk=produto_cod).delete()
+#     return HttpResponseRedirect("/produtos/produtos/")
+
+
 def removerFinal(request, produto_cod):
-    Produto.objects.get(pk=produto_cod).delete()
+    produto = Produto.objects.get(pk=produto_cod)
+
+    # Excluir a imagem associada ao produto, se existir
+    if produto.img:
+        caminho_foto = os.path.join(settings.MEDIA_ROOT, str(produto.img))
+        if os.path.exists(caminho_foto):
+            os.remove(caminho_foto)
+
+    produto.delete()
     return HttpResponseRedirect("/produtos/produtos/")
-
-
-# def adicionarFoto(request):
-#     template_name = 'produtos/adicionar.html'
-#     form = ProdutoPhotoForm(request.POST or None)
-
-#     if request.method == 'POST':
-#         # photo = request.FILES.get('photo')  # pega so um arquivo
-#         #
-#         photos = request.FILES.getlist('photo')  # pega vários arquivos.
-
-#         if form.is_valid():
-#             produto = form.save()
-
-#             for photo in photos:  # Tira se for so uma
-#                 Photo.objects.create(produto=produto, photo=photo)
-
-#             # return redirect('produtos:produto_detail', produto.pk)
-
-#             return HttpResponseRedirect("/produtos/produtos/")
-
-#     context = {'form': form}
-    # return render(request, template_name, context)
-
-
-def photo_create(request):
-    template_name = 'produtos/adicionar.html'
-    form = ProdutoPhotoForm(request.POST or None)
-
-    if request.method == 'POST':
-        photos = request.FILES.getlist('photo')  # pega vários arquivos.
-        if form.is_valid():
-            produto = form.save()
-            for photo in photos:
-                Photo.objects.create(produto=produto, photo=photo)
-            # return redirect('produtos:produto_detail', produto.cod) -> pk ou cod?
-
-            return HttpResponseRedirect("/produtos/produtos/")
-    context = {'form': form}
-    return render(request, template_name, context)
-
-
-# def produto_detail(request,  produto_cod):
-#     template_name = 'produtos/detalhes.html'
-#     obj = Produto.objects.get(pk=produto_cod)
-#     context = {'object': obj}
-#     return render(request, template_name, context)

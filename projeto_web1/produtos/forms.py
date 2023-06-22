@@ -3,16 +3,19 @@ from django import forms
 from django.forms import ModelForm
 from produtos.models import Produto
 from django import forms
+from django.db import models
 
 
-class ProdutoForm(ModelForm):
+class ProdutoForm(forms.ModelForm):
+    required_css_class = 'required'
     tipo = forms.ChoiceField(
         choices=[('prato', 'Prato'), ('bebida', 'Bebida')])
+    img = forms.ImageField()
 
     class Meta:
         model = Produto
         fields = ['cod', 'nome', 'valorUnitario',
-                  'descricao', 'estoque', 'tipo']
+                  'descricao', 'estoque', 'tipo', 'img']
         widgets = {
             'tipo': forms.Select(attrs={'class': 'custom-select'}),
         }
@@ -22,6 +25,7 @@ class ProdutoForm(ModelForm):
             'descricao': 'Descrição',
             'estoque': 'Estoque',
             'tipo': 'Tipo',
+            'img': 'Imagem',
         }
 
     def save(self, commit=True):
@@ -35,23 +39,3 @@ class ProdutoForm(ModelForm):
         if commit:
             produto.save()
         return produto
-
-
-class ProdutoPhotoForm(forms.ModelForm):
-    required_css_class = 'required'
-    # photo = forms.ImageField(required=False)  # Uma foto so
-    photo = forms.ImageField(  # VARIAS FOTOS
-        required=False,
-        widget=forms.ClearableFileInput(attrs={'multiple': True})
-    )
-
-    class Meta:
-        model = Produto
-        fields = ('cod', 'nome', 'valorUnitario',
-                  'descricao', 'estoque', 'tipo', 'photo')
-
-    def __init__(self, *args, **kwargs):
-        super(ProdutoPhotoForm, self).__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-        self.fields['photo'].widget.attrs['class'] = None

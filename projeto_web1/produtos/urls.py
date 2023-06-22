@@ -2,9 +2,9 @@ from django.urls import path
 from . import views
 from .views import ProdutosView
 
-from produtos import views as v
+# from produtos import views as v
 
-app_name = 'produtos'
+# app_name = 'produtos'
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -20,8 +20,5 @@ urlpatterns = [
     path('produtos/remover/final/<int:produto_cod>/',
          views.removerFinal, name='removerFinal'),
 
-
-
-    path('produtos/addFoto/', v.photo_create, name='adicionarFoto'),
     # path('<int:produto_cod>/', v.produto_detail, name='produto_detail'),
 ]
