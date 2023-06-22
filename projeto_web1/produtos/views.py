@@ -64,26 +64,27 @@ class ProdutosView(ListView):
 def adicionar(request):
     template_name = 'produtos/adicionar.html'
     form = ProdutoForm(request.POST or None, request.FILES or None)
-
     if request.method == 'POST':
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
+            nome = form.cleaned_data['nome']
             if estoque >= 0:
-                produto = form.save()
-                produto.img = request.FILES.get('img')
+                produto = form.save(commit=False)
+                img_file = request.FILES.get('img')
+                ext = os.path.splitext(img_file.name)[1]
+                novo_nome = f"{nome}{ext}"
+                produto.img.save(novo_nome, img_file)
                 produto.save()
                 return HttpResponseRedirect('/produtos/produtos/')
             else:
                 form.add_error('estoque', 'O estoque não pode ser negativo.')
     else:
         form = ProdutoForm()
-
     context = {'form': form}
     return render(request, template_name, context)
 
+
 # @login_required
-
-
 def editar(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     if request.method == 'POST':
