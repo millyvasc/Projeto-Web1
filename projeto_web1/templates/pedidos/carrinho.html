@@ -1,5 +1,8 @@
 {% extends 'cardapio.html' %}
 
+{% block main_title %}Pedidos{% endblock %}
+{% block main_subtitle %}Veja seus pedidos neste instante!{% endblock %}
+
 {% block content %}
 
 
@@ -13,7 +16,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Imagem do produto -->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="{{produto.img.url}}" alt="..." />
                     <!-- Detalhes do produto -->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -49,7 +52,7 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Imagem do produto -->
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="{{produto.img.url}}" alt="..." />
                     <!-- Detalhes do produto -->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -73,5 +76,17 @@
         </div>
     </div>
 </section>
+
+
+<hr class="Tdivisoria">
+
+<section class="py-5">
+    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="">Fazer pedido</a>
+        </div>
+    </div>
+</section>
+
+
 
 {% endblock %}
