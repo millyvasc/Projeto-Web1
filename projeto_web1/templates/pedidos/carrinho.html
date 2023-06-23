@@ -82,8 +82,16 @@
 
 <section class="py-5">
     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="">Fazer pedido</a>
-        </div>
+        <form action="/pedidos/{{mesa}}/fazerPedido/{{pedido.cod}}/" method="POST"> {% csrf_token %}
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="1/cardapio/">Fazer pedido</a>
+            
+                <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                Fazer pedido 
+                </button>
+                <!-- {{pedido.cod}} -->
+            </div>
+        </form>
+        
     </div>
 </section>
 
