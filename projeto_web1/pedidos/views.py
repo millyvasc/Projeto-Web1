@@ -105,14 +105,14 @@ def list_carrinho(request, mesa1):
                         if i.cod_produto.cod==a.cod:
                             i.cod_produto.estoque=i.quantidade
                             dsPratos.append(i.cod_produto)
-                            soma=soma+a.valorUnitario
+                            soma=soma+(a.valorUnitario*i.quantidade)
                 #busco as bebidas
                 for i in produtosPedidos:
                     for a in dsBebidasAux:
                         if i.cod_produto.cod==a.cod:
                             i.cod_produto.estoque=i.quantidade
                             dsBebidas.append(i.cod_produto)
-                            soma=soma+a.valorUnitario
+                            soma=soma+(a.valorUnitario*i.quantidade)
                 
                 contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas, 'soma': soma}
                 
@@ -134,7 +134,8 @@ def remover_carrinho(request, mesa1, cod_produto):
             for i in dsPedido:
                 if i.status==0:
                     pedido = Pedido.objects.get(pk=i.cod)
-                    
+    #pedido = buscarPedidoAberto(mesa1)
+                 
     vProduto = Produto.objects.get(pk=cod_produto)
     produto=Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=vProduto.cod)
     for i in produto:
@@ -179,3 +180,24 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
     vProduto.save()
     
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/") #retorno pro cardapio
+
+def confirmarPedido(request, mesa1):
+    pedido=buscarPedidoAberto(mesa1)
+    pedido.status=1 #mudo o status do pedido para em preparo
+    pedido.save()
+    
+    #comanda.valorTotal+=pedido.valor
+    
+    return redirect("/"+str(mesa1)+"/cardapio/") 
+
+def buscarComanda(mesa1):
+    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
+    for a in dsComanda:
+        comanda = a
+    return comanda
+
+def buscarPedidoAberto(mesa1):
+    dsPedido = Pedido.objects.filter(status=0, comanda=buscarComanda(mesa1))
+    for a in dsPedido:
+        pedido = a
+    return pedido
