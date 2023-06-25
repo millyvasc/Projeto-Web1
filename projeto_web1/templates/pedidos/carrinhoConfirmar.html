@@ -1,0 +1,36 @@
+{% extends 'cardapio.html' %}
+
+{% block content %}
+
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            
+            <div class="col-md-6">
+                <!-- <div class="small mb-1">SKU: BST-498</div> -->
+                <h1 class="display-5 fw-bolder">Pedido N°{{ vPedido.cod }}</h1>
+                <div class="fs-5 mb-5">
+                    <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
+                    <span>Valor total: R$ {{ vPedido.valor }}</span>
+                </div>
+                
+                <div class="d-flex">
+                    <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/" method="POST"  display='line'> {% csrf_token %}
+                        Observação: 
+                        <input class="form-control text-center me-3" name="observacao" id="text" type="text"
+                            value="" style="max-width: 500rem" max-length="25rem" min="0" max="200" />
+
+                        <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                            <i class="bi-cart-fill me-1"></i>
+                            Confirmar pedido
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

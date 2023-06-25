@@ -1,19 +1,16 @@
 from comandas.models import Comanda
-from urllib3 import HTTPResponse
 from produtos.models import Produto
 from pedidos.models import Pedido, Pedido_Produto
 from django.shortcuts import redirect, render
 
+#----------------------------------------------> Carrinho <----------------------------------------------
 def adicionar(request, mesa1, cod_produto):
-    
-    #se não houver comanda aberta na mesa, abre
+    #crio ou busco a comanda
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
-    #dsComandaTamanho = 
     if dsComanda.count()== 0:
         comanda = Comanda()
         comanda.mesa=mesa1
         comanda.save()
-    #busco a comanda da mesa que esta em aberto (status=0)
     else:
         for i in dsComanda:
             if i.status==0:
@@ -21,10 +18,7 @@ def adicionar(request, mesa1, cod_produto):
     
     #busco o pedido em aberto daquela comanda
     dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
-    
-    dsPedidoTamanho = dsPedido.count() #pego o numero de itens no dsPedido
-    
-    if dsPedidoTamanho==0: #se não houver pedido em andamento cria um
+    if dsPedido.count()==0: #se não houver pedido em andamento cria um
         pedido = Pedido()
         pedido.comanda=comanda
         pedido.save()
@@ -33,14 +27,13 @@ def adicionar(request, mesa1, cod_produto):
             if i.status==0:
                 pedido = Pedido.objects.get(pk=i.cod)
     
-    
     #pego a quantidade do form
     quantidade = int(request.POST.get('quantidade'))
     
-    print(str(quantidade))
     #busco o pedido
     produto = Produto.objects.get(pk=cod_produto)
     
+    #salvo o produto no "pedido"
     produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=produto.cod)
     if produtosPedidos.count()==0: #guardo no banco se não houver daquele produto
         produtos=Pedido_Produto()
@@ -53,13 +46,11 @@ def adicionar(request, mesa1, cod_produto):
             i.quantidade+=quantidade
             i.save()
     
-    
     #altero os valores e estoque
-    pedido.valor+=(produto.valorUnitario*int(quantidade))
+    pedido.valor+=(produto.valorUnitario*quantidade)
     pedido.save()
     produto.estoque-=quantidade
     produto.save()
-    
     
     return redirect("/"+str(mesa1)+"/cardapio/") #retorno pro cardapio
 
@@ -75,105 +66,72 @@ def list_carrinho(request, mesa1):
                 comanda = Comanda.objects.get(pk=i.cod)
         
         dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
-        
         if dsPedido.count()==0: #verifico se há pedidp
-            #url='/pedidos/'+str(mesa1)+
             return render(request, "pedidos/carrinhoVazio.html", mesaContext)
         else: #se houver, busca ele
             for i in dsPedido:
                 if i.status==0:
                     pedido = Pedido.objects.get(pk=i.cod)
 
-            #pego todos os produtos do pedido
-            produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
             
+            produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+            #Verifico se há produtos no pedido
             if produtosPedidos.count()==0:
                 return render(request, "pedidos/carrinhoVazio.html", mesaContext)
             else:
                 #filtragem :
-                dsPratosAux = Produto.objects.filter(
-                    tipo__icontains="prato")#busco todos os pratos
+                dsPratosAux = Produto.objects.filter(tipo__icontains="prato")
                 dsPratos=[]
-                dsBebidasAux = Produto.objects.filter(
-                    tipo__icontains="bebida")
+                dsBebidasAux = Produto.objects.filter(tipo__icontains="bebida")
                 dsBebidas=[]
-                
-                #busco os pratos
-                soma=0
+            
+                soma=0 #guardo o valor total do pedido
                 for i in produtosPedidos:
-                    for a in dsPratosAux:
+                    for a in dsPratosAux: #guardo os pratos
                         if i.cod_produto.cod==a.cod:
                             i.cod_produto.estoque=i.quantidade
                             dsPratos.append(i.cod_produto)
                             soma=soma+(a.valorUnitario*i.quantidade)
-                #busco as bebidas
-                for i in produtosPedidos:
-                    for a in dsBebidasAux:
+                    for a in dsBebidasAux: #guardo as bebidas
                         if i.cod_produto.cod==a.cod:
                             i.cod_produto.estoque=i.quantidade
                             dsBebidas.append(i.cod_produto)
                             soma=soma+(a.valorUnitario*i.quantidade)
                 
                 contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas, 'soma': soma}
-                
                 return render(request, "pedidos/carrinho.html", contexto)
         
+#Método para remover algo do carrinho
 def remover_carrinho(request, mesa1, cod_produto):
-    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
-    if dsComanda.count()== 0: #verifico se não há comanda
-        return render(request, "pedidos/carrinhoVazio.html") #se não tiver
-    else:
-        for i in dsComanda: #se tiver busco
-            if i.status==0:
-                comanda = Comanda.objects.get(pk=i.cod)
-        
-        dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
-        if dsPedido.count()==0: #verifico se há pedidp
-            return render(request, "pedidos/carrinhoVazio.html")
-        else: #se houver, busca ele
-            for i in dsPedido:
-                if i.status==0:
-                    pedido = Pedido.objects.get(pk=i.cod)
-    #pedido = buscarPedidoAberto(mesa1)
-                 
+    pedido = buscarPedidoAberto(request, mesa1)
     vProduto = Produto.objects.get(pk=cod_produto)
     produto=Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=vProduto.cod)
+    #altero os valores de estoque dos produtos, para a quantidade do produto no pedido
     for i in produto:
         if i.cod_produto.cod==vProduto.cod:
             vProduto.estoque=i.quantidade
     
     contexto = {'mesa': mesa1, 'vProduto': vProduto}
-            
     return render(request, "pedidos/carrinhoRemover.html", contexto)
 
+#Método que confirma a remoção
 def remover_carrinho_confirmar(request, mesa1, cod_produto):
+    #Busco a quantidade a se remover
     quantidadeDeletar = int(request.POST.get('quantidade'))
-    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
-    if dsComanda.count()== 0: #verifico se não há comanda
-        return render(request, "pedidos/carrinhoVazio.html") #se não tiver
-    else:
-        for i in dsComanda: #se tiver busco
-            if i.status==0:
-                comanda = Comanda.objects.get(pk=i.cod)
-        
-        dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
-        if dsPedido.count()==0: #verifico se há pedidp
-            return render(request, "pedidos/carrinhoVazio.html")
-        else: #se houver, busca ele
-            for i in dsPedido:
-                if i.status==0:
-                    pedido = Pedido.objects.get(pk=i.cod)
-                    
-    vProduto = Produto.objects.get(pk=cod_produto)
-    produto=Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=vProduto.cod)
+    pedido = buscarPedidoAberto(request, mesa1)  
+    
+    #produto que eu vou modificar estoque     
+    vProduto = Produto.objects.get(pk=cod_produto) 
+    #produtos que estão em pedido
+    produto=Pedido_Produto.objects.filter(cod_pedido=pedido.cod, cod_produto=vProduto.cod) 
     for i in produto:
-        if i.cod_produto.cod==vProduto.cod:
-            vProduto.estoque=i.quantidade
-            if vProduto.estoque==quantidadeDeletar:
-                i.delete()
+        if i.cod_produto.cod==vProduto.cod: #busco o produto especifico
+            if i.quantidade==quantidadeDeletar:
+                i.delete() #se a quantidade for igual, deleta do banco
             else:
                 i.quantidade-=quantidadeDeletar
-                i.save()
+                i.save() # se não, só modifica o valor
+    #modifico o valor do pedido e o estoque do produto
     pedido.valor-=quantidadeDeletar*vProduto.valorUnitario
     pedido.save()
     vProduto.estoque+=quantidadeDeletar
@@ -181,23 +139,60 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
     
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/") #retorno pro cardapio
 
+#Método que direciona para a tela de confiração
 def confirmarPedido(request, mesa1):
-    pedido=buscarPedidoAberto(mesa1)
+    pedido=buscarPedidoAberto(request, mesa1)
+    contexto = {'mesa': mesa1, 'vPedido': pedido}
+    return render(request, "pedidos/carrinhoConfirmar.html", contexto) 
+
+#Método que confirma o pedido
+def confirmarPedidoFinal(request, mesa1):
+    pedido=buscarPedidoAberto(request, mesa1)
+    #busco a observação no banco e altero o pedido
+    observ = str(request.POST.get('observacao'))
+    pedido.observacao=observ
     pedido.status=1 #mudo o status do pedido para em preparo
     pedido.save()
-    
-    #comanda.valorTotal+=pedido.valor
+    #altero a comanda
+    comanda=buscarComanda(request, mesa1)
+    comanda.valorTotal+=pedido.valor
+    comanda.save() 
     
     return redirect("/"+str(mesa1)+"/cardapio/") 
 
-def buscarComanda(mesa1):
-    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
-    for a in dsComanda:
-        comanda = a
-    return comanda
+#----------------------------------------------> Comandas <----------------------------------------------
+#Método que lista os pedidos da Comanda
+def list_comanda(request, mesa1):
+    comanda=buscarComanda(request, mesa1)
+    dsPedidos = Pedido.objects.filter(comanda=comanda)
+    if dsPedidos.count()==0:
+        mesaContext={'mesa':mesa1}
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+    else:
+        contexto={'comanda': comanda, 'mesa': mesa1, 'dsPedidos': dsPedidos}
+        return render(request, "pedidos/comanda.html", contexto)
 
-def buscarPedidoAberto(mesa1):
-    dsPedido = Pedido.objects.filter(status=0, comanda=buscarComanda(mesa1))
-    for a in dsPedido:
-        pedido = a
-    return pedido
+#Método que irá detalhar o pedido especifico    
+def detalharPedido():
+    print("Cry")
+
+#método que busca comanda a partir da mesa
+def buscarComanda(request, mesa1):
+    mesaContext={'mesa': mesa1}
+    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
+    if dsComanda.count()== 0: #verifico se não há comanda
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext) #se não tiver
+    else:
+        for i in dsComanda: #se tiver busco
+            comanda = i
+        return comanda
+#método que busca pedido a partir da mesa
+def buscarPedidoAberto(request, mesa1):
+    dsPedido = Pedido.objects.filter(status=0, comanda=buscarComanda(request, mesa1))
+    if dsPedido.count()==0: #verifico se há pedido
+        mesaContext={'mesa':mesa1}
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+    else: #se houver, busca ele
+        for a in dsPedido:
+            pedido = a
+        return pedido

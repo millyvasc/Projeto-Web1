@@ -1,0 +1,43 @@
+{% extends 'cardapio.html' %}
+
+{% block content %}
+
+<h2 class="Tdivisoria">Pedidos</h2>
+<hr class="Tdivisoria">
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for pedido in dsPedidos %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Imagem do pedido -->
+                    <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOtXIcYfWKL-CGkcP4RE0WsN7fCpr2ck3-IA&usqp=CAU" alt="..." />
+                    <!-- Detalhes do Pedido -->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Nome do Pedido -->
+                            <h5 class="fw-bolder">Pedido N°{{ pedido.cod }}</h5>
+                            <!-- Preço e quantidade do Pedido -->
+                            Valor total: R$ {{ pedido.valor }} <br>
+                        </div>
+                    </div>
+                    <!-- Ações do Pedido -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/detalhar/{{Pedido.cod}}/">Detalhar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/confirmarPedido/">
+    Total: {{comanda.valorTotal}} <br>
+    Fechar conta
+</a>
+</div>
+
+{% endblock %}
