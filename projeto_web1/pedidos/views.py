@@ -9,6 +9,9 @@ from datetime import datetime
 import os
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import win32print
+import win32api
+# from win32.win32print import win32print
 
 # ------------------------------------------------------------
 
@@ -182,21 +185,28 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
     
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/") #retorno pro cardapio
 
+
+
+
+
 def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     import uuid
     #sufixo exclusivo com base no timestamp atual
-    timestamp = str(int(uuid.uuid4()))
-    timestamp = timestamp[:8]
+    # timestamp = str(int(uuid.uuid4()))
+    timestamp = datetime.now().strftime("%d-%m-%Y_%Hh%Mmin%Sseg")
+    # timestamp = timestamp[:8]
     # Criação do objeto canvas para gerar o PDF
-    c = canvas.Canvas(os.path.join("pdf_pedidos", f"impressao_pedido_#{pedido.cod}_{timestamp}.pdf"), pagesize=letter)
+    nome_arquivo = f"impressao_pedido_#{pedido.cod}_{timestamp}.pdf"
+    c = canvas.Canvas(os.path.join("pdf_pedidos", nome_arquivo), pagesize=letter)
     # c = canvas.Canvas("impressao_pedido.pdf", pagesize=letter)
 
     # Adicione os elementos do pedido ao PDF
     data_hora_formatada = pedido.data_hora.strftime('%d/%m/%Y %H:%M:%S')
     if pedido is not None:
         c.setFont("Helvetica", 12)
-        c.drawString(100, 720, f"Mesa: {mesa1}")
-        c.drawString(100, 700, f"Código do Pedido: {pedido.cod}")
+        c.drawString(100, 740, f"Mesa Nº: {mesa1}")
+        c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
+        c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
         c.drawString(100, 680, f"Data e Hora: {data_hora_formatada}")
         c.drawString(100, 660, "Produtos:")
     else:
@@ -205,27 +215,66 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     # Adicione os detalhes de cada produto ao PDF
     y = 640
     for produto_pedido in produtos_pedido:
+        cod_produto = produto_pedido.cod_produto_id
         produto = produto_pedido.cod_produto.nome
         quantidade = produto_pedido.quantidade
-        c.drawString(120, y, f"- {produto}: {quantidade}")
+        c.drawString(120, y, f"-> Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade}")
         y -= 20
 
     # Salve o arquivo PDF
     c.showPage()
     c.save()
+    
+    return os.path.join("pdf_pedidos", nome_arquivo) 
+   
+
+def obter_impressora_padrao():
+    # Obtenha a impressora padrão
+    impressora_padrao = win32print.GetDefaultPrinter()
+
+    # Abra a impressora e obtenha um objeto PyHANDLE
+    handle_impressora = win32print.OpenPrinter(impressora_padrao)
+
+    # Obtenha informações sobre a impressora
+    impressora_info = win32print.GetPrinter(handle_impressora, 2)
+
+    # Extraia o nome da impressora
+   # printer_info = win32print.GetPrinter("NomeDaImpressora", 2) # Osegundo argumento é sobre o nível de detalhe do retorno, 2 para obter informações completas
+    nome_impressora = impressora_info["pPrinterName"]
+
+    print("Impressora: " + nome_impressora)
+    
+    return nome_impressora #retorna o nome da impressora virtual 
 
 def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
-    # Implemente a lógica para enviar o pedido para a impressora
-    # Isso pode envolver a formatação adequada dos dados do pedido e o envio para a impressora usando a biblioteca ou serviço adequado.
-    # Exemplo simplificado:
-    for produto_pedido in produtos_pedido:
-        produto = produto_pedido.cod_produto.nome
-        quantidade = produto_pedido.quantidade
-        
-    gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
+    # Implementando a lógica para enviar o pedido para a impressora
     
-        # Formate as informações e envie para a impressora
-
+    # # Exemplo simplificado:
+    # for produto_pedido in produtos_pedido:
+    #     produto = produto_pedido.cod_produto.nome
+    #     quantidade = produto_pedido.quantidade
+    arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
+    
+    # win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
+    
+    
+    # Formate as informações e envie para a impressora
+    # obter_impressora_padrao()
+    
+    
+    
+    # listar_impressoras()
+    # definir_impressora_padrao()
+    impressora_padrao = win32print.GetDefaultPrinter()
+   
+    
+    
+    # if impressora_padrao is None:
+        # print("Não existe impressora padronizada")
+        # definir_impressora_padrao()
+    # else:
+    print("Impressora Padrão: " + impressora_padrao)
+    
 
 def fazer_pedido(request, mesa1, cod_pedido):
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
@@ -271,26 +320,59 @@ def fazer_pedido(request, mesa1, cod_pedido):
             
     return redirect('/'+str(mesa1)+'/cardapio/') #retorno para cardapio
 
-    # if dsPedidos.count()==0: #verifico se há pedido
-    #     return render(request, "pedidos/carrinhoVazio.html")
-    # else: #se houver, busca ele
-    #     for i in dsPedidos:
-    #         if i.status==0:
-    #             pedido = Pedido.objects.get(pk=i.cod)
 
+
+
+  # Variável global para armazenar o nome da impressora padrão
+# impressora_padrao = None
+
+def listar_impressoras():
+    impressoras = win32print.EnumPrinters(win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS)
+
+    print("Impressoras Disponíveis:")
+    for i, impressora in enumerate(impressoras):
+        nome_impressora = impressora[2]
+        print(f"{i+1}. {nome_impressora}")
+
+
+    opcao = int(input("Ecolha uma das opções e digite o número da impressora desejada: "))
+    if opcao >= 1 and opcao <= len(impressoras):
+        return impressoras[opcao-1][2]
+    else:
+        print("Opção inválida.")
+        return None
     
+def definir_impressora_padrao():
+    impressora_atual = win32print.GetDefaultPrinter()
+    # impressora_atual = None
+    # global impressora_padrao
+# if impressora_atual is None:
+    print(f"Impressora padrão atual: {impressora_atual}")
+    # print("Nenhuma impressora padrão selecionada.")
+    opcao = input("Deseja definir outra impressora como padrão? (S/N): ")
+    if opcao.lower() == "s":
+        nova_impressora = listar_impressoras()
+        if nova_impressora is not None:
+            win32print.SetDefaultPrinter(nova_impressora)
+            print(f"Impressora '{nova_impressora}' definida como padrão.")
+    else:
+        print("Nenhuma alteração realizada.")
     
-    # if dsComanda.count()== 0: #verifico se não há comanda
-    #     return render(request, "pedidos/carrinhoVazio.html") #se não tiver
-    # else:
-    #     for i in dsComanda: #se tiver busco
-    #         if i.status==0:
-    #             comanda = Comanda.objects.get(pk=i.cod)
+    return
+# elif impressora_atual is not None:
+#     print(f"Impressora padrão atual: {impressora_atual}")
         
-    #     dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
-    #     if dsPedido.count()==0: #verifico se há pedidp
-    #         return render(request, "pedidos/carrinhoVazio.html")
-    #     else: #se houver, busca ele
-    #         for i in dsPedido:
-    #             if i.status==0:
-    #                 pedido = Pedido.objects.get(pk=i.cod)
+        
+
+    # opcao = input(f"Deseja definir a impressora '{impressora_padrao}' como padrão? (S/N): ")
+    # if opcao.lower() == "s":
+    #     win32print.SetDefaultPrinter(impressora_padrao)
+    #     print(f"Impressora '{impressora_padrao}' definida como padrão.")
+    # else:
+    #     print("Nenhuma alteração realizada.")
+        
+        
+def obter_impressora_padrao():
+    impressora_padrao = win32print.GetDefaultPrinter()
+    print("Impressora padrão:", impressora_padrao)
+    return impressora_padrao        
