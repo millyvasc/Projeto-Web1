@@ -12620,3 +12620,12 @@ fieldset:disabled .btn {
 
   margin-top: 25px;
 }
+
+#btnCarrinho {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  background-color: #0d6efd;
+  color:white;
+  border-color: white;
+}

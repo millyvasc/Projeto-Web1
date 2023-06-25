@@ -65,52 +65,58 @@ def adicionar(request, mesa1, cod_produto):
 
 # Método para listar todos o carrinho
 def list_carrinho(request, mesa1):
-    
+    mesaContext={'mesa': mesa1}
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
     if dsComanda.count()== 0: #verifico se não há comanda
-        return render(request, "pedidos/carrinhoVazio.html") #se não tiver
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext) #se não tiver
     else:
         for i in dsComanda: #se tiver busco
             if i.status==0:
                 comanda = Comanda.objects.get(pk=i.cod)
         
         dsPedido = Pedido.objects.filter(status=0, comanda=comanda.cod)
+        
         if dsPedido.count()==0: #verifico se há pedidp
-            return render(request, "pedidos/carrinhoVazio.html")
+            #url='/pedidos/'+str(mesa1)+
+            return render(request, "pedidos/carrinhoVazio.html", mesaContext)
         else: #se houver, busca ele
             for i in dsPedido:
                 if i.status==0:
                     pedido = Pedido.objects.get(pk=i.cod)
-        
+
             #pego todos os produtos do pedido
             produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
             
-            
-            #filtragem :
-            dsPratosAux = Produto.objects.filter(
-                tipo__icontains="prato")#busco todos os pratos
-            dsPratos=[]
-            dsBebidasAux = Produto.objects.filter(
-                tipo__icontains="bebida")
-            dsBebidas=[]
-            
-            #busco os pratos
-            for i in produtosPedidos:
-                for a in dsPratosAux:
-                    if i.cod_produto.cod==a.cod:
-                        i.cod_produto.estoque=i.quantidade
-                        dsPratos.append(i.cod_produto)
-            #busco as bebidas
-            for i in produtosPedidos:
-                for a in dsBebidasAux:
-                    if i.cod_produto.cod==a.cod:
-                        i.cod_produto.estoque=i.quantidade
-                        dsBebidas.append(i.cod_produto)
-            
-            
-            contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
-            
-            return render(request, "pedidos/carrinho.html", contexto)
+            if produtosPedidos.count()==0:
+                return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+            else:
+                #filtragem :
+                dsPratosAux = Produto.objects.filter(
+                    tipo__icontains="prato")#busco todos os pratos
+                dsPratos=[]
+                dsBebidasAux = Produto.objects.filter(
+                    tipo__icontains="bebida")
+                dsBebidas=[]
+                
+                #busco os pratos
+                soma=0
+                for i in produtosPedidos:
+                    for a in dsPratosAux:
+                        if i.cod_produto.cod==a.cod:
+                            i.cod_produto.estoque=i.quantidade
+                            dsPratos.append(i.cod_produto)
+                            soma=soma+a.valorUnitario
+                #busco as bebidas
+                for i in produtosPedidos:
+                    for a in dsBebidasAux:
+                        if i.cod_produto.cod==a.cod:
+                            i.cod_produto.estoque=i.quantidade
+                            dsBebidas.append(i.cod_produto)
+                            soma=soma+a.valorUnitario
+                
+                contexto = {'mesa': mesa1, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas, 'soma': soma}
+                
+                return render(request, "pedidos/carrinho.html", contexto)
         
 def remover_carrinho(request, mesa1, cod_produto):
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
