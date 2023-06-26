@@ -188,6 +188,39 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
 
 
 
+# import xml.etree.ElementTree as ET
+#método para gerar xml do pedido
+# def gerar_xml_pedido(mesa1, pedido, produtos_pedido):
+#     # Cria o elemento raiz do XML
+#     root = ET.Element("pedido")
+    
+#     # Adiciona elementos ao XML com base nos dados do pedido
+#     mesa_element = ET.SubElement(root, "mesa")
+#     mesa_element.text = str(mesa1)
+    
+#     codigo_element = ET.SubElement(root, "codigo")
+#     codigo_element.text = str(pedido.cod)
+    
+#     data_hora_element = ET.SubElement(root, "data_hora")
+#     data_hora_element.text = pedido.data_hora.strftime('%Y-%m-%d %H:%M:%S')
+    
+#     produtos_element = ET.SubElement(root, "produtos")
+#     for produto_pedido in produtos_pedido:
+#         produto_element = ET.SubElement(produtos_element, "produto")
+#         nome_element = ET.SubElement(produto_element, "nome")
+#         nome_element.text = produto_pedido.cod_produto.nome
+#         quantidade_element = ET.SubElement(produto_element, "quantidade")
+#         quantidade_element.text = str(produto_pedido.quantidade)
+    
+#     # Cria o objeto ElementTree com a estrutura XML
+#     tree = ET.ElementTree(root)
+    
+#     # Salva o arquivo XML
+#     arquivo_xml = os.path.join("pdf_pedidos", f"pedido_#{pedido.cod}.xml")
+#     # arquivo_xml = f"pedido_#{pedido.cod}.xml"
+#     tree.write(arquivo_xml, encoding="utf-8", xml_declaration=True)
+    
+#     return arquivo_xml
 
 def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     import uuid
@@ -254,7 +287,7 @@ def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
     #     produto = produto_pedido.cod_produto.nome
     #     quantidade = produto_pedido.quantidade
     arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
-    
+    gerar_xml_pedido(mesa1, pedido, produtos_pedido)
     # win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
     
     

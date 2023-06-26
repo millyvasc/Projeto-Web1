@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<pedido><mesa>1</mesa><codigo>1</codigo><data_hora>2023-06-25 21:31:52</data_hora><produtos><produto><nome>Porção de Mandioca</nome><quantidade>1</quantidade></produto><produto><nome>Feijoada</nome><quantidade>1</quantidade></produto><produto><nome>Refrigerante Coca-Cola Lata 350ML</nome><quantidade>3</quantidade></produto><produto><nome>Refrigerante Fanta Lata 350ML</nome><quantidade>2</quantidade></produto><produto><nome>Rabada</nome><quantidade>1</quantidade></produto></produtos></pedido>
