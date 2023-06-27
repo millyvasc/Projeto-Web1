@@ -22,7 +22,7 @@
                     <form action="/pedidos/{{mesa}}/adicionar/{{vProduto.cod}}/" method="POST"
                         style="display: contents;"> {% csrf_token %}
                         <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
-                            value="1" style="max-width: 3rem" min="1" max="{{vProduto.estoque}}" />
+                            value="1" style="max-width: 5rem" min="1" max="{{vProduto.estoque}}" />
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Add to cart

@@ -11,16 +11,29 @@
                 <!-- <div class="small mb-1">SKU: BST-498</div> -->
                 <h1 class="display-5 fw-bolder">Pedido N°{{ vPedido.cod }}</h1>
                 <div class="fs-5 mb-5">
-                    <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
-                    <span>Valor total: R$ {{ vPedido.valor }}</span>
+                    {% for produto in produtos%} <!-- Verifico quando o produto pertencer ao pedido -->
+                        {% if produto.estoque == 1 %}
+                        <span>{{produto.nome}}: {{ produto.estoque }} Unidade <br>Valor: {{ produto.valorUnitario }}</span>
+                        <br>
+                        {% else %}
+                        <span>{{produto.nome}}: {{ produto.estoque }} Unidades <br>Valor: {{ produto.valorUnitario }}</span>
+                        {% endif %}
+                    {% empty %}
+                        <h1>Nenhum produto no pedido</h1>
+                        <br>
+                    {%endfor%}
+                    <br>
+                    <h3>Valor do pedido: R$ {{soma}}</h3><br>
+                    
                 </div>
                 
                 <div class="d-flex">
                     <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/" method="POST"  display='line'> {% csrf_token %}
-                        Observação: 
+                        <h3>Observação: </h3>
                         <input class="form-control text-center me-3" name="observacao" id="text" type="text"
                             value="" style="max-width: 500rem" max-length="25rem" min="0" max="200" />
-
+                        <br>
+                        <hr class="Tdivisoria">
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Confirmar pedido

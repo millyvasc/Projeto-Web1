@@ -142,7 +142,21 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
 #Método que direciona para a tela de confiração
 def confirmarPedido(request, mesa1):
     pedido=buscarPedidoAberto(request, mesa1)
-    contexto = {'mesa': mesa1, 'vPedido': pedido}
+    produtosAux = Produto.objects.all()
+    produtos = []
+    soma=0
+    #busco todos os produtos do pedido
+    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+    for i in produtosPedidos:
+        for a in produtosAux: 
+            if i.cod_produto.cod==a.cod:#salvo os produtoos, mas antes
+                i.cod_produto.valorUnitario=(a.valorUnitario*i.quantidade)#mudo o valorUnitario para a soma de todos os produtos iguais
+                i.cod_produto.estoque=i.quantidade#'salvo' a quantidade de produtos do pedido no estoque do produto
+                #isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
+                produtos.append(i.cod_produto)
+                soma=soma+(a.valorUnitario*i.quantidade)
+    
+    contexto = {'mesa': mesa1, 'vPedido': pedido,'produtos': produtos, 'soma': soma}
     return render(request, "pedidos/carrinhoConfirmar.html", contexto) 
 
 #Método que confirma o pedido
@@ -163,21 +177,32 @@ def confirmarPedidoFinal(request, mesa1):
 #----------------------------------------------> Comandas <----------------------------------------------
 #Método que lista os pedidos da Comanda
 def list_comanda(request, mesa1):
-    comanda=buscarComanda(request, mesa1)
-    dsPedidos = Pedido.objects.filter(comanda=comanda)
+    mesaContext={'mesa':mesa1}
+    dsComanda = Comanda.objects.filter(status=0, mesa=mesa1) 
+    if dsComanda.count()== 0: #verifico se não há comanda
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext) #se não tiver
+    else:
+        for i in dsComanda: #se tiver busco
+            comanda = i
+    dsPedidos = Pedido.objects.filter(comanda=comanda.cod)
     if dsPedidos.count()==0:
-        mesaContext={'mesa':mesa1}
         return render(request, "pedidos/carrinhoVazio.html", mesaContext)
     else:
-        contexto={'comanda': comanda, 'mesa': mesa1, 'dsPedidos': dsPedidos}
-        return render(request, "pedidos/comanda.html", contexto)
+        aux=0
+        for pedido in dsPedidos:
+            produtos=Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+            if produtos.count()==0:
+                aux+=1
+        if aux!=0:
+            return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+        else:
+            contexto={'comanda': comanda, 'mesa': mesa1, 'dsPedidos': dsPedidos}
+            return render(request, "pedidos/comanda.html", contexto)
 
 #Método que irá detalhar o pedido especifico    
 def detalharPedido(request, mesa1, cod_pedido):
     pedido = Pedido.objects.get(pk=cod_pedido)
-    
     produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
-            
     produtosAux = Produto.objects.all()
     produtos=[]
     for i in produtosPedidos:
@@ -191,8 +216,32 @@ def detalharPedido(request, mesa1, cod_pedido):
     return render(request, "pedidos/detalhar.html", contexto)
 
 #Método fe fechamento de conta
-def fecharConta(requesst, mesa1):
-    print("Cry")
+def fecharConta(request, mesa1):
+    comanda = buscarComanda(request, mesa1)
+    pedidos = Pedido.objects.filter(comanda=comanda.cod)
+    produtosAux = Produto.objects.all()
+    produtos = []
+    #busco todos os produtos de todos os pedidos
+    verificacao = 0
+    verificacaoCarrinho = 0
+    for p in pedidos:
+        if p.status!=2: #verifico se os pedidos estão todos concluidos
+            verificacao+=1
+        elif p.status==0: #olho se tem carrinho aberto
+            verificacaoCarrinho+=1
+        produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=p.cod)
+        
+        for i in produtosPedidos:
+            for a in produtosAux: 
+                if i.cod_produto.cod==a.cod:#salvo os produtoos, mas antes
+                    i.cod_produto.valorUnitario=(a.valorUnitario*i.quantidade)#mudo o valorUnitario para a soma de todos os produtos iguais
+                    i.cod_produto.estoque=i.quantidade#'salvo' a quantidade de produtos do pedido no estoque do produto
+                    i.cod_produto.cod=p.cod#'salvo' o id do pedido no id do produto
+                    #isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
+                    produtos.append(i.cod_produto)
+          
+    contexto = {'mesa': mesa1,'comanda': comanda, 'pedidos': pedidos, 'produtos': produtos, 'verificacao': verificacao, 'verificacaoCarrinho': verificacaoCarrinho}
+    return render(request, "pedidos/fecharConta.html", contexto)
 
 #método que busca comanda a partir da mesa
 def buscarComanda(request, mesa1):

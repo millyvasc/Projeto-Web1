@@ -1,0 +1,101 @@
+{% extends 'cardapio.html' %}
+
+{% block content %}
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <!--  -->
+                <h1 class="display-5 fw-bolder">Comanda N°{{ comanda.cod }}</h1>
+                <br>
+                {% for pedido in pedidos %} <!-- Mostro todos os pedidos -->
+                <div class="fs-5 mb-5">
+                    <br>
+                    <h2>Pedido N°{{ pedido.cod }}</h2>
+                    {% for produto in produtos%} <!-- Verifico quando o produto pertencer ao pedido -->
+                        {% if produto.cod == pedido.cod %}
+                        <span>{{produto.nome}}: {{ produto.estoque }} Unidades <br>Valor: {{ produto.valorUnitario }}</span>
+                        <br>
+                        {% endif %}
+                    {% empty %}
+                        <h1>Nenhum produto no pedido</h1>
+                        <br>
+                    {%endfor%}
+                    <br>
+                    {% if pedido.status == 0 %}
+                        <span>Status: Carrinho ainda sendo montado</span>
+                    {% elif pedido.status == 1 %}
+                        <span>Status: Pedido em preparação</span>
+                    {% elif pedido.status == 2 %}
+                        <span>Status: Pedido conluido</span>
+                    {% endif %}<br>
+                    <span>Observação: {{ pedido.observacao }}</span>
+                    <h3>Valor do pedido: R$ {{ pedido.valor }}</h3><br>
+                    <hr class="Tdivisoria">
+                    {% empty %}
+                        <br><h1>Nenhum pedido realizado</h1><br>
+                </div>
+                {% endfor %}   
+
+                <h1>Valor total: {{comanda.valorTotal}}<br></h1>
+                
+                <div class="d-flex">
+                    <form action="/manda pra onde for agora" method="POST"  display='line'> {% csrf_token %}
+                        <style type="text/css">
+                            .corVermelha {
+                                color: #f00;
+                            }
+                        </style>
+                        <script language="javascript">
+                            function habilitacao(){
+                              if(document.getElementById('dinheiro').checked == true){
+                                document.getElementById('troco').disabled = false;
+                              }else{
+                                document.getElementById('troco').disabled = true;
+                              }
+                              if({{verificacao}} != 0){
+                                document.getElementById('btn').disabled = true;
+                              }else{
+                                document.getElementById('btn').disabled = false;
+                              }
+                            }
+                          </script>
+                        <br>
+                        <h3>Selecione a forma de pagamento:<br></h3>
+                        <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">
+                        <label for="pix">PIX</label><br>
+                        <input type="radio" onClick="habilitacao()" id="credito" name="forma_pagamento" value="Credito">
+                        <label for="credito">Credito</label><br>
+                        <input type="radio" onClick="habilitacao()" id="debito" name="forma_pagamento" value="Débito">
+                        <label for="debito">Débito</label><br>
+                        <input type="radio" onClick="habilitacao()" id="dinheiro" name="forma_pagamento" value="Dinheiro">
+                        <label for="dinheiro">Dinheiro</label><br>
+                        <span>Troco para:</span> 
+                        <input class="form-control text-center me-3" name="troco" id="troco" type="number"
+                            value="{{comanda.valorTotal}}" style="max-width: 10rem" min="{{comanda.valorTotal}}" max="" disabled/><br>
+                        {% if verificacao !=  0 %}
+                        <span class="corVermelha">*Impossível fechar a conta*</span><br>
+                            {% if verificacaoCarrinho == verificacao %}
+                                <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
+                            {% else %}
+                            <span class="corVermelha">Possui pedidos em preparação, aguarde serem entregues, ou cancele-os!</span><br>
+                                {% if verificacaoCarrinho !=  0 %}
+                                <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
+                                {% endif %}
+                            {% endif %}
+                        <br>
+                        {% endif %}
+                        <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" disabled>
+                            <i class="bi-cart-fill me-1"></i>
+                            Pedir a conta
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

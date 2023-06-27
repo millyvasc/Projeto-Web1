@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
@@ -12,9 +11,8 @@
                 <h1 class="display-5 fw-bolder">Pedido N°{{ pedido.cod }}</h1>
                 <div class="fs-5 mb-5">
                     <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
-                    <span>Produtos: </span>
                     {% for produto in produtos %}
-                        <br>
+                        
                         <span>{{produto.nome}}: {{ produto.estoque }} Unidades <br>Valor: {{ produto.valorUnitario }}</span>
                     {% empty %}
                         <h1>Nenhum produto disponível</h1>

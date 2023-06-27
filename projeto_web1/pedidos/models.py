@@ -9,8 +9,8 @@ class Pedido(models.Model):
     valor = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     observacao = models.CharField(max_length=200, blank=True)
     status = models.IntegerField(default=0) # 0 = EM ABERTO 
-                                   # 1 = EM PREPARO 
-                                   # 2 = ENTREGUE
+                                            # 1 = EM PREPARO 
+                                            # 2 = ENTREGUE
     
     def __str__(self):
         return "Pedido "+str(self.cod)
