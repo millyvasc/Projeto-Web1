@@ -173,7 +173,25 @@ def list_comanda(request, mesa1):
         return render(request, "pedidos/comanda.html", contexto)
 
 #Método que irá detalhar o pedido especifico    
-def detalharPedido():
+def detalharPedido(request, mesa1, cod_pedido):
+    pedido = Pedido.objects.get(pk=cod_pedido)
+    
+    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+            
+    produtosAux = Produto.objects.all()
+    produtos=[]
+    for i in produtosPedidos:
+        for a in produtosAux: #guardo os produtos
+            if i.cod_produto.cod==a.cod:
+                i.cod_produto.valorUnitario=+(a.valorUnitario*i.quantidade)
+                i.cod_produto.estoque=i.quantidade
+                produtos.append(i.cod_produto)
+   
+    contexto = {'pedido': pedido, 'produtos': produtos, 'mesa': mesa1}
+    return render(request, "pedidos/detalhar.html", contexto)
+
+#Método fe fechamento de conta
+def fecharConta(requesst, mesa1):
     print("Cry")
 
 #método que busca comanda a partir da mesa

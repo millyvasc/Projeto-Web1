@@ -24,7 +24,7 @@
                     </div>
                     <!-- Ações do Pedido -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/detalhar/{{Pedido.cod}}/">Detalhar</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/detalhar/{{pedido.cod}}/">Detalhar</a>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
         </div>
     </div>
 </section>
-<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/confirmarPedido/">
+<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/fecharConta/">
     Total: {{comanda.valorTotal}} <br>
     Fechar conta
 </a>

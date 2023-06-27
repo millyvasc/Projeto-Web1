@@ -10,4 +10,6 @@ urlpatterns = [
     path("<int:mesa1>/confirmarPedidoFinal/", views.confirmarPedidoFinal, name="confirmarPedidoFinal"),
     path("<int:mesa1>/comanda/", views.list_comanda, name="list_comanda"),
     path("<int:mesa1>/detalhar/<int:cod_pedido>/", views.detalharPedido, name="detalharPedido"),
+    
+    path("<int:mesa1>/fecharConta/", views.fecharConta, name="fecharConta"),
 ]
