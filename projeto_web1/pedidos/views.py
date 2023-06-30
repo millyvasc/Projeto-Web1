@@ -191,34 +191,32 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
     # retorno pro cardapio
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
 
-# Método que direciona para a tela de confiração
+# Método que direciona para a tela de confirmação
 
 
-def confirmarPedido(request, mesa1):
-    pedido = buscarPedidoAberto(request, mesa1)
-    produtosAux = Produto.objects.all()
-    produtos = []
-    soma = 0
-    # busco todos os produtos do pedido
-    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
-    for i in produtosPedidos:
-        for a in produtosAux:
-            if i.cod_produto.cod == a.cod:  # salvo os produtoos, mas antes
-                # mudo o valorUnitario para a soma de todos os produtos iguais
-                i.cod_produto.valorUnitario = (a.valorUnitario*i.quantidade)
-                # 'salvo' a quantidade de produtos do pedido no estoque do produto
-                i.cod_produto.estoque = i.quantidade
-                # isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
-                produtos.append(i.cod_produto)
-                soma = soma+(a.valorUnitario*i.quantidade)
+# def confirmarPedido(request, mesa1):
+#     pedido = buscarPedidoAberto(request, mesa1)
+#     produtosAux = Produto.objects.all()
+#     produtos = []
+#     soma = 0
+#     # busco todos os produtos do pedido
+#     produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+#     for i in produtosPedidos:
+#         for a in produtosAux:
+#             if i.cod_produto.cod == a.cod:  # salvo os produtoos, mas antes
+#                 # mudo o valorUnitario para a soma de todos os produtos iguais
+#                 i.cod_produto.valorUnitario = (a.valorUnitario*i.quantidade)
+#                 # 'salvo' a quantidade de produtos do pedido no estoque do produto
+#                 i.cod_produto.estoque = i.quantidade
+#                 # isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
+#                 produtos.append(i.cod_produto)
+#                 soma = soma+(a.valorUnitario*i.quantidade)
 
-    contexto = {'mesa': mesa1, 'vPedido': pedido,
-                'produtos': produtos, 'soma': soma}
-    return render(request, "pedidos/carrinhoConfirmar.html", contexto)
+#     contexto = {'mesa': mesa1, 'vPedido': pedido,
+#                 'produtos': produtos, 'soma': soma}
+#     return render(request, "pedidos/carrinhoConfirmar.html", contexto)
 
 # Método que confirma o pedido
-
-
 def confirmarPedidoFinal(request, mesa1):
     pedido = buscarPedidoAberto(request, mesa1)
     # busco a observação no banco e altero o pedido

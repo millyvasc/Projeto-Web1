@@ -2,6 +2,15 @@
 
 {% block content %}
 
+<header class="bg-dark py-5" style="background: darkblue !important;">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Comanda Digital</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Faça seu pedido agora mesmo!</p>
+        </div>
+    </div>
+</header>
+
 <h2 class="Tdivisoria">Pedidos</h2>
 <hr class="Tdivisoria">
 
@@ -12,7 +21,9 @@
             <div class="col mb-5">
                 <div class="card h-100">
                     <!-- Imagem do pedido -->
-                    <img class="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOtXIcYfWKL-CGkcP4RE0WsN7fCpr2ck3-IA&usqp=CAU" alt="..." />
+                    <img class="card-img-top"
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOtXIcYfWKL-CGkcP4RE0WsN7fCpr2ck3-IA&usqp=CAU"
+                        alt="..." />
                     <!-- Detalhes do Pedido -->
                     <div class="card-body p-4">
                         <div class="text-center">
@@ -24,7 +35,8 @@
                     </div>
                     <!-- Ações do Pedido -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/detalhar/{{pedido.cod}}/">Detalhar</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                href="/pedidos/{{mesa}}/detalhar/{{pedido.cod}}/">Detalhar</a>
                         </div>
                     </div>
                 </div>
@@ -34,10 +46,17 @@
         </div>
     </div>
 </section>
-<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/fecharConta/">
-    Total: {{comanda.valorTotal}} <br>
-    Fechar conta
-</a>
+<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto"
+        href="/pedidos/{{mesa}}/fecharConta/">
+        Total: {{comanda.valorTotal}} <br>
+        Fechar conta
+    </a>
 </div>
+
+<footer class="py-5 bg-dark" style="    background: darkblue !important;">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+    </div>
+</footer>
 
 {% endblock %}
