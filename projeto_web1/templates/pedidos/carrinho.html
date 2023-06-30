@@ -2,82 +2,92 @@
 
 {% block content %}
 
+<section class="h-100" style="background-color: #eee;">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
 
-<h2 class="Tdivisoria">Pratos</h2>
-<hr class="Tdivisoria">
-
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for produto in dsPratos %}
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <!-- Imagem do produto -->
-                    <img class="card-img-top" src="{{ produto.img.url}}" alt="..." />
-                    <!-- Detalhes do produto -->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Nome do produto -->
-                            <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço e quantidade do produto -->
-                            R$ {{ produto.valorUnitario }} <br>
-                            Quantidade: {{ produto.estoque }}
-                        </div>
+                <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0 text-black">Carrinho</h3>
+                    <div>
+                        <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!" class="text-body">price <i
+                                    class="fas fa-angle-down mt-1"></i></a></p>
                     </div>
-                    <!-- Ações do produto -->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
+                </div> -->
+
+                {% for produto in dsProdutos %}
+                <div class="card rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img src="{{produto.img.url}}" class="img-fluid rounded-3" alt="{{produto.nome}}">
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <p class="lead fw-normal mb-2">{{ produto.nome }}</p>
+                                <p><span class="text-muted">Descrição: </span>{{ produto.descricao }}</p>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                <button class="btn btn-link px-2"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+
+                                <input id="form1" min="0" name="quantity" value="{{ produto.estoque }}" type="number"
+                                    class="form-control form-control-sm" />
+
+                                <button class="btn btn-link px-2"
+                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h5 class="mb-0">R$ {{ produto.valorUnitario }}</h5>
+                            </div>
+                            <div class="text-center"><a style="text-decoration: none; color: darkslategray;"
+                                    href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a></div>
+                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <h1>Carrinho Vazio !</h1>
+                {% endfor %}
+
+                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/" method="POST"> {% csrf_token %}
+                    <div class="card mb-4">
+                        <div class="card-body p-4 d-flex flex-row">
+                            <div class="form-outline flex-fill">
+                                <input name="observacao" id="text" type="text" value="" id="form1"
+                                    class="form-control form-control-lg" placeholder="Observação" max-length="25rem"
+                                    min="0" max="200" />
+                            </div>
+                            <!-- <button type="button" class="btn btn-outline-warning btn-lg ms-3">Adicionar</button> -->
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div style="display: flex;">
+                            <div class="card-body">
+                                <button type="submit" class="btn btn-warning btn-block btn-lg">Concluir pedido</button>
+                            </div>
+                            <div class="card-body">
+                                <button type="text" class="btn btn-warning btn-block btn-lg" style="background: none;
+                                        border: none; cursor: auto;">Total: {{soma}}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
-            {% empty %}
-            <h1>Nenhum produto selecionado</h1>
-            {% endfor %}
         </div>
+
+    </div>
+    </div>
     </div>
 </section>
 
-
-<h2 class="Tdivisoria">Bebidas</h2>
-<hr class="Tdivisoria">
-
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for produto in dsBebidas %}
-            <div class="col mb-5">
-                <div class="card h-100">
-                    <!-- Imagem do produto -->
-                    <img class="card-img-top" src="{{ produto.img.url}}" alt="..." />
-                    <!-- Detalhes do produto -->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Nome do produto -->
-                            <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço e quantidade do produto -->
-                            R$ {{ produto.valorUnitario }} <br>
-                            Quantidade: {{ produto.estoque }}
-                        </div>
-                    </div>
-                    <!-- Ações do produto -->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <h1>Nenhum produto selecionado</h1>
-            {% endfor %}
-
-        </div>
-    </div>
-</section>
-<div bor class="text-center"><a id="btnCarrinho" class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/confirmarPedido/">
-    Total: {{soma}} <br>
-    Concluir pedido
-</a>
-</div>
 
 {% endblock %}

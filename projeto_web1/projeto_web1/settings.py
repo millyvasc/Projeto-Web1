@@ -20,8 +20,6 @@ INSTALLED_APPS = [
     'pedidos',
     'garcons',
     'funcionarios',
-    'cozinhas',
-    'clientes',
     'caixas',
     'administradores',
     'django_cleanup.apps.CleanupConfig',
