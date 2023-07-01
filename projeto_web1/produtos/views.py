@@ -1,3 +1,5 @@
+from comandas.models import Comanda
+from pedidos.models import Pedido, Pedido_Produto
 from django.conf import settings
 import os
 from django.http import HttpResponse, HttpResponseRedirect
@@ -16,6 +18,8 @@ def index(request, mesa):
         tipo__icontains="prato").exclude(estoque=0)
     dsBebidas = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
+    
+    
     contexto = {'mesa': mesa, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
     return render(request, "produtos/index.html", contexto)
 

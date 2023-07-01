@@ -33,27 +33,30 @@
                             </div>
                             <div class="col-md-3 col-lg-3 col-xl-3">
                                 <p class="lead fw-normal mb-2">{{ produto.nome }}</p>
-                                <p><span class="text-muted">Descrição: </span>{{ produto.descricao }}</p>
+                                <p><span class="text-muted">Descrição: </span>{{ produto.descricao }}<br><span class="text-muted">No carrinho: </span>{{ produto.estoque }}</p>
+                                
                             </div>
-                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                <button class="btn btn-link px-2"
-                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                    <i class="fas fa-minus"></i>
-                                </button>
+                            
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <p class="lead fw-normal mb-2">Remover</p>
+                                <form action="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/" method="POST"> {% csrf_token %}
+                                    <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
+                                        value="1" style="max-width: 3rem" min="1" max="{{produto.estoque}}" />
+            
+                                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                                        <i class="bi-cart-fill me-1"></i>
+                                        
+                                    </button>
+                                </form>   
+                            </div>
 
-                                <input id="form1" min="0" name="quantity" value="{{ produto.estoque }}" type="number"
-                                    class="form-control form-control-sm" />
-
-                                <button class="btn btn-link px-2"
-                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                    <i class="fas fa-plus"></i>
-                                </button>
                             </div>
                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                <h5 class="mb-0">R$ {{ produto.valorUnitario }}</h5>
+                                <h5 class="mb-0">Total: R$ {{ produto.valorUnitario }}</h5>
                             </div>
-                            <div class="text-center"><a style="text-decoration: none; color: darkslategray;"
-                                    href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a></div>
+                            <div class="text-center">
+                                
+                            </div>
                             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                 <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                             </div>

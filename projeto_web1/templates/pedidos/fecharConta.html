@@ -32,7 +32,16 @@
                     {% endif %}<br>
                     <span>Observação: {{ pedido.observacao }}</span>
                     <h3>Valor do pedido: R$ {{ pedido.valor }}</h3><br>
+                    <div class="d-flex">
+                        {% if pedido.status != 2 %}
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
+                        </div>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{pedido.comanda.mesa}}/cancelar/{{pedido.cod}}/">Cancelar</a>
+                        </div>
+                        {% endif %}
+                    </div>
                     <hr class="Tdivisoria">
+
                     {% empty %}
                         <br><h1>Nenhum pedido realizado</h1><br>
                 </div>
