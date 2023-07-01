@@ -1,7 +1,7 @@
 {% extends 'painel.html' %} {%block content%}
 
-<div class="btn-group-toggle" data-toggle="buttons">
-  <a href="add" class="btn btn-primary">Add Funcionário</a>
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary"><a href="/funcionarios/register">Adicionar Funcionário</a></h6>
 </div>
 
 <div class="row">
@@ -48,20 +48,29 @@
                 <th
                   class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                 >
-                  Tipo
+                  Grupo
                 </th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" colspan="2">
+                  Ações
+                </th>
+                
               </tr>
             </thead>
             <tbody>
               {% for funcionario in dsFuncionarios %}
-              <tr>
-                <td>{{funcionario.id}}</td>
-                <td>{{funcionario.nome}}</td>
-                <td>{{funcionario.CPF}}</td>
-                <td>{{funcionario.telefone}}</td>
-                <td>{{funcionario.endereco}}</td>
-                <td>{{funcionario.senha}}</td>
-                <td>{{funcionario.tipo}}</td>
+            <tr>
+                <td>{{ funcionario.id }}</td>
+                <td>{{ funcionario.user.first_name }}</td>
+                <td>{{ funcionario.CPF }}</td>
+                <td>{{ funcionario.telefone }}</td>
+                <td>{{ funcionario.endereco }}</td>
+                <td>{{ funcionario.user.password }}</td>
+                {% for group in funcionario.user.groups.all %}
+                <td>{{ group.name }}</td>
+                <td><a href="/funcionarios/edit/{{funcionario.id}}">Editar</a></td>
+                <td><a href="/funcionarios/remove/{{funcionario.id}}">Excluir</a></td>
+                {% endfor %}
+                
               </tr>
               {% empty %}
               <tr>

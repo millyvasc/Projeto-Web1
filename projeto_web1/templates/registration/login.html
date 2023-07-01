@@ -1,0 +1,70 @@
+{% load static %}
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets_painel/img/apple-icon.png' %}" />
+    <link rel="icon" type="image/png" href="{% static 'assets_painel/img/favicon.png'%}" />
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <link href="{% static 'assets_painel/css/nucleo-icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets_painel/css/nucleo-svg.css' %}" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="{% static 'assets_painel/css/nucleo-svg.css'%}" rel="stylesheet" />
+    <link id="pagestyle" href="{% static 'assets_painel/css/argon-dashboard.css' %}" rel="stylesheet" />
+    <link id="pagestyle" href="{% static 'assets_painel/css/style.css' %}" rel="stylesheet" />
+  </head>
+  <style>
+    .bg-image-vertical {
+        position: relative;
+        overflow: hidden;
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: auto 100%;
+        }
+        
+        @media (min-width: 1025px) {
+        .h-custom-2 {
+        height: 100%;
+        }
+        }
+
+  </style>
+
+
+  {% if user.is_authtenticated %}
+    <h3>ação nao permitida</h3>
+    <hr>
+    <p class"load">
+        <strong>
+            Houve Algum Problema
+        </strong>
+
+    </p>
+   {%else%}
+<!-- Section: Design Block -->
+<section class="vh-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex align-items-center justify-content-center h-100">
+        <div class="col-md-8 col-lg-7 col-xl-6">
+          <img src="{% static 'login/login.svg' %}"
+            class="img-fluid" alt="Phone image">
+        </div>
+        <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+          <form method='post'>
+                {% csrf_token%}
+            <!-- Email input -->
+                 {{form.as_p}}
+  
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+  
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {% endif %}
