@@ -98,7 +98,7 @@ def list_carrinho(request, mesa1):
                             soma = soma+(a.valorUnitario*i.quantidade)
 
                 contexto = {'mesa': mesa1,
-                            'dsProdutos': dsProdutos, 'soma': soma}
+                            'dsProdutos': dsProdutos, 'soma': soma, 'pedido': pedido}
                 return render(request, "pedidos/carrinho.html", contexto)
 
 # Método para remover algo do carrinho
@@ -156,13 +156,16 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
 
 # Método que confirma o pedido
-def confirmarPedidoFinal(request, mesa1):
-    pedido = buscarPedidoAberto(request, mesa1)
+def confirmarPedidoFinal(request, mesa1, cod_pedido):
+    
+    #pedido = buscarPedidoAberto(request, mesa1)
+    pedido = Pedido.objects.get(pk=cod_pedido)
     # busco a observação no banco e altero o pedido
     observ = str(request.POST.get('observacao'))
     pedido.observacao = observ
     pedido.status = 1  # mudo o status do pedido para em preparo
     pedido.save()
+    
     # altero a comanda
     comanda = buscarComanda(request, mesa1)
     comanda.valorTotal += pedido.valor
@@ -172,31 +175,71 @@ def confirmarPedidoFinal(request, mesa1):
 
 def modificarPedido(request, mesa1, cod_pedido):
     pedidoModificando = Pedido.objects.get(pk=cod_pedido)
-    pedidosCarrinho = Pedido.objects.filter(comanda=pedidoModificando.comanda.cod, status=0)
+    comanda = pedidoModificando.comanda
+    pedidosCarrinho = Pedido.objects.filter(comanda=comanda.cod, status=0)
     
-    if pedidosCarrinho.count() != 0:
-        for pedido in pedidosCarrinho:
-            pedidoCarrinho=pedido
+    if pedidoModificando.status != 0:
         
-        if pedidoModificando.status != 0:
-            produtosModificando = Pedido_Produto.objects.filter(cod_produto=pedidoModificando.cod)
-            produtosCarrinho = Pedido_Produto.objects.filter(cod_produto=pedidoCarrinho.cod)
-            for prodCarrinho in produtosCarrinho:
-                for prodModificando in produtosModificando:
-                    if prodCarrinho.cod_produto == prodModificando.cod_produto:
-                        prodModificando.quantidade += prodCarrinho.quantidade
-                        prodCarrinho.delete()
-                        prodModificando.save()
-                    else:
-                        prodCarrinho.cod_pedido=prodModificando.cod_pedido
-                        prodCarrinho.save()
-            pedidoCarrinho.delete()
-            
-    pedidoModificando.status=0
-    pedidoModificando.save()
-
+        if pedidosCarrinho.count()==0: #não tem carrinho
+            pedidoModificando.status=0 
+            #
+            #Aqui a geração de pdf para cancelamento do pedido modificando
+            #
+            pedidoModificando.save()
         
     return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
+
+def deletarPedido(request, mesa1, cod_pedido):
+    pedido = Pedido.objects.get(pk=cod_pedido)
+    produtosAux = Produto.objects.all()
+    produtos = []
+    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+
+    for i in produtosPedidos:
+        for a in produtosAux:
+            if i.cod_produto.cod == a.cod:  # salvo os produtoos, mas antes
+                # mudo o valorUnitario para a soma de todos os produtos iguais
+                i.cod_produto.valorUnitario = (
+                    a.valorUnitario*i.quantidade)
+                # 'salvo' a quantidade de produtos do pedido no estoque do produto
+                i.cod_produto.estoque = i.quantidade
+                i.cod_produto.cod = pedido.cod  # 'salvo' o id do pedido no id do produto                    # isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
+                produtos.append(i.cod_produto)
+    
+    contexto = {'mesa': mesa1, 'pedido': pedido, 'produtos': produtos}
+    
+    return render(request, "pedidos/deletar.html", contexto)
+
+def deletarPedidoFinal(request, mesa1, cod_pedido):
+    pedido = Pedido.objects.get(pk=cod_pedido)
+    #reaver valores e estoque
+    if pedido.status!=0:
+        pedido.comanda.valorTotal=pedido.comanda.valorTotal-pedido.valor
+        pedido.comanda.save()
+    produtosAux = Produto.objects.all()
+    produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+
+    for produtoPedido in produtosPedidos:
+        for produto in produtosAux:
+            if produtoPedido.cod_produto.cod == produto.cod:  # salvo os produtoos, mas antes
+                produto.estoque=produto.estoque+produtoPedido.quantidade
+                produto.save()
+                
+    
+    #
+    # Aqui a emissão do pdf
+    #
+    
+    #deleção de pedidos e comanda caso estejam vazios
+    
+    comanda = pedido.comanda
+    pedidos = Pedido.objects.filter(comanda=comanda.cod)
+    if pedidos.count() == 0:
+        comanda.delete()
+        
+    pedido.delete()
+    
+    return redirect("/"+str(mesa1)+"/cardapio/")
 
 # ----------------------------------------------> Comandas <----------------------------------------------
 
@@ -222,8 +265,8 @@ def fecharConta(request, mesa1):
     for p in pedidos:
         if p.status != 2:  # verifico se os pedidos estão todos concluidos
             verificacao += 1
-        elif p.status == 0:  # olho se tem carrinho aberto
-            verificacaoCarrinho += 1
+        if p.status == 0:  # olho se tem carrinho aberto
+            verificacaoCarrinho = 10
         produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=p.cod)
 
         for i in produtosPedidos:
@@ -240,7 +283,12 @@ def fecharConta(request, mesa1):
 
     contexto = {'mesa': mesa1, 'comanda': comanda, 'pedidos': pedidos, 'produtos': produtos,
                 'verificacao': verificacao, 'verificacaoCarrinho': verificacaoCarrinho}
-    return render(request, "pedidos/fecharConta.html", contexto)
+    pedidos = Pedido.objects.filter(comanda=comanda.cod)
+    if pedidos.count() == 0:
+        mesaContext = {'mesa': mesa1}
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+    else:
+        return render(request, "pedidos/fecharConta.html", contexto)
 
 # método que busca comanda a partir da mesa
 

@@ -68,7 +68,7 @@
                 <h1>Carrinho Vazio !</h1>
                 {% endfor %}
 
-                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/" method="POST"> {% csrf_token %}
+                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/{{pedido.cod}}/" method="POST"> {% csrf_token %}
                     <div class="card mb-4">
                         <div class="card-body p-4 d-flex flex-row">
                             <div class="form-outline flex-fill">
