@@ -15,15 +15,6 @@
     <div class="container h-100 py-5">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-10">
-
-                <!-- <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="fw-normal mb-0 text-black">Carrinho</h3>
-                    <div>
-                        <p class="mb-0"><span class="text-muted">Sort by:</span> <a href="#!" class="text-body">price <i
-                                    class="fas fa-angle-down mt-1"></i></a></p>
-                    </div>
-                </div> -->
-
                 {% for produto in dsProdutos %}
                 <div class="card rounded-3 mb-4">
                     <div class="card-body p-4">
@@ -33,42 +24,38 @@
                             </div>
                             <div class="col-md-3 col-lg-3 col-xl-3">
                                 <p class="lead fw-normal mb-2">{{ produto.nome }}</p>
-                                <p><span class="text-muted">Descrição: </span>{{ produto.descricao }}<br><span class="text-muted">No carrinho: </span>{{ produto.estoque }}</p>
-                                
+                                <p><span class="text-muted">Descrição: </span>{{ produto.descricao }}
+                                    <br><span class="text-muted">No carrinho: </span>{{ produto.estoque }}
+                                </p>
                             </div>
-                            
+
                             <div class="col-md-3 col-lg-3 col-xl-3">
-                                <p class="lead fw-normal mb-2">Remover</p>
-                                <form action="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/" method="POST"> {% csrf_token %}
-                                    <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
-                                        value="1" style="max-width: 3rem" min="1" max="{{produto.estoque}}" />
-            
-                                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">
-                                        <i class="bi-cart-fill me-1"></i>
-                                        
+                                <form action="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/" method="POST"
+                                    style="display: flex;">
+                                    {% csrf_token %}
+                                    <input class="form-control text-center me-3" name="quantidade" id="inputQuantity"
+                                        type="number" value="0" style="max-width: 3rem" min="1"
+                                        max="{{produto.estoque}}" />
+                                    <button class="btn btn-outline-dark flex-shrink-0" type="submit">Remover
                                     </button>
-                                </form>   
+
+                                </form>
                             </div>
 
-                            </div>
                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                <h5 class="mb-0">Total: R$ {{ produto.valorUnitario }}</h5>
+                                <h5 class="mb-0">Valor: R$ {{ produto.valorUnitario }}</h5>
                             </div>
-                            <div class="text-center">
-                                
-                            </div>
-                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
-                            </div>
-
                         </div>
                     </div>
                 </div>
                 {% empty %}
                 <h1>Carrinho Vazio !</h1>
                 {% endfor %}
+            </div>
 
-                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/{{pedido.cod}}/" method="POST"> {% csrf_token %}
+            <div class="col-10">
+                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/{{pedido.cod}}/" method="POST">
+                    {% csrf_token %}
                     <div class="card mb-4">
                         <div class="card-body p-4 d-flex flex-row">
                             <div class="form-outline flex-fill">
@@ -76,7 +63,6 @@
                                     class="form-control form-control-lg" placeholder="Observação" max-length="25rem"
                                     min="0" max="200" />
                             </div>
-                            <!-- <button type="button" class="btn btn-outline-warning btn-lg ms-3">Adicionar</button> -->
                         </div>
                     </div>
 
@@ -92,12 +78,8 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
-
-    </div>
-    </div>
     </div>
 </section>
 

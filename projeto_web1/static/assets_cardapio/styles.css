@@ -12626,6 +12626,12 @@ fieldset:disabled .btn {
   right: 15px;
   bottom: 15px;
   background-color: #0d6efd;
-  color:white;
+  color: white;
   border-color: white;
+}
+
+
+.comanda {
+  display: flex;
+  justify-content: space-between;
 }

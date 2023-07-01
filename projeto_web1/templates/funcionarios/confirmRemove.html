@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'painel.html' %}
+
+{% block content %}
+
+<div class="deleteProduto">
     ID: {{funcionario.user.id}}
 
-    <hr> Tem certeza?
+    <hr>
+    Tem certeza que deseja excluir {{funcionario.user.username}}?
+    <hr>
 
-    <a href="{% url 'removeFinal' funcionario.id %}">Sim</a>
-    <a href="/funcionarios/">Nao</a>
-</body>
-</html>
+    <a href="{% url 'removeFinal' funcionario.id %}" class="btnProduto" style="margin: 50px">SIM</a>
+    <a href="/funcionarios/" class="btnProduto" style="margin: 50px">NÃO</a>
+</div>
+
+{% endblock %}

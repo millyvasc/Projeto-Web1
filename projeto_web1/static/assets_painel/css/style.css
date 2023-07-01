@@ -54,3 +54,13 @@ select {
 
 
 /* #5e72e4 */
+
+
+.teste {
+    width: 90% !important;
+    font-size: 0.875rem !important;
+    font-weight: 400 !important;
+    color: #495057 !important;
+    margin: auto !important;
+    margin-bottom: 30px !important;
+}
