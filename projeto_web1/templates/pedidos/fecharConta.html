@@ -93,22 +93,6 @@
                             color: #f00;
                         }
                     </style>
-                    <script language="javascript">
-                        function habilitacao() {
-                            if (document.getElementById('dinheiro').checked == true) {
-                                document.getElementById('troco').disabled = false;
-                            } else {
-                                document.getElementById('troco').disabled = true;
-                            }
-
-                            var verificacao = 0; // exemplo de variável que será comparada com zero
-                            if (verificacao != 0) {
-                                document.getElementById('btn').disabled = true;
-                            } else {
-                                document.getElementById('btn').disabled = false;
-                            }
-                        }
-                    </script>
 
                     <br>
                     <h3>Selecione a forma de pagamento:<br></h3>
@@ -153,19 +137,24 @@
                         disabled /><br> -->
 
                     {% if verificacao != 0 %}
+                    <br>
                     <span class="corVermelha">*Impossível fechar a conta*</span><br>
                     {% if verificacaoCarrinho == verificacao %}
                     <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
                     {% else %}
-                    <span class="corVermelha">Possui pedidos em preparação, aguarde serem entregues, ou
-                        cancele-os!</span><br>
                     {% if verificacaoCarrinho != 0 %}
                     <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
                     {% endif %}
+                    <span class="corVermelha">Possui pedidos em preparação, aguarde serem entregues, ou
+                        cancele-os!</span><br>
                     {% endif %}
                     <br>
                     {% endif %}
-                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" disabled>
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" 
+                    {% if verificacao != 0 %}
+                    disabled
+                    {% endif %}
+                    >
                         <i class="bi-cart-fill me-1"></i>
                         Pedir a conta
                     </button>

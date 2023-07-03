@@ -88,7 +88,7 @@ def list_carrinho(request, mesa1):
                 dsProdutosAux = Produto.objects.all()
                 dsProdutos = []
 
-                soma = 0  # guardo o valor total do pedido
+                soma = 0  #F guardo o valor total do pedido
                 for i in produtosPedidos:
                     for a in dsProdutosAux:  # guardo os produtos
                         if i.cod_produto.cod == a.cod:
@@ -143,17 +143,22 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
         
     #deleção de pedidos e comanda caso estejam vazios
     
+    comanda = pedido.comanda
     produtos = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
     if produtos.count() == 0:
         pedido.delete()
+        pedidos = Pedido.objects.filter(comanda=comanda.cod)
+        if pedidos.count() == 0:
+            comanda.delete()
+        return redirect("/"+str(mesa1)+"/cardapio/")
+    else:
+        return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
     
     comanda = pedido.comanda
+    pedido.delete()
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
     if pedidos.count() == 0:
         comanda.delete()
-    
-    # retorno pro cardapio
-    return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
 
 # Método que confirma o pedido
 def confirmarPedidoFinal(request, mesa1, cod_pedido):
@@ -182,6 +187,8 @@ def modificarPedido(request, mesa1, cod_pedido):
         
         if pedidosCarrinho.count()==0: #não tem carrinho
             pedidoModificando.status=0 
+            comanda.valorTotal -= pedidoModificando.valor
+            comanda.save()
             #
             #Aqui a geração de pdf para cancelamento do pedido modificando
             #
@@ -233,11 +240,10 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     #deleção de pedidos e comanda caso estejam vazios
     
     comanda = pedido.comanda
+    pedido.delete()
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
     if pedidos.count() == 0:
         comanda.delete()
-        
-    pedido.delete()
     
     return redirect("/"+str(mesa1)+"/cardapio/")
 
@@ -264,9 +270,10 @@ def fecharConta(request, mesa1):
     verificacaoCarrinho = 0
     for p in pedidos:
         if p.status != 2:  # verifico se os pedidos estão todos concluidos
-            verificacao += 1
+            verificacao = verificacao + 1
         if p.status == 0:  # olho se tem carrinho aberto
-            verificacaoCarrinho = 10
+            verificacaoCarrinho = verificacaoCarrinho + 1
+            
         produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=p.cod)
 
         for i in produtosPedidos:
@@ -284,6 +291,7 @@ def fecharConta(request, mesa1):
     contexto = {'mesa': mesa1, 'comanda': comanda, 'pedidos': pedidos, 'produtos': produtos,
                 'verificacao': verificacao, 'verificacaoCarrinho': verificacaoCarrinho}
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
+    
     if pedidos.count() == 0:
         mesaContext = {'mesa': mesa1}
         return render(request, "pedidos/carrinhoVazio.html", mesaContext)
