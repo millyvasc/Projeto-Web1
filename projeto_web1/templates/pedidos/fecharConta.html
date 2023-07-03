@@ -112,18 +112,46 @@
 
                     <br>
                     <h3>Selecione a forma de pagamento:<br></h3>
-                    <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">
+
+                    <select id="opcoes" onchange="mostrarInput()">
+                        <option value="Credito" id="credito" name="forma_pagamento">Crédito</option>
+                        <option value="Débito" id="debito" name="forma_pagamento">Débito</option>
+                        <option value="PIX" d="pix" name="forma_pagamento">PIX</option>
+                        <option value="Dinheiro" id="dinheiro" name="forma_pagamento">Dinhero em espécie</option>
+                    </select>
+                    <label for="troco" id="trocoL" style="display: none;"><br>Troco para:</label>
+                    <input type="number" name="troco" id="troco" style="display: none;" value="{{comanda.valorTotal}}"
+                        style="max-width: 10rem" min="{{comanda.valorTotal}}" max="" />
+
+                    <script>
+                        function mostrarInput() {
+                            var select = document.getElementById("opcoes");
+                            var dinheiro = document.getElementById("troco");
+                            var inputDinheiro = document.getElementById("trocoL");
+
+                            if (select.value === "Dinheiro") {
+                                dinheiro.style.display = "block";
+                                inputDinheiro.style.display = "block";
+                            } else {
+                                dinheiro.style.display = "none";
+                                inputDinheiro.style.display = "none";
+                            }
+                        }
+                    </script>
+
+                    <!-- <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">
                     <label for="pix">PIX</label><br>
                     <input type="radio" onClick="habilitacao()" id="credito" name="forma_pagamento" value="Credito">
                     <label for="credito">Credito</label><br>
                     <input type="radio" onClick="habilitacao()" id="debito" name="forma_pagamento" value="Débito">
                     <label for="debito">Débito</label><br>
                     <input type="radio" onClick="habilitacao()" id="dinheiro" name="forma_pagamento" value="Dinheiro">
-                    <label for="dinheiro">Dinheiro</label><br>
-                    <span>Troco para:</span>
+                    <label for="dinheiro">Dinheiro</label><br> -->
+                    <!-- <span>Troco para:</span>
                     <input class="form-control text-center me-3" name="troco" id="troco" type="number"
                         value="{{comanda.valorTotal}}" style="max-width: 10rem" min="{{comanda.valorTotal}}" max=""
-                        disabled /><br>
+                        disabled /><br> -->
+
                     {% if verificacao != 0 %}
                     <span class="corVermelha">*Impossível fechar a conta*</span><br>
                     {% if verificacaoCarrinho == verificacao %}
