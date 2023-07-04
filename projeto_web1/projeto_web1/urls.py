@@ -15,6 +15,8 @@ urlpatterns = [
     # --------------- CAMILLE -----------------
     path('<int:mesa>/cardapio/', include('produtos.urls')),
     path('produtos/', include('produtos.urls')),
+    path('painel/', include('funcionarios.urls')),
+    path('vendas/', include('comandas.urls')),
 ]
 
 if settings.DEBUG:
