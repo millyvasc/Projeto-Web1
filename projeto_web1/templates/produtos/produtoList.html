@@ -39,8 +39,8 @@
                 <td>{{produto.nome}}</td>
                 <td>{{produto.valorUnitario}}</td>
                 <td>{{produto.estoque}}</td>
-                <td><a href="/produtos/produtos/editar/{{produto.cod}}">Editar</a></td>
-                <td><a href="/produtos/produtos/remover/{{produto.cod}}">Excluir</a></td>
+                <td><a href="/produtos/produtos/editar/{{produto.cod}}" class="btn btn-primary" >Editar</a></td>
+                <td><a href="/produtos/produtos/remover/{{produto.cod}}" class="btn btn-danger">Excluir</a></td>
               </tr>
               {% empty %}
               <tr>

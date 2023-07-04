@@ -16,6 +16,7 @@
   <link href="{% static 'assets_painel/css/nucleo-svg.css'%}" rel="stylesheet" />
   <link id="pagestyle" href="{% static 'assets_painel/css/argon-dashboard.css' %}" rel="stylesheet" />
   <link id="pagestyle" href="{% static 'assets_painel/css/style.css' %}" rel="stylesheet" />
+  <link id="pagestyle" href="{% static 'assets_painel/css/styleFormsFuncionario.css' %}" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
@@ -56,7 +57,7 @@
           <a class="nav-link" href="{% url 'funcionarios' %}">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
             </div>
             <span class="nav-link-text ms-1">Funcionários</span>
           </a>
@@ -84,15 +85,7 @@
             Account pages
           </h6>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="./pages/profile.html">
-            <div
-              class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-            </div>
-            <span class="nav-link-text ms-1">Perfil</span>
-          </a>
-        </li>
+        
         <li class="nav-item">
           {% if user.is_authtenticated %}
 
@@ -122,23 +115,7 @@
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
       data-scroll="false">
       <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm">
-              <a class="opacity-5 text-white" href="javascript:;">Páginas</a>
-            </li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">
-              Dashboard
-            </li>
-          </ol>
-        </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group">
-              <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-              <input type="text" class="form-control" placeholder="Digite aqui..." />
-            </div>
-          </div>
+        
           <ul class="navbar-nav justify-content-end">
             <li class="nav-item d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-white font-weight-bold px-0">
@@ -187,7 +164,7 @@
   <script src="{% static 'assets_painel/js/core/bootstrap.min.js'%}"></script>
   <script src="{% static 'assets_painel/js/plugins/perfect-scrollbar.min.js'%}"></script>
   <script src="{% static 'assets_painel/js/plugins/smooth-scrollbar.min.js'%}"></script>
-  <script src="{% static 'assets/js/plugins/chartjs.min.js'%}"></script>
+  <script src="{% static 'assets_painel/js/plugins/chartjs.min.js'%}"></script>
   <script>
     var ctx1 = document.getElementById("chart-line").getContext("2d");
 
@@ -291,8 +268,9 @@
       Scrollbar.init(document.querySelector("#sidenav-scrollbar"), options);
     }
   </script>
+  
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <script src="./assets/js/argon-dashboard.min.js?v=2.0.4"></script>
+  <script src="{% static  'assets/js/argon-dashboard.min.js?v=2.0.4'%}"></script>
 
 
 

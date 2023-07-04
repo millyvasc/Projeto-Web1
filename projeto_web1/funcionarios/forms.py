@@ -9,14 +9,14 @@ from django import forms
 class FuncionarioForm(ModelForm):
     # opte por não utilizar fields = "__all__"
     # uma vez que o cod não fará parte do form. Defina os campos em uma lista.
-    required_css_class = 'required'
+    #required_css_class = 'required'
 
     class Meta:
         model = Funcionario
-        fields = ['cpf', 'telefone', 'endereco', 'user']
+        fields = ['cpf', 'telefone', 'endereco']
         labels = {
             'cpf': 'CPF',
             'telefone': 'Telefone',
             'endereco': 'Endereço',
-            'user': 'User',
+            
         }

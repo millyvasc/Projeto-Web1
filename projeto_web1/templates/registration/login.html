@@ -54,11 +54,13 @@
         <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
           <form method='post'>
                 {% csrf_token%}
-            <!-- Email input -->
-                 {{form.as_p}}
+                <div class="formProduto">
+                  {{form.as_p}}
+                </div>
+                 
   
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Acessar</button>
   
             
           </form>

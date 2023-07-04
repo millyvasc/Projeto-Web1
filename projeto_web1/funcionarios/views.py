@@ -47,36 +47,29 @@ def add(request):
 
 from accounts.forms import CustomerUserForm
 from funcionarios.forms import FuncionarioForm
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 
-def edit(request, funcionarios_id=None):
-    perfil = None
 
-    if funcionarios_id:
-        perfil = get_object_or_404(Funcionario, id=funcionarios_id)
+
+def edit(request,  funcionarios_id):
+     # Obtém o usuário existente
+    funcionario = get_object_or_404(Funcionario, pk=funcionarios_id)  # Obtém o perfil do usuário que é o Funcionário existente
+    user = get_object_or_404(User, pk=funcionario.user_id)
+    
+    form = CustomerUserForm(instance=user)
+    formFuncionario = FuncionarioForm(instance=funcionario)
 
     if request.method == 'POST':
-        form = CustomerUserForm(request.POST, instance=perfil.user if perfil else None)
+        form = CustomerUserForm(request.POST, instance=user)
+        formFuncionario = FuncionarioForm(request.POST, instance=funcionario)
 
-        if form.is_valid():
-            user = form.save()  # Salva o usuário atualizado
-            if perfil:
-                perfil.cpf = form.cleaned_data['cpf']
-                perfil.telefone = form.cleaned_data['telefone']
-                perfil.endereco = form.cleaned_data['endereco']
-                perfil.save()  # Atualiza a instância de funcionarios associada ao usuário
-            else:
-                perfil = Funcionario(user=user, cpf=form.cleaned_data['cpf'], telefone=form.cleaned_data['telefone'], endereco=form.cleaned_data['endereco'])
-                perfil.save()  # Cria uma nova instância de funcionarios associada ao usuário
+        if form.is_valid() and formFuncionario.is_valid():
+            form.save()  # Salva as alterações do usuário
+            formFuncionario.save()  # Salva as alterações do perfil
             return HttpResponseRedirect('/funcionarios/')
-    else:
-        form = CustomerUserForm(instance=perfil.user if perfil else None)
 
-    context = {
-        'form': form,
-        'funcionarios_id': funcionarios_id
-    }
-
-    return render(request, 'funcionarios/edit.html', context)
+    return render(request, "funcionarios/edit.html", {'form': form, 'formFuncionario': formFuncionario})
 
 
 
@@ -116,16 +109,18 @@ def removeFinal(request, funcionarios_id):
 
 def register(request):
     form = CustomerUserForm()
+    formFuncionario = FuncionarioForm()
     if request.method == 'POST':
         form = CustomerUserForm(request.POST)
-        if form.is_valid():
+        formFuncionario = FuncionarioForm(request.POST)
+        if form.is_valid() and formFuncionario.is_valid():
             user = form.save()  # Salva o novo usuário
-            perfil = Funcionario(user=user, cpf=form.cleaned_data['cpf'], telefone=form.cleaned_data['telefone'], endereco=form.cleaned_data['endereco'])
+            perfil = formFuncionario.save(False)
+            perfil.user = user
             perfil.save()  # Cria uma nova instância de PerfilUsuario associada ao usuário
             return HttpResponseRedirect('/funcionarios/')
-    else:
-        form = CustomerUserForm()
+    
         
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form, 'formFuncionario' : formFuncionario})
 
 
