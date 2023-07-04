@@ -246,6 +246,10 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
         print("Pedido é None")
         
     # Adicione os detalhes de cada produto ao PDF
+            # if produtos_pedido.cod_produto_id.tipo == "prato"  :
+            #     pratos = produtos_pedido.objects.filter(tipo__icontains="prato").exclude(estoque=0)
+                # pratos = produtos_pedido.objects.filter(
+                 #     tipo__icontains="prato").exclude(estoque=0)
     y = 640
     for produto_pedido in produtos_pedido:
         cod_produto = produto_pedido.cod_produto_id
@@ -287,7 +291,9 @@ def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
     #     produto = produto_pedido.cod_produto.nome
     #     quantidade = produto_pedido.quantidade
     arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
-    gerar_xml_pedido(mesa1, pedido, produtos_pedido)
+    # gerar_xml_pedido(mesa1, pedido, produtos_pedido)
+    
+    # O a linha abaixo envia o comando shell para a impressora e imprime o pdf
     # win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
     
     
@@ -348,7 +354,7 @@ def fazer_pedido(request, mesa1, cod_pedido):
         dsProdutosPedido = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
         
         enviar_pedido_impressora(mesa1, pedido, dsProdutosPedido) #método para enviar o pedido para a impressora
-        
+        definir_impressora_padrao()
         contexto = { 'produtosPedido' : dsProdutosPedido}
             
     return redirect('/'+str(mesa1)+'/cardapio/') #retorno para cardapio
