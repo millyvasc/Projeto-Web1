@@ -12,5 +12,5 @@ urlpatterns = [
     path("<int:mesa1>/cancelar/<int:cod_pedido>/", views.deletarPedido, name="deletarPedido"),
     path("<int:mesa1>/cancelarFinal/<int:cod_pedido>/", views.deletarPedidoFinal, name="deletarPedidoFinal"),
 
-    path("<int:mesa1>/comanda/", views.fecharConta, name="fecharConta"),
+    
 ]

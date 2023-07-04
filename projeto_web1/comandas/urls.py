@@ -4,4 +4,5 @@ from comandas import views
 
 urlpatterns = [
     path('vendas/', views.verHistorico, name="verHistorico"),
+    path("<int:mesa1>/", views.fecharConta, name="fecharConta"),
 ]
