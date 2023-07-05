@@ -6,6 +6,16 @@
 
 {% block content %}
 
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Cardápio Digital</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Faça seu pedido agora mesmo!</p>
+        </div>
+    </div>
+</header>
+
 
 <h2 class="Tdivisoria">Pratos</h2>
 <hr class="Tdivisoria">
@@ -16,7 +26,8 @@
             {% for produto in dsPratos %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"> <!--450x300-->
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
@@ -47,7 +58,8 @@
             {% for produto in dsBebidas %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"> <!--450x300-->
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>

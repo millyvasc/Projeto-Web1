@@ -1,6 +1,7 @@
+from comandas.models import Comanda
+from pedidos.models import Pedido, Pedido_Produto
 from django.conf import settings
 import os
-from django import template
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -17,6 +18,8 @@ def index(request, mesa):
         tipo__icontains="prato").exclude(estoque=0)
     dsBebidas = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
+    
+    
     contexto = {'mesa': mesa, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
     return render(request, "produtos/index.html", contexto)
 
@@ -61,39 +64,45 @@ class ProdutosView(ListView):
         return context
 
 
+# @login_required
 def adicionar(request):
     template_name = 'produtos/adicionar.html'
     form = ProdutoForm(request.POST or None, request.FILES or None)
-
     if request.method == 'POST':
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
+            nome = form.cleaned_data['nome']
             if estoque >= 0:
-                produto = form.save()
-                produto.img = request.FILES.get('img')
+                produto = form.save(commit=False)
+                img_file = request.FILES.get('img')
+                ext = os.path.splitext(img_file.name)[1]
+                novo_nome = f"{nome}{ext}"
+                produto.img.save(novo_nome, img_file)
                 produto.save()
                 return HttpResponseRedirect('/produtos/produtos/')
             else:
                 form.add_error('estoque', 'O estoque não pode ser negativo.')
     else:
         form = ProdutoForm()
-
     context = {'form': form}
     return render(request, template_name, context)
 
+
 # @login_required
-
-
 def editar(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     if request.method == 'POST':
         form = ProdutoForm(request.POST, request.FILES, instance=produto)
         if form.is_valid():
             estoque = form.cleaned_data['estoque']
+            nome = form.cleaned_data['nome']
             if estoque >= 0:
                 produto = form.save(commit=False)
                 if 'img' in request.FILES:
-                    produto.img = request.FILES['img']
+                    nova_imagem = request.FILES['img']
+                    ext = os.path.splitext(nova_imagem.name)[1]
+                    novo_nome = f"{nome}{ext}"
+                    produto.img.save(novo_nome, nova_imagem)
                 produto.save()
                 return HttpResponseRedirect('/produtos/produtos/')
             else:
@@ -110,19 +119,11 @@ def remover(request, produto_cod):
 
 
 # @login_required
-# def removerFinal(request, produto_cod):
-#     Produto.objects.get(pk=produto_cod).delete()
-#     return HttpResponseRedirect("/produtos/produtos/")
-
-
 def removerFinal(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
-
-    # Excluir a imagem associada ao produto, se existir
     if produto.img:
         caminho_foto = os.path.join(settings.MEDIA_ROOT, str(produto.img))
         if os.path.exists(caminho_foto):
             os.remove(caminho_foto)
-
     produto.delete()
     return HttpResponseRedirect("/produtos/produtos/")

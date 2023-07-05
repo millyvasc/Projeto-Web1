@@ -49,13 +49,8 @@
                         Carrinho
                         <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                     </button>
-                    {% comment %} <button class="btn btn-outline-dark" type="submit">
-                        <i class="bi bi-file-text-fill"></i>
-                        Comanda
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                    </button> {% endcomment %}
                 </form>
-                <form class="d-flex" action="comanda/">
+                <form class="d-flex" action="/pedidos/{{ mesa }}/comanda/">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi bi-file-text-fill"></i>
                         Comanda

@@ -2,34 +2,24 @@
 
 {% block content %}
 
-<div>
-    {% for item in object.photos.all %}
-    {% if item.photo %}
-    <img src="{{ item.photo.url }}" alt="">
-
-    {% else %}
-    <p>No photo available for this item.</p>
-
-    {% endif %}
-    {% endfor %}
-</div>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
-                    src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." /></div>
             <div class="col-md-6">
-                <div class="small mb-1">SKU: BST-498</div>
+                <img src="{{ vProduto.img.url}}" alt="{{ vProduto.nome }}" class="card-img-top mb-5 mb-md-0"
+                    style="max-width: 600px; max-height: 700px;">
+            </div>
+            <div class="col-md-6">
+                <!-- <div class="small mb-1">SKU: BST-498</div> -->
                 <h1 class="display-5 fw-bolder">{{ vProduto.nome }}</h1>
                 <div class="fs-5 mb-5">
                     <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
                     <span>R$ {{ vProduto.valorUnitario }}</span>
                 </div>
                 <p class="lead">{{ vProduto.descricao }}</p>
-                <div class="d-flex">
-
-
+                
+                <div class="d-flex"  display='line'>
                     <form action="/pedidos/{{mesa}}/carrinhoRemoverConfirmar/{{vProduto.cod}}/" method="POST"> {% csrf_token %}
                         <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
                             value="1" style="max-width: 3rem" min="1" max="{{vProduto.estoque}}" />
@@ -40,11 +30,40 @@
                         </button>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
 
-
+{% if dsProdutos %}
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Produtos relacionados</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for produto in dsProdutos %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">{{ produto.nome }}</h5>
+                            R$ {{ produto.valorUnitario }}
+                        </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                href="/{{ mesa }}/cardapio/{{ produto.cod }}">Ver opções</a></div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h1>Não há nenhum produto relacionado</h1>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}

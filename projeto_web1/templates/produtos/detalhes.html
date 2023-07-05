@@ -1,17 +1,25 @@
 {% extends 'cardapio.html' %}
 
 {% block content %}
-
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Cardápio Digital</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Faça seu pedido agora mesmo!</p>
+        </div>
+    </div>
+</header>
 
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6">
-                <img src="{{ vProduto.img.url}}" alt="{{ vProduto.nome }}" class="card-img-top mb-5 mb-md-0">
-                <!--600x700-->
+                <img src="{{ vProduto.img.url}}" alt="{{ vProduto.nome }}" class="card-img-top mb-5 mb-md-0"
+                    style="max-width: 600px; max-height: 700px;">
             </div>
             <div class="col-md-6">
-                <div class="small mb-1">SKU: BST-498</div>
+                <!-- <div class="small mb-1">SKU: BST-498</div> -->
                 <h1 class="display-5 fw-bolder">{{ vProduto.nome }}</h1>
                 <div class="fs-5 mb-5">
                     <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
@@ -19,13 +27,13 @@
                 </div>
                 <p class="lead">{{ vProduto.descricao }}</p>
                 <div class="d-flex">
-                    <form action="/pedidos/{{mesa}}/adicionar/{{vProduto.cod}}/" method="POST"> {% csrf_token %}
+                    <form action="/pedidos/{{mesa}}/adicionar/{{vProduto.cod}}/" method="POST"
+                        style="display: contents;"> {% csrf_token %}
                         <input class="form-control text-center me-3" name="quantidade" id="inputQuantity" type="number"
-                            value="1" style="max-width: 3rem" min="1" max="{{vProduto.estoque}}" />
-
+                            value="1" style="max-width: 5rem" min="1" max="{{vProduto.estoque}}" />
                         <button class="btn btn-outline-dark flex-shrink-0" type="submit">
                             <i class="bi-cart-fill me-1"></i>
-                            Add to cart
+                            Adicionar ao carrinho
                         </button>
                     </form>
                 </div>
@@ -39,12 +47,11 @@
     <div class="container px-4 px-lg-5 mt-5">
         <h2 class="fw-bolder mb-4">Produtos relacionados</h2>
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
             {% for produto in dsProdutos %}
             <div class="col mb-5">
                 <div class="card h-100">
-
-                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"> <!--450x300-->
+                    <img src="{{ produto.img.url}}" alt="{{ produto.nome }}" class="card-img-top"
+                        style="max-width: 450px; max-height: 300px;">
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>

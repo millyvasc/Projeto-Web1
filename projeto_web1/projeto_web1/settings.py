@@ -20,10 +20,10 @@ INSTALLED_APPS = [
     'pedidos',
     'garcons',
     'funcionarios',
-    'cozinhas',
-    'clientes',
     'caixas',
     'administradores',
+    'django_cleanup.apps.CleanupConfig',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -106,3 +106,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR.joinpath('media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'index2'
+LOGOUT_REDIRECT_URL = 'login'

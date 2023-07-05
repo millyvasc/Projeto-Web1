@@ -1,0 +1,169 @@
+{% extends 'cardapio.html' %}
+
+{% block content %}
+
+
+<header class="bg-dark py-5" style="background: darkblue !important;">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Comanda Digital</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Comanda da mesa: {{mesa}}</p>
+        </div>
+    </div>
+</header>
+
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <h1 class="display-5 fw-bolder">Comanda N°{{ comanda.cod }}</h1>
+        <hr>
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <!--  -->
+            <br>
+            {% for pedido in pedidos %} <!-- Mostro todos os pedidos -->
+            <div class="fs-5 mb-5">
+                <br>
+                <h2>Pedido N°{{ pedido.cod }}</h2>
+                <div class="comanda" style="
+                display: flex;
+                justify-content: space-between;">
+
+
+                    <div class="comanda1">
+                        {% for produto in produtos%} <!-- Verifico quando o produto pertencer ao pedido -->
+                        {% if produto.cod == pedido.cod %}
+                        <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
+                            {{ produto.valorUnitario}}</span>
+                        <br>
+                        {% endif %}
+                        {% empty %}
+                        <h1>Nenhum produto no pedido</h1>
+                        <br>
+                        {%endfor%}
+                        <br>
+                        <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
+                    </div>
+                    <div class="comanda2">
+                        {% if pedido.status == 0 %}
+                        <span>Status: Carrinho ainda sendo montado</span>
+                        {% elif pedido.status == 1 %}
+                        <span>Status: Pedido em preparação</span>
+                        {% elif pedido.status == 2 %}
+                        <span>Status: Pedido concluido</span>
+                        {% endif %}<br>
+                        <span>Observação: {{ pedido.observacao }}</span>
+                        <div class="d-flex">
+                            {% if pedido.status != 2 %}
+                            {% if verificacaoCarrinho != 0 %}
+                            {% if pedido.status == 0 %}
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                    href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
+                            </div>
+                            {% else %}
+                            <span class="corVermelha">Esvazie o carrinho caso queira modificar!</span><br>
+                            {% endif %}
+                            {% else %}
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                    href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
+                            </div>
+                            {% endif %}
+
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                    href="/pedidos/{{pedido.comanda.mesa}}/cancelar/{{pedido.cod}}/">Cancelar</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                {% empty %}
+                <br>
+                <h1>Nenhum pedido realizado</h1><br>
+            </div>
+            {% endfor %}
+
+            <h1>Valor total: {{comanda.valorTotal}}<br></h1>
+
+            <div class="d-flex">
+                <form action="/manda pra onde for agora" method="POST" display='line'> {% csrf_token %}
+                    <style type="text/css">
+                        .corVermelha {
+                            color: #f00;
+                        }
+                    </style>
+
+                    <br>
+                    <h3>Selecione a forma de pagamento:<br></h3>
+
+                    <select id="opcoes" onchange="mostrarInput()">
+                        <option value="Credito" id="credito" name="forma_pagamento">Crédito</option>
+                        <option value="Débito" id="debito" name="forma_pagamento">Débito</option>
+                        <option value="PIX" d="pix" name="forma_pagamento">PIX</option>
+                        <option value="Dinheiro" id="dinheiro" name="forma_pagamento">Dinhero em espécie</option>
+                    </select>
+                    <label for="troco" id="trocoL" style="display: none;"><br>Troco para:</label>
+                    <input type="number" name="troco" id="troco" style="display: none;" value="{{comanda.valorTotal}}"
+                        style="max-width: 10rem" min="{{comanda.valorTotal}}" max="" />
+
+                    <script>
+                        function mostrarInput() {
+                            var select = document.getElementById("opcoes");
+                            var dinheiro = document.getElementById("troco");
+                            var inputDinheiro = document.getElementById("trocoL");
+
+                            if (select.value === "Dinheiro") {
+                                dinheiro.style.display = "block";
+                                inputDinheiro.style.display = "block";
+                            } else {
+                                dinheiro.style.display = "none";
+                                inputDinheiro.style.display = "none";
+                            }
+                        }
+                    </script>
+
+                    <!-- <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">
+                    <label for="pix">PIX</label><br>
+                    <input type="radio" onClick="habilitacao()" id="credito" name="forma_pagamento" value="Credito">
+                    <label for="credito">Credito</label><br>
+                    <input type="radio" onClick="habilitacao()" id="debito" name="forma_pagamento" value="Débito">
+                    <label for="debito">Débito</label><br>
+                    <input type="radio" onClick="habilitacao()" id="dinheiro" name="forma_pagamento" value="Dinheiro">
+                    <label for="dinheiro">Dinheiro</label><br> -->
+                    <!-- <span>Troco para:</span>
+                    <input class="form-control text-center me-3" name="troco" id="troco" type="number"
+                        value="{{comanda.valorTotal}}" style="max-width: 10rem" min="{{comanda.valorTotal}}" max=""
+                        disabled /><br> -->
+
+                    {% if verificacao != 0 %}
+                    <br>
+                    <span class="corVermelha">*Impossível fechar a conta*</span><br>
+                    {% if verificacaoCarrinho == verificacao %}
+                    <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
+                    {% else %}
+                    {% if verificacaoCarrinho != 0 %}
+                    <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
+                    {% endif %}
+                    <span class="corVermelha">Possui pedidos em preparação, aguarde serem entregues, ou
+                        cancele-os!</span><br>
+                    {% endif %}
+                    <br>
+                    {% endif %}
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" 
+                    {% if verificacao != 0 %}
+                    disabled
+                    {% endif %}
+                    >
+                        <i class="bi-cart-fill me-1"></i>
+                        Pedir a conta
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -5,11 +5,18 @@ from django.forms import ModelForm
 from produtos.models import Produto
 from django import forms
 
-class FuncionarioForm(forms.ModelForm):
-    #opte por não utilizar fields = "__all__" 
-    #uma vez que o cod não fará parte do form. Defina os campos em uma lista.
-    nome = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}))
-    
-    
 
+class FuncionarioForm(ModelForm):
+    # opte por não utilizar fields = "__all__"
+    # uma vez que o cod não fará parte do form. Defina os campos em uma lista.
+    #required_css_class = 'required'
 
+    class Meta:
+        model = Funcionario
+        fields = ['cpf', 'telefone', 'endereco']
+        labels = {
+            'cpf': 'CPF',
+            'telefone': 'Telefone',
+            'endereco': 'Endereço',
+            
+        }
