@@ -6,9 +6,8 @@ from pedidos.models import Pedido, Pedido_Produto
 
 
 def verHistorico(request):
-
-    # contexto = {'mesa': mesa, 'vProduto': vProduto, 'dsProdutos': dsProdutos}
-    return render(request, "comandas/historico.html")
+    dsComandas = Comanda.objects.all()
+    return render(request, "comandas/historico.html", {"dsComandas": dsComandas})
 
 
 def fecharConta(request, mesa1):
@@ -20,7 +19,7 @@ def fecharConta(request, mesa1):
     else:
         for i in dsComanda:  # se tiver busco
             comanda = i
-            
+
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
     produtosAux = Produto.objects.all()
     produtos = []
@@ -32,7 +31,7 @@ def fecharConta(request, mesa1):
             verificacao = verificacao + 1
         if p.status == 0:  # olho se tem carrinho aberto
             verificacaoCarrinho = verificacaoCarrinho + 1
-            
+
         produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=p.cod)
 
         for i in produtosPedidos:
@@ -50,7 +49,7 @@ def fecharConta(request, mesa1):
     contexto = {'mesa': mesa1, 'comanda': comanda, 'pedidos': pedidos, 'produtos': produtos,
                 'verificacao': verificacao, 'verificacaoCarrinho': verificacaoCarrinho}
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
-    
+
     if pedidos.count() == 0:
         mesaContext = {'mesa': mesa1}
         return render(request, "pedidos/carrinhoVazio.html", mesaContext)

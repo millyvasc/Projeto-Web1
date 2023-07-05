@@ -4,6 +4,15 @@
     <a href="" class="btn btn-primary" style="background-color: rgb(10, 10, 174);">Histórico Completo</a>
 </div>
 
+
+<select>
+    <option>Em Aberto</option>
+
+    <option>Finalizado</option>
+    <option>Filtrar por mesa</option>
+    Todos de um dia so - filtragem automatica
+</select>
+
 <div class="row">
     <div class="col-12">
         <div class="card mb-4">
@@ -25,32 +34,38 @@
                                     Mesa
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Data - Hora
+                                    Status
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Detalhar
+                                    Data
                                 </th>
-                                <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                                    colspan="2">
-                                    Ações
-                                </th> -->
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                    colspan="1">
+                                    Ação
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- {% for produto in dsProdutos %}
-              <tr>
-                <td>{{produto.cod}}</td>
-                <td>{{produto.nome}}</td>
-                <td>{{produto.valorUnitario}}</td>
-                <td>{{produto.estoque}}</td>
-                <td><a href="/produtos/produtos/editar/{{produto.cod}}">Editar</a></td>
-                <td><a href="/produtos/produtos/remover/{{produto.cod}}">Excluir</a></td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="5">Nenhum produto cadastrado.</td>
-              </tr>
-              {% endfor %} -->
+                            {% for comanda in dsComandas %}
+                            <tr>
+                                <td>{{comanda.cod}}</td>
+                                <td>{{comanda.valorTotal}}</td>
+                                <td>{{comanda.mesa}}</td>
+                                {% if comanda.status == 0 %}
+                                <td>Em Aberto</td>
+                                {% elif comanda.status == 1 %}
+                                <td>Finalizado</td>
+                                {% endif %}
+                                <td>{{comanda.data}}</td>
+                                <!-- <td>{{comanda.dataFechamento}}</td> -->
+                                <td><a href="/produtos/produtos/{{comanda.cod}}">Detalhar</a></td>
+                                <!--<td><a href="/produtos/produtos/remover/{{produto.cod}}">Excluir</a></td> -->
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">Nenhuma comanda cadastrada.</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

@@ -9,6 +9,10 @@ class Comanda(models.Model):
     mesa = models.IntegerField()
     status = models.IntegerField(default=0)  # 0 = EM ABERTO
     # 1 = Finalizado
+    data = models.DateTimeField()
+
+    # dataCriacao = models.DateTimeField()
+    # dataFechamento = models.DateTimeField()
 
     def __str__(self):
         # Pra tentar mandar uma mensagem bonitinha tipo 'Comanda = 103'
