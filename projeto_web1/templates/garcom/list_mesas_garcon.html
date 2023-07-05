@@ -1,7 +1,7 @@
 {% extends 'cardapio.html' %}
 
-{% block main_title %}Pedidos{% endblock %}
-{% block main_subtitle %}Veja todos os pedidos do dia!{% endblock %}
+{% block main_title %}Mesas{% endblock %}
+{% block main_subtitle %}Veja todos os pedidos das mesas neste dia!{% endblock %}
 
 {% block content %}
 <section class="py-5">
@@ -12,7 +12,7 @@
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Imagem do produto -->
-                        <img class="card-img-top" src="" alt="..." />
+                        {% comment %} <h1 class="card-img-top" src="" alt="..." />{{comanda.mesa}}</h1>                       {% endcomment %}
                         <!-- Detalhes do produto -->
                         <div class="card-body p-4">
                             <div class="text-center">
@@ -25,7 +25,7 @@
                         </div>
                         <!-- Ações do produto -->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{comanda.mesa}}/carrinho/">Ver Pedidos</a>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/{{comanda.mesa}}/list_pedidos/">Ver Pedidos</a>
                             </div>
                         </div>
                     </div>

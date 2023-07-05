@@ -13,12 +13,12 @@
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Imagem do produto -->
-                        {% comment %} <img class="card-img-top" src="" alt="..." /> {% endcomment %}
+                        <img class="card-img-top" src="" alt="..." />
                         <!-- Detalhes do produto -->
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Nome do produto -->
-                                <h5 class="fw-bolder">Ver todos os pedidos</h5>
+                                <h5 class="fw-bolder">Ver todas as mesas</h5>
                                 <!-- Preço e quantidade do produto -->
                                 {% comment %} R$ {{ produto.valorUnitario }} <br>
                                 Quantidade: {{ produto.estoque }} {% endcomment %}
@@ -26,23 +26,23 @@
                         </div>
                         <!-- Ações do produto -->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/list_pedidos/">Ver Pedidos</a>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/list_mesas/">Ver Mesas</a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col mb-5">
+                {% comment %} <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Imagem do produto -->
-                        {% comment %} <img class="card-img-top" src="" alt="..." /> {% endcomment %}
+                        <img class="card-img-top" src="" alt="..." />
                         <!-- Detalhes do produto -->
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Nome do produto -->
                                 <h5 class="fw-bolder">Deseja fazer um pedido?</h5>
                                 <!-- Preço e quantidade do produto -->
-                                {% comment %} R$ {{ produto.valorUnitario }} <br>
-                                Quantidade: {{ produto.estoque }} {% endcomment %}
+                                R$ {{ produto.valorUnitario }} <br>
+                                Quantidade: {{ produto.estoque }}
                             </div>
                         </div>
                         <!-- Ações do produto -->
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> {% endcomment %}
                 {% comment %} {% empty %} {% endcomment %}
                 {% comment %} <h1>Nenhum produto selecionado</h1> {% endcomment %}
                 {% comment %} {% endfor %}
