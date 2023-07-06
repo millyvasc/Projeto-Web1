@@ -10,12 +10,17 @@ urlpatterns = [
     path('accounts/', include("django.contrib.auth.urls")),
     path('funcionarios/', include('funcionarios.urls')),
     path('pedidos/', include('pedidos.urls')),
-    path('comandas/', include('comandas.urls')),
 
+    path('comandas/', include('comandas.urls')),
 
     # --------------- CAMILLE -----------------
     path('<int:mesa>/cardapio/', include('produtos.urls')),
     path('produtos/', include('produtos.urls')),
+    
+    # --------------Joao V Nascimento ---------------
+    path('garcom/', include('garcons.urls')),
+    # -----------------------------------------------
+
     path('painel/', include('funcionarios.urls')),
     path('vendas/', include('comandas.urls')),
 ]

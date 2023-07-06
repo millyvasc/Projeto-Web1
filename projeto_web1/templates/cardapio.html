@@ -59,8 +59,18 @@
             </div>
         </div>
     </nav>
-    {% block content %}
 
+    <!-- Header-->
+    {% comment %} <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Cardápio<!--{% block main_title %}{% endblock %}--></h1>
+                <p class="lead fw-normal text-white-50 mb-0">Veja os pratos e as bebidas disponíveis</p>
+            </div>
+        </div>
+    </header> {% endcomment %}
+
+    {% block content %}
 
     <!-- Section-->
 
