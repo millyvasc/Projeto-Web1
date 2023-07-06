@@ -57,21 +57,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'projeto_web1.wsgi.application'
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "projeto_web1",
-        "USER": "root",
-        "OPTIONS": {
-            "sql_mode": "traditional",
-        },
-        'PASSWORD': '12345679',
-        "HOST": "localhost",
-        "PORT": "3306",
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # "default": {
+    #     "ENGINE": "django.db.backends.mysql",
+    #     "NAME": "projeto_web1",
+    #     "USER": "root",
+    #     "OPTIONS": {
+    #         "sql_mode": "traditional",
+    #     },
+    #     'PASSWORD': '12345679',
+    #     "HOST": "localhost",
+    #     "PORT": "3306",
+    # }
 }
 
 AUTH_PASSWORD_VALIDATORS = [

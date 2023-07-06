@@ -15,7 +15,7 @@ class Pedido(models.Model):
                                    # 1 = EM PREPARO 
                                    # 2 = ENTREGUE
     # data_hora = models.DateTimeField(auto_now_add=True)
-    data_hora = models.DateTimeField(blank=True, null=True)
+    # data_hora = models.DateTimeField(blank=True, null=True)
     # data_hora = models.DateTimeField(default=timezone.now)
     # data_hora = models.DateTimeField(default='01/01/2023 00:00:00')
     
