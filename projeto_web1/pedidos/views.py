@@ -184,6 +184,7 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     # data_hora_formatada = pedido.data_hora.strftime('%d/%m/%Y %H:%M:%S')
     if pedido is not None:
         c.setFont("Helvetica", 12)
+        c.drawString(100, 760, f"PEDIDO GERADO")
         c.drawString(100, 740, f"Mesa Nº: {mesa1}")
         c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
         c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
@@ -398,7 +399,7 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     # Aqui a emissão do pdf
     
     pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
-    enviar_pedido_impressora(pdf_cancelamento)
+    enviar_impressora(pdf_cancelamento)
     #
     
     #deleção de pedidos e comanda caso estejam vazios
