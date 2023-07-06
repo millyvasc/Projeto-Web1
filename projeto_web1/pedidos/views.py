@@ -181,13 +181,13 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     # c = canvas.Canvas("impressao_pedido.pdf", pagesize=letter)
 
     # Adicione os elementos do pedido ao PDF
-    data_hora_formatada = pedido.data_hora.strftime('%d/%m/%Y %H:%M:%S')
+    # data_hora_formatada = pedido.data_hora.strftime('%d/%m/%Y %H:%M:%S')
     if pedido is not None:
         c.setFont("Helvetica", 12)
         c.drawString(100, 740, f"Mesa Nº: {mesa1}")
         c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
         c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
-        c.drawString(100, 680, f"Data e Hora: {data_hora_formatada}")
+        # c.drawString(100, 680, f"Data e Hora: {data_hora_formatada}")
         c.drawString(100, 660, "Produtos:")
     else:
         print("Pedido é None")
@@ -205,18 +205,66 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     c.showPage()
     c.save()
     
-    return os.path.join("pdf_pedidos", nome_arquivo)  
+    return os.path.join("pdf_pedidos", nome_arquivo)
 
-def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
+def gerar_pdf_cancelamento(mesa1, pedido, produtos_pedido):
+    #sufixo exclusivo com base no timestamp atual
+    # timestamp = str(int(uuid.uuid4()))
+    timestamp = datetime.now().strftime("%d-%m-%Y_%Hh%Mmin%Sseg")
+    # timestamp = timestamp[:8]
+    # Criação do objeto canvas para gerar o PDF
+    nome_arquivo = f"impressao_cancelamento_pedido_#{pedido.cod}_{timestamp}.pdf"
+    c = canvas.Canvas(os.path.join("pdf_cancelamentos", nome_arquivo), pagesize=letter)
+    # c = canvas.Canvas("impressao_pedido.pdf", pagesize=letter)
+
+    # Adicione os elementos do pedido ao PDF
+    # data_hora_formatada = pedido.data_hora.strftime('%d/%m/%Y %H:%M:%S')
+    if pedido is not None:
+        c.setFont("Helvetica", 12)
+        c.drawString(100, 760, f"ALERTA! CANCELAMENTO DE PEDIDO Nº {pedido.cod}")
+        c.drawString(100, 740, f"Mesa Nº: {mesa1}")
+        c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
+        c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
+        # c.drawString(100, 680, f"Data e Hora: {data_hora_formatada}")
+        c.drawString(100, 660, "Produtos:")
+    else:
+        print("Pedido é None")
+        
+        
+    y = 640
+    for produto_pedido in produtos_pedido:
+        cod_produto = produto_pedido.cod_produto_id
+        produto = produto_pedido.cod_produto.nome
+        quantidade = produto_pedido.quantidade
+        c.drawString(120, y, f"(X) Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade}")
+        y -= 20
+
+    # Salve o arquivo PDF
+    c.showPage()
+    c.save()
+    
+    return os.path.join("pdf_cancelamentos", nome_arquivo)
+    
+
+# def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
+def enviar_impressora(arquivo_pdf):
+
     # Implementando a lógica para enviar o pedido para a impressora
-    arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
+    
+    # arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
+    
+    # arquivo_pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtos_pedido)
+    # definir_impressora_padrao()
+    
     
     # A linha abaixo envia o comando shell para a impressora e imprime o arquivo
-    # win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
+    if arquivo_pdf is not None:
+        print("Enviando para impressora")
+        win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
     
     
     # listar_impressoras()
-    # definir_impressora_padrao()
+    # definir_impressora_padrao()s
     impressora_padrao = win32print.GetDefaultPrinter() #pegando impressora padrão do sistema
     print("Impressora Padrão: " + impressora_padrao)
     
@@ -277,7 +325,16 @@ def confirmarPedidoFinal(request, mesa1, cod_pedido):
     comanda.valorTotal += pedido.valor
     comanda.save()
     
-    enviar_pedido_impressora(mesa1, pedido, dsProdutosPedido) #método para enviar o pedido para a impressora
+    produtosPedido = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
+    # Verifico se há produtos no pedido
+    if produtosPedido.count() == 0:
+        return render(request, "pedidos/carrinhoVazio.html")
+    else:
+        # filtragem :
+        dsProdutosPedido = Produto.objects.all()
+    
+    pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
+    enviar_impressora(pdf_pedido) #método para enviar o pedido para a impressora
     #definir_impressora_padrao() #Método para definir uma impressora padrão para o sistema
 
     return redirect("/"+str(mesa1)+"/cardapio/")
@@ -316,6 +373,7 @@ def deletarPedido(request, mesa1, cod_pedido):
                 i.cod_produto.estoque = i.quantidade
                 i.cod_produto.cod = pedido.cod  # 'salvo' o id do pedido no id do produto                    # isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
                 produtos.append(i.cod_produto)
+                
     
     contexto = {'mesa': mesa1, 'pedido': pedido, 'produtos': produtos}
     
@@ -338,6 +396,9 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
                 
     #
     # Aqui a emissão do pdf
+    
+    pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
+    enviar_pedido_impressora(pdf_cancelamento)
     #
     
     #deleção de pedidos e comanda caso estejam vazios
