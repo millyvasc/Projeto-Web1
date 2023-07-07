@@ -87,7 +87,7 @@
             <h1>Valor total: {{comanda.valorTotal}}<br></h1>
 
             <div class="d-flex">
-                <form action="/manda pra onde for agora" method="POST" display='line'> {% csrf_token %}
+                <form action="/comandas/{{comanda.cod}}/fecharConta/" method="POST" display='line' onsubmit="return verificarValor()"> {% csrf_token %}
                     <style type="text/css">
                         .corVermelha {
                             color: #f00;
@@ -97,14 +97,14 @@
                     <br>
                     <h3>Selecione a forma de pagamento:<br></h3>
 
-                    <select id="opcoes" onchange="mostrarInput()">
+                    <select id="opcoes" name="opcoes" onchange="mostrarInput()">
                         <option value="Credito" id="credito" name="forma_pagamento">Crédito</option>
                         <option value="Débito" id="debito" name="forma_pagamento">Débito</option>
                         <option value="PIX" d="pix" name="forma_pagamento">PIX</option>
                         <option value="Dinheiro" id="dinheiro" name="forma_pagamento">Dinhero em espécie</option>
                     </select>
                     <label for="troco" id="trocoL" style="display: none;"><br>Troco para:</label>
-                    <input type="number" name="troco" id="troco" style="display: none;" value="{{comanda.valorTotal}}"
+                    <input type="number" name="troco" id="troco" style="display: none;" value=""
                         style="max-width: 10rem" min="{{comanda.valorTotal}}" max="" />
 
                     <script>
@@ -112,6 +112,9 @@
                             var select = document.getElementById("opcoes");
                             var dinheiro = document.getElementById("troco");
                             var inputDinheiro = document.getElementById("trocoL");
+                            
+                            var input = document.getElementById("troco");
+                            input.value = null 
 
                             if (select.value === "Dinheiro") {
                                 dinheiro.style.display = "block";
@@ -121,6 +124,23 @@
                                 inputDinheiro.style.display = "none";
                             }
                         }
+
+                        function verificarValor() {
+                            var campo = document.getElementById('troco'); // 
+                            var valor = campo.value;
+                        
+                            if (valor === null){
+                                alert({{comanda.valorTotal}})
+                            } else {
+                                if (parseFloat(valor) < parseFloat({{comanda.valorTotal}})) {
+                                    alert("O valor informado é menor que "+{{comanda.valorTotal}}+". Não é permitida a continuação.");
+                                    return false; // Retorna falso para impedir a continuação do processo
+                                  }
+                                  // Se o valor for maior ou igual a 500,00, a execução continua normalmente
+                                  return true;
+                            }
+                            
+                          }
                     </script>
 
                     <!-- <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">

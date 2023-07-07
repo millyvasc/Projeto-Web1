@@ -18,9 +18,15 @@ def adicionar(request, mesa1, cod_produto):
     # crio ou busco a comanda
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
     if dsComanda.count() == 0:
-        comanda = Comanda()
-        comanda.mesa = mesa1
-        comanda.save()
+        #vejo se tem alguma comanda esperando pagamento
+        dsComanda1 = Comanda.objects.filter(status=1, mesa=mesa1)
+        if dsComanda1.count() == 0: #se não tiver, crio uma nova
+            comanda = Comanda()
+            comanda.mesa = mesa1
+            comanda.save()
+        else:
+            #se houver, mando pra ela
+            return redirect("/comandas/"+str(mesa1)+"/")
     else:
         for i in dsComanda:
             if i.status == 0:
@@ -334,8 +340,9 @@ def confirmarPedidoFinal(request, mesa1, cod_pedido):
         # filtragem :
         dsProdutosPedido = Produto.objects.all()
     
-    pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
-    enviar_impressora(pdf_pedido) #método para enviar o pedido para a impressora
+    #pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
+    
+    #enviar_impressora(pdf_pedido) #método para enviar o pedido para a impressora
     #definir_impressora_padrao() #Método para definir uma impressora padrão para o sistema
 
     return redirect("/"+str(mesa1)+"/cardapio/")
@@ -398,8 +405,8 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     #
     # Aqui a emissão do pdf
     
-    pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
-    enviar_impressora(pdf_cancelamento)
+    #pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
+    #enviar_impressora(pdf_cancelamento)
     #
     
     #deleção de pedidos e comanda caso estejam vazios

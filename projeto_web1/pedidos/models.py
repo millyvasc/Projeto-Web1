@@ -14,6 +14,7 @@ class Pedido(models.Model):
     status = models.IntegerField(default=0) # 0 = EM ABERTO 
                                    # 1 = EM PREPARO 
                                    # 2 = ENTREGUE
+    
     # data_hora = models.DateTimeField(auto_now_add=True)
     # data_hora = models.DateTimeField(blank=True, null=True)
     # data_hora = models.DateTimeField(default=timezone.now)
