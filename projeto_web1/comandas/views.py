@@ -1,3 +1,4 @@
+from datetime import date
 from django.shortcuts import render, redirect
 from comandas.models import Comanda
 from produtos.models import Produto
@@ -10,12 +11,44 @@ def verHistorico(request):
     return render(request, "comandas/historico.html", {"dsComandas": dsComandas})
 
 
+def verHistoricoCompletp(request):
+    dsComandas = Comanda.objects.all()
+    return render(request, "comandas/historicoAll.html", {"dsComandas": dsComandas})
+
+
+# ERRO NA EXIBIÇÃO DOS PRODUTOS EM COMANDA
+def detalharComanda(request, cod_comanda):
+    comanda = Comanda.objects.get(cod=cod_comanda)
+    dsPedidos = Pedido.objects.filter(comanda=comanda)
+    produtos = []
+
+    for pedido in dsPedidos:
+        produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido)
+
+        for produtoPedido in produtosPedidos:
+            produto = Produto.objects.get(pk=produtoPedido.cod_produto.pk)
+
+            produto.valorUnitario = produto.valorUnitario * produtoPedido.quantidade
+            produto.estoque = produtoPedido.quantidade
+            produto.cod = pedido.cod
+
+            produtos.append(produto)
+
+    contexto = {
+        "comanda": comanda,
+        "dsPedidos": dsPedidos,
+        "produtos": produtos
+    }
+
+    return render(request, "comandas/detalhar.html", contexto)
+
+
 def verConta(request, mesa1):
     mesaContext = {'mesa': mesa1}
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
     if dsComanda.count() == 0:  # verifico se não há comanda
         # se não tiver
-        
+
         dsComanda1 = Comanda.objects.filter(status=1, mesa=mesa1)
         if dsComanda1.count() == 0:
             return render(request, "pedidos/carrinhoVazio.html", mesaContext)
@@ -27,7 +60,8 @@ def verConta(request, mesa1):
             produtos = []
             # busco todos os produtos de todos os pedidos
             for p in pedidos:
-                produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=p.cod)
+                produtosPedidos = Pedido_Produto.objects.filter(
+                    cod_pedido=p.cod)
                 for i in produtosPedidos:
                     for a in produtosAux:
                         if i.cod_produto.cod == a.cod:  # salvo os produtoos, mas antes
@@ -39,11 +73,12 @@ def verConta(request, mesa1):
                             i.cod_produto.cod = p.cod  # 'salvo' o id do pedido no id do produto
                             # isso tudo é apenas para a visualização no html, pois não modifico o produto no BD
                             produtos.append(i.cod_produto)
-                            
-        contexto = {'mesa': mesa1, 'comanda': comanda1, 'pedidos': pedidos, 'produtos': produtos}
-        
+
+        contexto = {'mesa': mesa1, 'comanda': comanda1,
+                    'pedidos': pedidos, 'produtos': produtos}
+
         return render(request, "comandas/comandaEspera.html", contexto)
-        
+
     else:
         for i in dsComanda:  # se tiver busco
             comanda = i
@@ -84,19 +119,19 @@ def verConta(request, mesa1):
     else:
         return render(request, "comandas/fecharConta.html", contexto)
 
+
 def fecharConta(request, id_comanda):
     # Buscar as informações e passar para o caixa ou garçom
-    
-        
+
     #
     #
-    
+
     comanda = Comanda.objects.get(pk=id_comanda)
     mesa = comanda.mesa
-    comanda.status = 1 #Em espera de pagamento
+    comanda.status = 1  # Em espera de pagamento
     comanda.opcaoPagamento = request.POST.get('opcoes')
     if comanda.opcaoPagamento == "Dinheiro":
         comanda.trocoPara = request.POST.get('troco')
     comanda.save()
-    
-    return redirect("/comandas/"+str(mesa)+"/") 
+
+    return redirect("/comandas/"+str(mesa)+"/")

@@ -1,26 +1,28 @@
 {% extends 'painel.html' %} {%block content%}
 
 <div class="btn-group-toggle" data-toggle="buttons">
-    <a href="/vendas/vendas/all" class="btn btn-primary" style="background-color: rgb(10, 10, 174);">Histórico
-        Completo</a>
+    <a href="/vendas/vendas" class="btn btn-primary" style="background-color: rgb(10, 10, 174);">Histórico Diário</a>
 </div>
 
 
-<select>
-    <option>Em Aberto</option>
-    <option>Finalizado</option>
-    <option>Preparando</option>
-    <option>Filtrar por data</option>
-    <option>Filtrar por mesa</option>
-    <option>Filtrar por mesa</option>
-    Todos de um dia so - filtragem automatica
-</select>
+<!-- <form method="GET" action="{% url 'visualizar_comandas' %}">
+    <select name="filtro">
+        <option value="aberto">Em Aberto</option>
+        <option value="finalizado">Finalizado</option>
+        <option value="preparando">Preparando</option>
+        <option value="data">Filtrar por data</option>
+        <option value="mesa">Filtrar por mesa</option>
+        <option value="todos">Todos de um dia só - filtragem automática</option>
+    </select>
+    <button type="submit">Filtrar</button>
+</form> -->
+
 
 <div class="row">
     <div class="col-12">
         <div class="card mb-4">
             <div class="card-header pb-0">
-                <h6>Histórico de Vendas (Diário)</h6>
+                <h6>Histórico de Vendas Completas</h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
                 <div class="table-responsive p-0">
