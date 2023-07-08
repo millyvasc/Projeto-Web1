@@ -1,0 +1,33 @@
+
+ {% extends 'painel.html' %} 
+
+{% load static %}
+
+{% block content %}
+
+
+<body>
+    <div class="container">
+        <div class="container d-flex justify-content-center align-items-center" style="height: 20vh;">
+            <div class="col-md-6 mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-lock"></i>
+                        Acesso Negado!
+                    </div>
+                    <div class="card-body">
+                        <p>Você não tem permissão para acessar esta página.</p>
+                        <p>Entre em contato com o administrador para obter mais informações.</p>
+                        
+
+                        
+                        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}

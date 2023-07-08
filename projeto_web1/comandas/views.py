@@ -8,11 +8,17 @@ from pedidos.models import Pedido, Pedido_Produto
 
 
 def verHistorico(request):
+    if not request.user.groups.filter(name__in=['Administrador', 'Caixa']).exists():
+     return redirect('acesso_negado')
+ 
     dsComandas = Comanda.objects.all()
     return render(request, "comandas/historico.html", {"dsComandas": dsComandas})
 
 
 def verHistoricoCompletp(request):
+    if not request.user.groups.filter(name='Administrador').exists():
+        return redirect('acesso_negado')
+    
     dsComandas = Comanda.objects.all()
     return render(request, "comandas/historicoAll.html", {"dsComandas": dsComandas})
 

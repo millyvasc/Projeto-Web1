@@ -10,6 +10,7 @@ from produtos.models import Produto
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # ------------------------------------- CARDAPIO -------------------------------------
 
 
@@ -53,10 +54,21 @@ def verProduto(request, mesa, produto_cod):
 
 
 # ------------------------------------- PAINEL -------------------------------------
-class ProdutosView(ListView):
+class ProdutosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Produto
     template_name = 'produtos/produtoList.html'
     context_object_name = 'produtos'
+    
+    def test_func(self):
+        return self.request.user.groups.filter(name__in=['Administrador', 'Cozinha']).exists()
+
+        
+
+    def handle_no_permission(self):
+        if self.raise_exception or self.request.user.is_authenticated:
+
+            return redirect('acesso_negado')
+        return HttpResponse(render(self.request, 'funcionarios/menssagemLogin.html'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
