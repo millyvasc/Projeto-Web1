@@ -1,8 +1,9 @@
-from datetime import date
+from datetime import datetime
 from django.shortcuts import render, redirect
 from comandas.models import Comanda
 from produtos.models import Produto
 from pedidos.models import Pedido, Pedido_Produto
+
 # Create your views here.
 
 
@@ -132,6 +133,9 @@ def fecharConta(request, id_comanda):
     comanda.opcaoPagamento = request.POST.get('opcoes')
     if comanda.opcaoPagamento == "Dinheiro":
         comanda.trocoPara = request.POST.get('troco')
+        
+    nova_data_e_hora = datetime.now()
+    comanda.data_e_hora = nova_data_e_hora
     comanda.save()
 
     return redirect("/comandas/"+str(mesa)+"/")
