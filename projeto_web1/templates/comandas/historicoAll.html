@@ -1,22 +1,33 @@
 {% extends 'painel.html' %} {%block content%}
 
-<div class="btn-group-toggle" data-toggle="buttons">
-    <a href="/vendas/vendas" class="btn btn-primary" style="background-color: rgb(10, 10, 174);">Histórico Diário</a>
+<div style="display: flex;justify-content: space-around;">
+    <div class="btn-group-toggle" data-toggle="buttons">
+        <a href="/vendas/vendas/" class="btn btn-primary"
+            style="background-color: rgb(10, 10, 174); width: 210px;">Histórico
+            Diário</a>
+    </div>
+
+    <form method="POST" action="/vendas/vendas/all" style="display: inline-flex;">
+        {% csrf_token %}
+        <select class="btn btn-primary" style="background-color: rgb(10, 10, 174); width: 210px; margin-right: 5px;"
+            name="filtro" id="filtro" onchange="mostrarInput()">
+            <option value="" disabled selected style="display:none;">Filtro</option>
+            <option value="1" id="emAberto">Em Aberto</option>
+            <option value="2" id="aguardandoPagamento">Aguardando pagamento</option>
+            <option value="3" id="finalizado">Finalizado</option>
+            <option value="4" id="filtroMesa">Filtrar por mesa</option>
+            <option value="5" id="filtroMesa">Todos</option>
+        </select>
+        <br>
+        <input class="btn btn-primary" type="number" name="mesa" id="mesa"
+            style="display: none; width: 75px; background-color: white; color:black;">
+        <br>
+        <button class="btn btn-primary" style="background-color: rgb(3, 19, 71); width: 80px;margin-left: 5px;"
+            type="submit">
+            <span>Filtrar</span>
+        </button>
+    </form>
 </div>
-
-
-<!-- <form method="GET" action="{% url 'visualizar_comandas' %}">
-    <select name="filtro">
-        <option value="aberto">Em Aberto</option>
-        <option value="finalizado">Finalizado</option>
-        <option value="preparando">Preparando</option>
-        <option value="data">Filtrar por data</option>
-        <option value="mesa">Filtrar por mesa</option>
-        <option value="todos">Todos de um dia só - filtragem automática</option>
-    </select>
-    <button type="submit">Filtrar</button>
-</form> -->
-
 
 <div class="row">
     <div class="col-12">
@@ -42,7 +53,10 @@
                                     Status
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Data
+                                    Data - Criação
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Data - Fechamento
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     colspan="1">
@@ -59,16 +73,17 @@
                                 {% if comanda.status == 0 %}
                                 <td>Em Aberto</td>
                                 {% elif comanda.status == 1 %}
+                                <td>Aguardando pagamento</td>
+                                {% elif comanda.status == 2 %}
                                 <td>Finalizado</td>
                                 {% endif %}
-                                <td>{{comanda.data}}</td>
-                                <!-- <td>{{comanda.dataFechamento}}</td> -->
+                                <td>{{comanda.data_e_hora}}</td>
+                                <td>{{comanda.dataFechamento}}</td>
                                 <td><a href="/comandas/comandas/{{comanda.cod}}">Detalhar</a></td>
-                                <!--<td><a href="/produtos/produtos/remover/{{produto.cod}}">Excluir</a></td> -->
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5">Nenhuma comanda cadastrada.</td>
+                                <td colspan="5">Nenhuma comanda cadastrada</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -78,4 +93,27 @@
         </div>
     </div>
 </div>
+
+
+<h1>Lucro Total: {{lucroDiario}}</h1>
+
+
+<script>
+    function mostrarInput() {
+        var select = document.getElementById("filtro");
+        var mesa = document.getElementById("mesa");
+
+        mesa.value = null;
+
+        if (select.value === "4") {
+            mesa.style.display = "block";
+            mesa.required = true;
+        } else {
+            mesa.style.display = "none";
+            mesa.required = false;
+        }
+    }
+</script>
+
+
 {% endblock %}

@@ -3,9 +3,7 @@
 {% block content %}
 
 <div class="row d-flex justify-content-center">
-
     <div class="col-xl-10 col-lg-12 col-md-9">
-
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <div class="row">
@@ -16,25 +14,29 @@
 
                     {% for pedido in dsPedidos %}
                     <h3>- Pedido N°{{ pedido.cod }}</h3>
-                    {% for produto in produtos %}
-                    <h5>{{produto.nome}}: {{produto.estoque}} Unidade(s) - Valor: {{produto.valorUnitario}}</h5>
+                    {% for produto in produtos%}
+                    {% if produto.cod == pedido.cod %}
+                    <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
+                        {{ produto.valorUnitario}}</span>
+                    <br>
+                    {% endif %}
                     {% empty %}
                     <h1>Nenhum produto no pedido</h1>
                     <br>
-                    {% endfor %}
+                    {%endfor%}
                     <br>
-                    <h4>Observação: {{ pedido.observacao }}</h4>
+                    <span><strong>Observação: </strong> {{ pedido.observacao }}</span>
                     <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
                     <hr>
+                    {% empty %}
+                    <br>
+                    <h1>Nenhum pedido realizado</h1><br>
+                    {% endfor %}
+                    <h1>Valor total: {{comanda.valorTotal}}<br></h1>
                 </div>
-                {% empty %}
-                <br>
-                <h1>Nenhum pedido realizado</h1><br>
-                {% endfor %}
-
-                <h3>Valor total: {{ comanda.valorTotal }}<br></h3>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -87,7 +87,8 @@
             <h1>Valor total: {{comanda.valorTotal}}<br></h1>
 
             <div class="d-flex">
-                <form action="/comandas/{{comanda.cod}}/fecharConta/" method="POST" display='line' onsubmit="return verificarValor()"> {% csrf_token %}
+                <form action="/comandas/{{comanda.cod}}/fecharConta/" method="POST" display='line'
+                    onsubmit="return verificarValor()"> {% csrf_token %}
                     <style type="text/css">
                         .corVermelha {
                             color: #f00;
@@ -112,9 +113,9 @@
                             var select = document.getElementById("opcoes");
                             var dinheiro = document.getElementById("troco");
                             var inputDinheiro = document.getElementById("trocoL");
-                            
+
                             var input = document.getElementById("troco");
-                            input.value = null 
+                            input.value = null
 
                             if (select.value === "Dinheiro") {
                                 dinheiro.style.display = "block";
@@ -128,33 +129,20 @@
                         function verificarValor() {
                             var campo = document.getElementById('troco'); // 
                             var valor = campo.value;
-                        
-                            if (valor === null){
-                                alert({{comanda.valorTotal}})
-                            } else {
-                                if (parseFloat(valor) < parseFloat({{comanda.valorTotal}})) {
-                                    alert("O valor informado é menor que "+{{comanda.valorTotal}}+". Não é permitida a continuação.");
-                                    return false; // Retorna falso para impedir a continuação do processo
+
+                            if (valor === null) {
+                                alert({{ comanda.valorTotal }})
+                        } else {
+                            if (parseFloat(valor) < parseFloat({{ comanda.valorTotal }})) {
+                            alert("O valor informado é menor que " + {{ comanda.valorTotal }} +". Não é permitida a continuação.");
+                        return false; // Retorna falso para impedir a continuação do processo
                                   }
-                                  // Se o valor for maior ou igual a 500,00, a execução continua normalmente
-                                  return true;
+                        // Se o valor for maior ou igual a 500,00, a execução continua normalmente
+                        return true;
                             }
                             
                           }
                     </script>
-
-                    <!-- <input type="radio" onClick="habilitacao()" id="pix" name="forma_pagamento" value="PIX">
-                    <label for="pix">PIX</label><br>
-                    <input type="radio" onClick="habilitacao()" id="credito" name="forma_pagamento" value="Credito">
-                    <label for="credito">Credito</label><br>
-                    <input type="radio" onClick="habilitacao()" id="debito" name="forma_pagamento" value="Débito">
-                    <label for="debito">Débito</label><br>
-                    <input type="radio" onClick="habilitacao()" id="dinheiro" name="forma_pagamento" value="Dinheiro">
-                    <label for="dinheiro">Dinheiro</label><br> -->
-                    <!-- <span>Troco para:</span>
-                    <input class="form-control text-center me-3" name="troco" id="troco" type="number"
-                        value="{{comanda.valorTotal}}" style="max-width: 10rem" min="{{comanda.valorTotal}}" max=""
-                        disabled /><br> -->
 
                     {% if verificacao != 0 %}
                     <br>
@@ -170,11 +158,8 @@
                     {% endif %}
                     <br>
                     {% endif %}
-                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" 
-                    {% if verificacao != 0 %}
-                    disabled
-                    {% endif %}
-                    >
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" {% if verificacao !=0 %}
+                        disabled {% endif %}>
                         <i class="bi-cart-fill me-1"></i>
                         Pedir a conta
                     </button>

@@ -1,45 +1,100 @@
+from datetime import date
 from datetime import datetime
 from django.shortcuts import render, redirect
 from comandas.models import Comanda
 from produtos.models import Produto
 from pedidos.models import Pedido, Pedido_Produto
 
-# Create your views here.
-
 
 def verHistorico(request):
     if not request.user.groups.filter(name__in=['Administrador', 'Caixa']).exists():
-     return redirect('acesso_negado')
- 
-    dsComandas = Comanda.objects.all()
-    return render(request, "comandas/historico.html", {"dsComandas": dsComandas})
+        return redirect('acesso_negado')
+
+    filtro = None
+    if request.method == 'POST':
+        filtro = request.POST.get('filtro')
+
+    dataAtual = date.today()
+
+    if filtro == '1':
+        dsComandas = Comanda.objects.filter(
+            data_e_hora__date=dataAtual, status=0)
+    elif filtro == '2':
+        dsComandas = Comanda.objects.filter(
+            data_e_hora__date=dataAtual, status=1)
+    elif filtro == '3':
+        dsComandas = Comanda.objects.filter(
+            data_e_hora__date=dataAtual, status=2)
+    elif filtro == '4':
+        mesaInput = request.POST.get('mesa')
+        dsComandas = Comanda.objects.filter(
+            data_e_hora__date=dataAtual, mesa=mesaInput)
+    else:
+        dsComandas = Comanda.objects.filter(data_e_hora__date=dataAtual)
+
+    lucroDiario = 0
+    for comanda in dsComandas:
+        lucroDiario += comanda.valorTotal
+
+    contexto = {
+        "dsComandas": dsComandas,
+        "lucroDiario": lucroDiario,
+        "filtro": filtro,
+    }
+
+    return render(request, "comandas/historico.html", contexto)
 
 
-def verHistoricoCompletp(request):
+def verHistoricoCompleto(request):
     if not request.user.groups.filter(name='Administrador').exists():
         return redirect('acesso_negado')
-    
-    dsComandas = Comanda.objects.all()
-    return render(request, "comandas/historicoAll.html", {"dsComandas": dsComandas})
+
+    filtro = None
+    if request.method == 'POST':
+        filtro = request.POST.get('filtro')
+
+    if filtro == '1':
+        dsComandas = Comanda.objects.filter(status=0)
+    elif filtro == '2':
+        dsComandas = Comanda.objects.filter(status=1)
+    elif filtro == '3':
+        dsComandas = Comanda.objects.filter(status=2)
+    elif filtro == '4':
+        mesaInput = request.POST.get('mesa')
+        dsComandas = Comanda.objects.filter(mesa=mesaInput)
+    else:
+        dsComandas = Comanda.objects.all()
+
+    lucroDiario = 0
+    for comanda in dsComandas:
+        lucroDiario += comanda.valorTotal
+
+    contexto = {
+        "dsComandas": dsComandas,
+        "lucroDiario": lucroDiario,
+        "filtro": filtro,
+    }
+
+    return render(request, "comandas/historicoAll.html", contexto)
 
 
-# ERRO NA EXIBIÇÃO DOS PRODUTOS EM COMANDA
 def detalharComanda(request, cod_comanda):
     comanda = Comanda.objects.get(cod=cod_comanda)
     dsPedidos = Pedido.objects.filter(comanda=comanda)
+    produtosAux = Produto.objects.all()
     produtos = []
 
     for pedido in dsPedidos:
         produtosPedidos = Pedido_Produto.objects.filter(cod_pedido=pedido)
 
-        for produtoPedido in produtosPedidos:
-            produto = Produto.objects.get(pk=produtoPedido.cod_produto.pk)
-
-            produto.valorUnitario = produto.valorUnitario * produtoPedido.quantidade
-            produto.estoque = produtoPedido.quantidade
-            produto.cod = pedido.cod
-
-            produtos.append(produto)
+        for i in produtosPedidos:
+            for a in produtosAux:
+                if i.cod_produto.cod == a.cod:
+                    i.cod_produto.valorUnitario = (
+                        a.valorUnitario*i.quantidade)
+                    i.cod_produto.estoque = i.quantidade
+                    i.cod_produto.cod = pedido.cod
+                    produtos.append(i.cod_produto)
 
     contexto = {
         "comanda": comanda,
@@ -139,7 +194,7 @@ def fecharConta(request, id_comanda):
     comanda.opcaoPagamento = request.POST.get('opcoes')
     if comanda.opcaoPagamento == "Dinheiro":
         comanda.trocoPara = request.POST.get('troco')
-        
+
     nova_data_e_hora = datetime.now()
     comanda.data_e_hora = nova_data_e_hora
     comanda.save()
