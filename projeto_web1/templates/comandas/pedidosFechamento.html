@@ -37,16 +37,17 @@
                             <tr>
                                 <td>{{comanda.cod}}</td>
                                 <td>{{comanda.valorTotal}}</td>
+                                <td>{{comanda.mesa}}</td>
                                 <td>{{comanda.opcaoPagamento}}</td>
 
                                 {% if comanda.opcaoPagamento == "Dinheiro" %}
-                                <td>{{comanda.trocoPara}}</td>
+                                <td>{{comanda.troco}}</td>
                                 {% else %}
                                 <td>Não</td>
                                 {% endif %}
 
-                                <td>{{comanda.mesa}}</td>
-                                <td><a href="/comandas/comandas/{{comanda.cod}}" class="btn btn-primary">Concluir</a>
+                                
+                                <td><a href="/comandas/comandas/concluir/{{comanda.cod}}/" class="btn btn-primary">Concluir</a>
                                 </td>
                             </tr>
                             {% empty %}
@@ -60,6 +61,11 @@
             </div>
         </div>
     </div>
+    <script>
+        setTimeout(function() {
+            location.reload();
+        }, 5000); // 5000 milissegundos = 5 segundos
+    </script>
 </div>
 
 {% endblock %}

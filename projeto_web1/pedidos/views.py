@@ -23,6 +23,8 @@ def adicionar(request, mesa1, cod_produto):
         if dsComanda1.count() == 0: #se não tiver, crio uma nova
             comanda = Comanda()
             comanda.mesa = mesa1
+            nova_data_e_hora = datetime.now()
+            comanda.data_e_hora = nova_data_e_hora
             comanda.save()
         else:
             #se houver, mando pra ela
@@ -49,6 +51,10 @@ def adicionar(request, mesa1, cod_produto):
     # busco o pedido
     produto = Produto.objects.get(pk=cod_produto)
 
+    # se o estoque for menor que a quantidade, eu modifico ela, pra evitar conflitos
+    if quantidade>produto.estoque :
+        quantidade=produto.estoque
+        
     # salvo o produto no "pedido"
     produtosPedidos = Pedido_Produto.objects.filter(
         cod_pedido=pedido.cod, cod_produto=produto.cod)

@@ -7,8 +7,17 @@ from pedidos.models import Pedido, Pedido_Produto
 
 
 def pedidosFechamento(request):
+    comandas = Comanda.objects.filter(status=1).order_by("data_e_hora")
+    
+    contexto ={'dsComandas': comandas}
+    return render(request, "comandas/pedidosFechamento.html", contexto)
 
-    return render(request, "comandas/pedidosFechamento.html")
+def pedidosFechamentoConcluir(request, cod_comanda):
+    comanda = Comanda.objects.get(pk=cod_comanda)
+    comanda.status=2
+    comanda.save()
+    
+    return redirect("/comandas/comandas/")
 
 
 def verHistorico(request):
@@ -198,7 +207,8 @@ def fecharConta(request, id_comanda):
     comanda.status = 1  # Em espera de pagamento
     comanda.opcaoPagamento = request.POST.get('opcoes')
     if comanda.opcaoPagamento == "Dinheiro":
-        comanda.trocoPara = request.POST.get('troco')
+        comanda.troco = float(request.POST.get('troco'))
+        comanda.troco-=float(comanda.valorTotal)
 
     nova_data_e_hora = datetime.now()
     comanda.data_e_hora = nova_data_e_hora
