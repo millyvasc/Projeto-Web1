@@ -1,14 +1,33 @@
 {% extends 'cardapio.html' %}
 
-{% block main_title %}Mesas{% endblock %}
-{% block main_subtitle %}Veja todos os pedidos das mesas neste dia!{% endblock %}
+{% comment %} {% block main_title %}Mesas{% endblock %}
+{% block main_subtitle %}Veja todos os pedidos das mesas neste dia!{% endblock %} {% endcomment %}
+
+{% comment %} <header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Mesas</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Veja as mesas utilizadas</p>
+        </div>
+    </div>
+</header> {% endcomment %}
 
 {% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Mesas</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Veja as mesas utilizadas</p>
+        </div>
+    </div>
+</header>
+
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for comanda in dsComanda %}
-                {% for pedido in dsPedido %}
+                {% comment %} {% for pedido in dsPedido %} {% endcomment %}
                 <div class="col mb-5">
                     <div class="card h-100">
                         <!-- Imagem do produto -->
@@ -32,10 +51,12 @@
                 </div>
                 {% empty %}
                 <h1>Nenhum produto selecionado</h1>
-                {% endfor %}
+                {% comment %} {% endfor %} {% endcomment %}
             {% endfor %}
 
         </div>
     </div>
 </section>
+
+
 {% endblock content%}

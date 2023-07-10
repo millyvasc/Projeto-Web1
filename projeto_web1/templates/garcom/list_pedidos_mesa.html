@@ -1,7 +1,9 @@
 {% extends 'cardapio.html' %}
+{% comment %} {% extends 'painel.html' %} {% endcomment %}
 
-{% block main_title %}Pedidos da Mesa: {{mesa}}{% endblock %}
-{% block main_subtitle %}Veja todos os pedidos desta mesa neste dia!{% endblock %}
+
+{% comment %} {% block main_title %}Pedidos da Mesa: {{mesa}}{% endblock %}
+{% block main_subtitle %}Veja todos os pedidos desta mesa neste dia!{% endblock %} {% endcomment %}
 
 {% block content %}
 <section class="py-5">
@@ -37,5 +39,45 @@
 
         </div>
     </div>
+
+    <div class="row d-flex justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="text-center">
+                            <h2>Mesa N°{{ comanda.mesa }}</h2>
+                            <h2>Comanda N°{{ comanda.cod }}</h2>
+                            <br>
+                        </div>
+    
+                        {% for pedido in dsPedidos %}
+                        <h3>- Pedido N°{{ pedido.cod }}</h3>
+                        {% for produto in produtos%}
+                        {% if produto.cod == pedido.cod %}
+                        <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
+                            {{ produto.valorUnitario}}</span>
+                        <br>
+                        {% endif %}
+                        {% empty %}
+                        <h1>Nenhum produto no pedido</h1>
+                        <br>
+                        {%endfor%}
+                        <br>
+                        <span><strong>Observação: </strong> {{ pedido.observacao }}</span>
+                        <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
+                        <hr>
+                        {% empty %}
+                        <br>
+                        <h1>Nenhum pedido realizado</h1><br>
+                        {% endfor %}
+                        <h1>Valor total: {{comanda.valorTotal}}<br></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
 {% endblock content%}

@@ -212,6 +212,10 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     c.showPage()
     c.save()
     
+     # Verifica se a pasta "pdf_pedidos" existe
+    if not os.path.exists("pdf_pedidos"):
+        os.makedirs("pdf_pedidos")
+    
     return os.path.join("pdf_pedidos", nome_arquivo)
 
 def gerar_pdf_cancelamento(mesa1, pedido, produtos_pedido):
@@ -250,12 +254,18 @@ def gerar_pdf_cancelamento(mesa1, pedido, produtos_pedido):
     c.showPage()
     c.save()
     
+     # Verifica se a pasta "pdf_pedidos" existe
+    if not os.path.exists("pdf_cancelamentos"):
+        os.makedirs("pdf_cancelamentos")
+    
     return os.path.join("pdf_cancelamentos", nome_arquivo)
     
 
 # def enviar_pedido_impressora(mesa1, pedido, produtos_pedido):
-def enviar_impressora(arquivo_pdf):
-
+# def enviar_impressora(arquivo_pdf):
+fila_pedidos = []
+fila_cancelamentos = []
+def enviar_impressora():
     # Implementando a lógica para enviar o pedido para a impressora
     
     # arquivo_pdf = gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido)
@@ -265,13 +275,47 @@ def enviar_impressora(arquivo_pdf):
     
     
     # A linha abaixo envia o comando shell para a impressora e imprime o arquivo
-    if arquivo_pdf is not None:
-        print("Enviando para impressora")
-        win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
+    # if arquivo_pdf is not None:
+    #     print("Enviando para impressora")
+    #     win32api.ShellExecute(0, "print", arquivo_pdf, None, ".", 0)
     
+    # TESTE NOVO ---------
+    # Verifica se há um pedido de cancelamento na fila de cancelamentos
+    # Exibir todos os itens da fila de pedidos
+    print("Itens na fila de Pedidos:")
+    for arquivo_pedido in fila_pedidos:
+        print("-", arquivo_pedido)
+
+    print("Itens na fila de Cancelamentos:")
+    for arquivo_cancelamento in fila_cancelamentos:
+        print("-", arquivo_cancelamento)
+        
+    definir_impressora_padrao()
+   
+    if fila_cancelamentos:
+        arquivo_cancelamento = fila_cancelamentos[0]
+        print("Enviando para impressora (CANCELAMETNO): ", arquivo_cancelamento)
+        win32api.ShellExecute(0, "print", arquivo_cancelamento, None, ".", 0) 
+        
+    # Caso contrário, envia o próximo pedido da fila de pedidos pendentes
+    if fila_pedidos:
+        arquivo_pedido = fila_pedidos[0]
+        print("Enviando para impressora (PEDIDO):", arquivo_pedido)
+        win32api.ShellExecute(0, "print", arquivo_pedido, None, ".", 0)
+    else:
+        print("Não há pedidos para imprimir.")
     
     # listar_impressoras()
-    # definir_impressora_padrao()s
+    
+     # Exibir novamente os itens nas filas após o envio
+    print("Itens restantes na fila de Pedidos:")
+    for arquivo_pedido in fila_pedidos:
+        print("-", arquivo_pedido)
+
+    print("Itens restantes na fila de Cancelamentos:")
+    for arquivo_cancelamento in fila_cancelamentos:
+        print("-", arquivo_cancelamento)
+     
     impressora_padrao = win32print.GetDefaultPrinter() #pegando impressora padrão do sistema
     print("Impressora Padrão: " + impressora_padrao)
     
@@ -340,8 +384,12 @@ def confirmarPedidoFinal(request, mesa1, cod_pedido):
         # filtragem :
         dsProdutosPedido = Produto.objects.all()
     
-    #pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
+    pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
     
+    if pdf_pedido is not None:
+        fila_pedidos.append(pdf_pedido)
+    
+    enviar_impressora()
     #enviar_impressora(pdf_pedido) #método para enviar o pedido para a impressora
     #definir_impressora_padrao() #Método para definir uma impressora padrão para o sistema
 
@@ -405,8 +453,14 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     #
     # Aqui a emissão do pdf
     
-    #pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
-    #enviar_impressora(pdf_cancelamento)
+    pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
+    
+    if pdf_cancelamento is not None:
+        fila_cancelamentos.append(pdf_cancelamento)
+    
+    enviar_impressora()
+    
+    # enviar_impressora(pdf_cancelamento)
     #
     
     #deleção de pedidos e comanda caso estejam vazios
