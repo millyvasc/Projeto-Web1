@@ -33,7 +33,7 @@
     <div class="col-12">
         <div class="card mb-4">
             <div class="card-header pb-0">
-                <h6>Histórico de Vendas (Diário)</h6>
+                <h6>Histórico de Vendas (Diário) - <strong> Total: R${{lucroDiario}}</strong> </h6>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
                 <div class="table-responsive p-0">
@@ -53,10 +53,7 @@
                                     Status
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Data - Criação
-                                </th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Data - Fechamento
+                                    Data-Hora
                                 </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
                                     colspan="1">
@@ -78,8 +75,8 @@
                                 <td>Finalizado</td>
                                 {% endif %}
                                 <td>{{comanda.data_e_hora}}</td>
-                                <td>{{comanda.dataFechamento}}</td>
-                                <td><a href="/comandas/comandas/{{comanda.cod}}">Detalhar</a></td>
+                                <td><a href="/comandas/comandas/{{comanda.cod}}" class="btn btn-primary">Detalhar</a>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
@@ -93,8 +90,6 @@
         </div>
     </div>
 </div>
-
-<h1>Lucro do dia: {{lucroDiario}}</h1>
 
 <script>
     function mostrarInput() {
