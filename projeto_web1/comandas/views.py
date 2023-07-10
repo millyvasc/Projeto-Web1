@@ -6,6 +6,11 @@ from produtos.models import Produto
 from pedidos.models import Pedido, Pedido_Produto
 
 
+def pedidosFechamento(request):
+
+    return render(request, "comandas/pedidosFechamento.html")
+
+
 def verHistorico(request):
     if not request.user.groups.filter(name__in=['Administrador', 'Caixa']).exists():
         return redirect('acesso_negado')

@@ -1,0 +1,64 @@
+{% extends 'painel.html' %} {%block content%}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <h6>Pedidos de Fechamento de Conta</h6>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div class="table-responsive p-0">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Cod
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Valor Total
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Mesa
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Forma de Pagamento
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Troco
+                                </th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+                                    colspan="1">
+                                    Ação
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for comanda in dsComandas %}
+                            <tr>
+                                <td>{{comanda.cod}}</td>
+                                <td>{{comanda.valorTotal}}</td>
+                                <td>{{comanda.opcaoPagamento}}</td>
+
+                                {% if comanda.opcaoPagamento == "Dinheiro" %}
+                                <td>{{comanda.trocoPara}}</td>
+                                {% else %}
+                                <td>Não</td>
+                                {% endif %}
+
+                                <td>{{comanda.mesa}}</td>
+                                <td><a href="/comandas/comandas/{{comanda.cod}}">Fechar</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">Nenhuma comanda cadastrada</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

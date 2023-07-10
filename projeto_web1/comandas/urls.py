@@ -12,5 +12,7 @@ urlpatterns = [
     path("comandas/<int:cod_comanda>/",
          views.detalharComanda, name="detalharComanda"),
 
+    path("comandas/", views.pedidosFechamento, name="pedidosFechamento"),
+
 
 ]
