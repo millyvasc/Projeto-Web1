@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <header class="bg-dark py-5" style="background: darkblue !important;">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -12,25 +11,21 @@
     </div>
 </header>
 
-
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <h1 class="display-5 fw-bolder">Comanda N°{{ comanda.cod }}</h1>
         <hr>
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <!--  -->
             <br>
-            {% for pedido in pedidos %} <!-- Mostro todos os pedidos -->
+            {% for pedido in pedidos %}
             <div class="fs-5 mb-5">
                 <br>
                 <h2>Pedido N°{{ pedido.cod }}</h2>
                 <div class="comanda" style="
                 display: flex;
                 justify-content: space-between;">
-
-
                     <div class="comanda1">
-                        {% for produto in produtos%} <!-- Verifico quando o produto pertencer ao pedido -->
+                        {% for produto in produtos%}
                         {% if produto.cod == pedido.cod %}
                         <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
                             {{ produto.valorUnitario}}</span>
@@ -67,7 +62,6 @@
                                     href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
                             </div>
                             {% endif %}
-
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto"
                                     href="/pedidos/{{pedido.comanda.mesa}}/cancelar/{{pedido.cod}}/">Cancelar</a>
                             </div>
@@ -75,21 +69,15 @@
                         </div>
                     </div>
                 </div>
-
                 <hr>
-
                 {% empty %}
                 <br>
                 <h1>Nenhum pedido realizado</h1><br>
             </div>
             {% endfor %}
-
             <div>
                 <h1>Valor total: {{comanda.valorTotal}}<br></h1>
-
-
             </div>
-
             <div class="d-flex">
                 <form action="/comandas/{{comanda.cod}}/fecharConta/" method="POST" display='line'
                     onsubmit="return verificarValor()">
@@ -99,14 +87,12 @@
                             color: #f00;
                         }
                     </style>
-
                     <br>
                     <br>
                     <br>
                     <br>
                     <br>
                     <h3>Selecione a forma de pagamento:<br></h3>
-
                     <select id="opcoes" name="opcoes" onchange="mostrarInput()">
                         <option value="Credito" id="credito" name="forma_pagamento">Crédito</option>
                         <option value="Débito" id="debito" name="forma_pagamento">Débito</option>
@@ -116,16 +102,13 @@
                     <label for="troco" id="trocoL" style="display: none;"><br>Troco para:</label>
                     <input type="number" name="troco" id="troco" style="display: none;" value=""
                         style="max-width: 10rem" min="{{comanda.valorTotal}}" max="" />
-
                     <script>
                         function mostrarInput() {
                             var select = document.getElementById("opcoes");
                             var dinheiro = document.getElementById("troco");
                             var inputDinheiro = document.getElementById("trocoL");
-
                             var input = document.getElementById("troco");
                             input.value = null
-
                             if (select.value === "Dinheiro") {
                                 dinheiro.style.display = "block";
                                 inputDinheiro.style.display = "block";
@@ -134,11 +117,9 @@
                                 inputDinheiro.style.display = "none";
                             }
                         }
-
                         function verificarValor() {
                             var campo = document.getElementById('troco');
                             var valor = campo.value;
-
                             if (valor === null) {
                                 alert({{ comanda.valorTotal }});
                         } else {
@@ -150,7 +131,6 @@
                             }
                         }
                     </script>
-
                     {% if verificacao != 0 %}
                     <br>
                     <span class="corVermelha">*Impossível fechar a conta*</span><br>
@@ -170,7 +150,6 @@
                         Pedir a conta
                     </button>
                 </form>
-
             </div>
         </div>
     </div>

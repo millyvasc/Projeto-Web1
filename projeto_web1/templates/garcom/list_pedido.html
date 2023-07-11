@@ -15,21 +15,17 @@
             {% for produto in dsPratos %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <!-- Imagem do produto -->
                     <img class="card-img-top" src="{{produto.img.url}}" alt="..." />
-                    <!-- Detalhes do produto -->
                     <div class="card-body p-4">
                         <div class="text-center">
-                            <!-- Nome do produto -->
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço e quantidade do produto -->
                             R$ {{ produto.valorUnitario }} <br>
                             Quantidade: {{ produto.estoque }}
                         </div>
                     </div>
-                    <!-- Ações do produto -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
                         </div>
                     </div>
                 </div>
@@ -41,7 +37,6 @@
     </div>
 </section>
 
-
 <h2 class="Tdivisoria">Bebidas</h2>
 <hr class="Tdivisoria">
 
@@ -51,21 +46,17 @@
             {% for produto in dsBebidas %}
             <div class="col mb-5">
                 <div class="card h-100">
-                    <!-- Imagem do produto -->
                     <img class="card-img-top" src="{{produto.img.url}}" alt="..." />
-                    <!-- Detalhes do produto -->
                     <div class="card-body p-4">
                         <div class="text-center">
-                            <!-- Nome do produto -->
                             <h5 class="fw-bolder">{{ produto.nome }}</h5>
-                            <!-- Preço e quantidade do produto -->
                             R$ {{ produto.valorUnitario }} <br>
                             Quantidade: {{ produto.estoque }}
                         </div>
                     </div>
-                    <!-- Ações do produto -->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                href="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/">Remover</a>
                         </div>
                     </div>
                 </div>

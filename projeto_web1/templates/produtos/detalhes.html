@@ -1,7 +1,7 @@
 {% extends 'cardapio.html' %}
 
 {% block content %}
-<!-- Header-->
+
 <header class="bg-dark py-5">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -19,10 +19,8 @@
                     style="max-width: 600px; max-height: 700px;">
             </div>
             <div class="col-md-6">
-                <!-- <div class="small mb-1">SKU: BST-498</div> -->
                 <h1 class="display-5 fw-bolder">{{ vProduto.nome }}</h1>
                 <div class="fs-5 mb-5">
-                    <!-- <span class="text-decoration-line-through">R$ 45.00</span> -->
                     <span>R$ {{ vProduto.valorUnitario }}</span>
                 </div>
                 <p class="lead">{{ vProduto.descricao }}</p>

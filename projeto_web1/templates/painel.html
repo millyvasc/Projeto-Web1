@@ -63,7 +63,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/produtos/produtos"> <!--% url 'produtos' %-->
+          <a class="nav-link" href="/produtos/produtos">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
@@ -85,10 +85,8 @@
             Account pages
           </h6>
         </li>
-
         <li class="nav-item">
           {% if user.is_authtenticated %}
-
           {% else %}
           <a class="nav-link" href="{% url 'login' %}">
             {% endif %}
@@ -115,7 +113,6 @@
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
       data-scroll="false">
       <div class="container-fluid py-1 px-3">
-
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
             <a style="cursor:default" class="nav-link text-white font-weight-bold px-0">
@@ -160,15 +157,9 @@
   <script src="{% static 'assets_painel/js/plugins/perfect-scrollbar.min.js'%}"></script>
   <script src="{% static 'assets_painel/js/plugins/smooth-scrollbar.min.js'%}"></script>
   <script src="{% static 'assets_painel/js/plugins/chartjs.min.js'%}"></script>
-
-
-
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <script src="{% static  'assets_painel/js/argon-dashboard.min.js'%}"></script>
 
-
-
 </body>
-
 
 </html>

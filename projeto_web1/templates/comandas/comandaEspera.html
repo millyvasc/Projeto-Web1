@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <header class="bg-dark py-5" style="background: darkblue !important;">
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
@@ -12,25 +11,21 @@
     </div>
 </header>
 
-
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
         <h1 class="display-5 fw-bolder">Comanda N°{{ comanda.cod }}</h1>
         <hr>
         <div class="row gx-4 gx-lg-5 align-items-center">
-            <!--  -->
             <br>
-            {% for pedido in pedidos %} <!-- Mostro todos os pedidos -->
+            {% for pedido in pedidos %}
             <div class="fs-5 mb-5">
                 <br>
                 <h2>Pedido N°{{ pedido.cod }}</h2>
                 <div class="comanda" style="
                 display: flex;
                 justify-content: space-between;">
-
-
                     <div class="comanda1">
-                        {% for produto in produtos%} <!-- Verifico quando o produto pertencer ao pedido -->
+                        {% for produto in produtos%}
                         {% if produto.cod == pedido.cod %}
                         <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
                             {{ produto.valorUnitario}}</span>
@@ -52,18 +47,14 @@
                         <span>Status: Pedido concluido</span>
                         {% endif %}<br>
                         <span>Observação: {{ pedido.observacao }}</span>
-
                     </div>
                 </div>
-
                 <hr>
-
                 {% empty %}
                 <br>
                 <h1>Nenhum pedido realizado</h1><br>
             </div>
             {% endfor %}
-
             <div>
                 <h1>Valor total: {{comanda.valorTotal}}</h1>
                 <h2>Opção de pagamento: {{comanda.opcaoPagamento}}<br></h2>
@@ -72,7 +63,6 @@
                 {% endif %}
                 <p>Data: {{ comanda.data_e_hora|date }}</p>
                 <p>Hora: {{ comanda.data_e_hora|time }}</p>
-
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
 from comandas import views
 
 urlpatterns = [
@@ -10,5 +10,4 @@ urlpatterns = [
     path("comandas/<int:cod_comanda>/", views.detalharComanda, name="detalharComanda"),
     path("comandas/", views.pedidosFechamento, name="pedidosFechamento"),
     path("comandas/concluir/<int:cod_comanda>/", views.pedidosFechamentoConcluir, name="pedidosFechamentoConcluir"),
-
 ]

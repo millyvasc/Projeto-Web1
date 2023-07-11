@@ -1,5 +1,3 @@
-from comandas.models import Comanda
-from pedidos.models import Pedido, Pedido_Produto
 from django.conf import settings
 import os
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,20 +5,16 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from produtos.forms import ProdutoForm
 from produtos.models import Produto
-from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-# ------------------------------------- CARDAPIO -------------------------------------
 
+# ------------------------------------- CARDAPIO -------------------------------------
 
 def index(request, mesa):
     dsPratos = Produto.objects.filter(
         tipo__icontains="prato").exclude(estoque=0)
     dsBebidas = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
-    
-    
     contexto = {'mesa': mesa, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
     return render(request, "produtos/index.html", contexto)
 
@@ -52,31 +46,23 @@ def verProduto(request, mesa, produto_cod):
     contexto = {'mesa': mesa, 'vProduto': vProduto, 'dsProdutos': dsProdutos}
     return render(request, "produtos/detalhes.html", contexto)
 
-
 # ------------------------------------- PAINEL -------------------------------------
 class ProdutosView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Produto
     template_name = 'produtos/produtoList.html'
     context_object_name = 'produtos'
-    
     def test_func(self):
         return self.request.user.groups.filter(name__in=['Administrador', 'Cozinha']).exists()
-
-        
-
     def handle_no_permission(self):
         if self.raise_exception or self.request.user.is_authenticated:
-
             return redirect('acesso_negado')
         return HttpResponse(render(self.request, 'funcionarios/menssagemLogin.html'))
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['dsProdutos'] = Produto.objects.all()
         return context
 
 
-# @login_required
 def adicionar(request):
     template_name = 'produtos/adicionar.html'
     form = ProdutoForm(request.POST or None, request.FILES or None)
@@ -100,7 +86,6 @@ def adicionar(request):
     return render(request, template_name, context)
 
 
-# @login_required
 def editar(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     if request.method == 'POST':
@@ -124,13 +109,11 @@ def editar(request, produto_cod):
     return render(request, 'produtos/editar.html', {'form': form})
 
 
-# @login_required
 def remover(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     return render(request, "produtos/removerFinal.html", {"produto": produto})
 
 
-# @login_required
 def removerFinal(request, produto_cod):
     produto = Produto.objects.get(pk=produto_cod)
     if produto.img:

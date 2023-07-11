@@ -8,33 +8,29 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% comment %} {% for comanda in dsComanda %} {% endcomment %}
-                {% for pedido in dsPedido %}
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Imagem do produto -->
-                        {% comment %} <h1 class="card-img-top" src="" alt="..." />{{comanda.mesa}}</h1>                       {% endcomment %}
-                        <!-- Detalhes do produto -->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Nome do produto -->
-                                <h5 class="fw-bolder">Pedido: {{ pedido.cod }}</h5>
-                                <!-- Preço e quantidade do produto -->
-                                {% comment %} R$ {{ produto.valorUnitario }} <br>
-                                Quantidade: {{ produto.estoque }} {% endcomment %}
-                            </div>
+            {% for pedido in dsPedido %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    {% comment %}
+                    <h1 class="card-img-top" src="" alt="..." />{{comanda.mesa}}</h1>
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <h5 class="fw-bolder">Pedido: {{ pedido.cod }}</h5>
+                            {% comment %} R$ {{ produto.valorUnitario }} <br>
+                            Quantidade: {{ produto.estoque }} {% endcomment %}
                         </div>
-                        <!-- Ações do produto -->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/{{comanda.mesa}}/list_pedido/">Ver Produtos</a>
-                            </div>
+                    </div>
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                href="/garcom/{{comanda.mesa}}/list_pedido/">Ver Produtos</a>
                         </div>
                     </div>
                 </div>
-                {% empty %}
-                <h1>Nenhum produto selecionado</h1>
-                {% endfor %}
+            </div>
+            {% empty %}
+            <h1>Nenhum produto selecionado</h1>
+            {% endfor %}
             {% comment %} {% endfor %} {% endcomment %}
-
         </div>
     </div>
 </section>

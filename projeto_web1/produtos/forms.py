@@ -30,7 +30,7 @@ class ProdutoForm(forms.ModelForm):
 
     def save(self, commit=True):
         produto = super().save(commit=False)
-        if not self.instance:  # Verificar se é criação de produto
+        if not self.instance:
             produto.nome = self.cleaned_data["nome"]
             produto.valorUnitario = self.cleaned_data["valorUnitario"]
             produto.descricao = self.cleaned_data["descricao"]

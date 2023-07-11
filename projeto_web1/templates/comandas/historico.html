@@ -6,7 +6,6 @@
             style="background-color: rgb(10, 10, 174); width: 210px;">Histórico
             Completo</a>
     </div>
-
     <form method="POST" action="." style="display: inline-flex;">
         {% csrf_token %}
         <select class="btn btn-primary" style="background-color: rgb(10, 10, 174); width: 210px; margin-right: 5px;"
@@ -95,9 +94,7 @@
     function mostrarInput() {
         var select = document.getElementById("filtro");
         var mesa = document.getElementById("mesa");
-
         mesa.value = null;
-
         if (select.value === "4") {
             mesa.style.display = "block";
             mesa.required = true;

@@ -5,11 +5,7 @@ from django.forms import ModelForm
 from produtos.models import Produto
 from django import forms
 
-
 class FuncionarioForm(ModelForm):
-    # opte por não utilizar fields = "__all__"
-    # uma vez que o cod não fará parte do form. Defina os campos em uma lista.
-    #required_css_class = 'required'
 
     class Meta:
         model = Funcionario

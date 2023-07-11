@@ -1,10 +1,8 @@
-
- {% extends 'painel.html' %} 
+{% extends 'painel.html' %}
 
 {% load static %}
 
 {% block content %}
-
 
 <body>
     <div class="container">
@@ -18,11 +16,7 @@
                     <div class="card-body">
                         <p>Você não tem permissão para acessar esta página.</p>
                         <p>Entre em contato com o administrador para obter mais informações.</p>
-                        
-
-                        
                         <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-                        
                     </div>
                 </div>
             </div>

@@ -8,7 +8,6 @@ class Funcionario(models.Model):
     cpf = models.CharField(max_length=14)
     telefone = models.CharField(max_length=16)
     endereco = models.CharField(max_length=200)
-    
 
     def __str__(self):
         return self.user.username

@@ -6,7 +6,6 @@
             style="background-color: rgb(10, 10, 174); width: 210px;">Histórico
             Diário</a>
     </div>
-
     <form method="POST" action="/vendas/vendas/all" style="display: inline-flex;">
         {% csrf_token %}
         <select class="btn btn-primary" style="background-color: rgb(10, 10, 174); width: 210px; margin-right: 5px;"
@@ -91,7 +90,6 @@
     </div>
 </div>
 
-
 <script>
     function mostrarInput() {
         var select = document.getElementById("filtro");
@@ -108,6 +106,5 @@
         }
     }
 </script>
-
 
 {% endblock %}

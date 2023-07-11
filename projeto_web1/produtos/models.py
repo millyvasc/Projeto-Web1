@@ -3,7 +3,6 @@ from django.db import models
 
 class Produto(models.Model):
 
-    # BigAutoField, pra ser auto incrementável
     cod = models.BigAutoField(primary_key=True)
     nome = models.CharField(max_length=100, verbose_name='Nome')
     valorUnitario = models.DecimalField(
