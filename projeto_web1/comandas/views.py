@@ -7,12 +7,18 @@ from pedidos.models import Pedido, Pedido_Produto
 
 
 def pedidosFechamento(request):
+    if not request.user.groups.filter(name__in=['Garçom', 'Caixa', 'Administrador']).exists():
+        return redirect('acesso_negado')
+    
     comandas = Comanda.objects.filter(status=1).order_by("data_e_hora")
     
     contexto ={'dsComandas': comandas}
     return render(request, "comandas/pedidosFechamento.html", contexto)
 
 def pedidosFechamentoConcluir(request, cod_comanda):
+    if not request.user.groups.filter(name__in=['Garçom', 'Caixa', 'Administrador']).exists():
+        return redirect('acesso_negado')
+    
     comanda = Comanda.objects.get(pk=cod_comanda)
     comanda.status=2
     comanda.save()
