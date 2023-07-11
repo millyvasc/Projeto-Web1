@@ -299,10 +299,10 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     pedidos = Pedido.objects.filter(comanda=comanda.cod)
     if pedidos.count() == 0:
         comanda.delete()
-
     return redirect("/"+str(mesa1)+"/cardapio/")
 
 # ----------------------------------------------> Comandas <----------------------------------------------
+
 
 def buscarComanda(request, mesa1):
     mesaContext = {'mesa': mesa1}
@@ -321,7 +321,7 @@ def buscarPedidoAberto(request, mesa1):
     if dsPedido.count() == 0:
         mesaContext = {'mesa': mesa1}
         return render(request, "pedidos/carrinhoVazio.html", mesaContext)
-    else: 
+    else:
         for a in dsPedido:
             pedido = a
         return pedido
