@@ -89,9 +89,6 @@
                     </style>
                     <br>
                     <br>
-                    <br>
-                    <br>
-                    <br>
                     <h3>Selecione a forma de pagamento:<br></h3>
                     <select id="opcoes" name="opcoes" onchange="mostrarInput()">
                         <option value="Credito" id="credito" name="forma_pagamento">Crédito</option>
@@ -117,22 +114,25 @@
                                 inputDinheiro.style.display = "none";
                             }
                         }
+
                         function verificarValor() {
                             var campo = document.getElementById('troco');
                             var valor = campo.value;
-                            if (valor === "") {
-                            } else {
-                                if (parseFloat(valor) < parseFloat("{{ comanda.valorTotal }}")) {
-                                    alert("O valor informado é menor que {{ comanda.valorTotal }}. Não é permitida a continuação.");
-                                    return false;
-                                }
+                            if (valor === null) {
                                 return true;
+                            } else {
+                                if (parseFloat(valor) < parseFloat({{ comanda.valorTotal }})) {
+                                alert("O valor informado é menor que {{ comanda.valorTotal }}. Não é permitida a continuação.");
+                                return false;
                             }
+
+                        }
                         }
                     </script>
                     {% if verificacao != 0 %}
                     <br>
                     <span class="corVermelha">*Impossível fechar a conta*</span><br>
+
                     {% if verificacaoCarrinho == verificacao %}
                     <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
                     {% else %}
@@ -144,7 +144,8 @@
                     {% endif %}
                     <br>
                     {% endif %}
-                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit">
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" {% if verificacao !=0 %} disabled {%
+                        endif %} type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Pedir a conta
                     </button>
