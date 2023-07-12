@@ -40,7 +40,7 @@ select {
 
 .btnFuncionario {
     width: 100px !important;
-    background-color: rgb(103, 103, 249) !important;
+    background-color: #faba66 !important;
     color: white !important;
     font-weight: 600 !important;
 }

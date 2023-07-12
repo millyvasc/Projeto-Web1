@@ -3,12 +3,12 @@
 <div style="display: flex;justify-content: space-around;">
     <div class="btn-group-toggle" data-toggle="buttons">
         <a href="/vendas/vendas/all" class="btn btn-primary"
-            style="background-color: rgb(10, 10, 174); width: 210px;">Histórico
+            style="background-color: #faba66; width: 210px;">Histórico
             Completo</a>
     </div>
     <form method="POST" action="." style="display: inline-flex;">
         {% csrf_token %}
-        <select class="btn btn-primary" style="background-color: rgb(10, 10, 174); width: 210px; margin-right: 5px;"
+        <select class="btn btn-primary" style="background-color: #faba66; width: 210px; margin-right: 5px;"
             name="filtro" id="filtro" onchange="mostrarInput()">
             <option value="" disabled selected style="display:none;">Filtro</option>
             <option value="1" id="emAberto">Em Aberto</option>
@@ -21,7 +21,7 @@
         <input class="btn btn-primary" type="number" name="mesa" id="mesa"
             style="display: none; width: 75px; background-color: white; color:black;">
         <br>
-        <button class="btn btn-primary" style="background-color: rgb(3, 19, 71); width: 80px;margin-left: 5px;"
+        <button class="btn btn-primary" style="background-color: #faba66; width: 80px;margin-left: 5px;"
             type="submit">
             <span>Filtrar</span>
         </button>
