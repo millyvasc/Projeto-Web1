@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Quick Bar</title>
+	<link rel="shortcut icon" href="{% static 'tela_inicial/images/icone.ico' %}" type="image/x-icon">
+	<link rel="stylesheet" href="{% static 'tela_inicial/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'tela_inicial/css/style.css' %}">
+</head>
+
+<body>
+	<header class="top-navbar">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container">
+				<h1>Quick Bar</h1>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-rs-food"
+					aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbars-rs-food">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active"><a class="nav-link" href="/painel">Acessar Painel</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div id="slides" class="cover-slides">
+		<ul class="slides-container">
+			<li class="text-center">
+				<img src="{% static 'tela_inicial/images/slider1.jpg' %}" alt="">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h1 class="m-b-20"><strong>Bem vindo(a) ao<br> Quick Bar</strong></h1>
+							<p class="m-b-40">Desfrute de uma experiência gastronômica única, onde sabor e qualidade se
+								encontram para encantar seu paladar.<br>Apreciar bons momentos à mesa é o nosso
+								compromisso. Bom apetite!</p>
+							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="#">Visualizar Cardápio</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="text-center">
+				<img src="{% static 'tela_inicial/images/slider2.avif' %}" alt="">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h1 class="m-b-20"><strong>Bem vindo(a) ao<br> Quick Bar</strong></h1>
+							<p class="m-b-40">Desfrute de uma experiência gastronômica única, onde sabor e qualidade se
+								encontram para encantar seu paladar.<br>Apreciar bons momentos à mesa é o nosso
+								compromisso. Bom apetite!</p>
+							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="#">Visualizar Cardápio</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</li>
+			<li class="text-center">
+				<img src="{% static 'tela_inicial/images/slider3.jpg' %}" alt="">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<h1 class="m-b-20"><strong>Bem vindo(a) ao<br> Quick Bar</strong></h1>
+							<p class="m-b-40">Desfrute de uma experiência gastronômica única, onde sabor e qualidade se
+								encontram para encantar seu paladar.<br>Apreciar bons momentos à mesa é o nosso
+								compromisso. Bom apetite!</p>
+							<p><a class="btn btn-lg btn-circle btn-outline-new-white" href="#">Visualizar Cardápio</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<script src="{% static 'tela_inicial/js/popper.min.js' %}"></script>
+	<script src="{% static 'tela_inicial/js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'tela_inicial/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'tela_inicial/js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'tela_inicial/js/custom.js' %}"></script>
+
+</body>
+
+</html>

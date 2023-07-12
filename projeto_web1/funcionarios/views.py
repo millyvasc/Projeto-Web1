@@ -15,8 +15,7 @@ from funcionarios.models import Funcionario
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
-from produtos.models import Produto
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.shortcuts import render
 
 

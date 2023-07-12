@@ -120,14 +120,13 @@
                         function verificarValor() {
                             var campo = document.getElementById('troco');
                             var valor = campo.value;
-                            if (valor === null) {
-                                alert({{ comanda.valorTotal }});
-                        } else {
-                            if (parseFloat(valor) < parseFloat({{ comanda.valorTotal }})) {
-                            alert("O valor informado é menor que {{ comanda.valorTotal }}. Não é permitida a continuação.");
-                            return false;
-                        }
-                        return true;
+                            if (valor === "") {
+                            } else {
+                                if (parseFloat(valor) < parseFloat("{{ comanda.valorTotal }}")) {
+                                    alert("O valor informado é menor que {{ comanda.valorTotal }}. Não é permitida a continuação.");
+                                    return false;
+                                }
+                                return true;
                             }
                         }
                     </script>
