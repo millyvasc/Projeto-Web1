@@ -95,7 +95,15 @@ def list_carrinho(request, mesa1):
 
 
 def remover_carrinho(request, mesa1, cod_produto):
-    pedido = buscarPedidoAberto(request, mesa1)
+    dsPedido = Pedido.objects.filter(
+        status=0, comanda=buscarComanda(request, mesa1))
+    if dsPedido.count() == 0:
+        mesaContext = {'mesa': mesa1}
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+    else:
+        for a in dsPedido:
+            pedido = a
+
     vProduto = Produto.objects.get(pk=cod_produto)
     produto = Pedido_Produto.objects.filter(
         cod_pedido=pedido.cod, cod_produto=vProduto.cod)
@@ -108,7 +116,14 @@ def remover_carrinho(request, mesa1, cod_produto):
 
 def remover_carrinho_confirmar(request, mesa1, cod_produto):
     quantidadeDeletar = int(request.POST.get('quantidade'))
-    pedido = buscarPedidoAberto(request, mesa1)
+    dsPedido = Pedido.objects.filter(
+        status=0, comanda=buscarComanda(request, mesa1))
+    if dsPedido.count() == 0:
+        mesaContext = {'mesa': mesa1}
+        return render(request, "pedidos/carrinhoVazio.html", mesaContext)
+    else:
+        for a in dsPedido:
+            pedido = a
     vProduto = Produto.objects.get(pk=cod_produto)
     produto = Pedido_Produto.objects.filter(
         cod_pedido=pedido.cod, cod_produto=vProduto.cod)
@@ -241,7 +256,7 @@ def confirmarPedidoFinal(request, mesa1, cod_pedido):
     pedido.observacao = observ
     pedido.status = 1
     pedido.save()
-    comanda = buscarComanda(request, mesa1)
+    comanda = pedido.comanda
     comanda.valorTotal += pedido.valor
     comanda.save()
     produtosPedido = Pedido_Produto.objects.filter(cod_pedido=pedido.cod)
