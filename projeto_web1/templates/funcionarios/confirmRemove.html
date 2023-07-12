@@ -1,36 +1,18 @@
+
+
 {% extends 'painel.html' %}
 
-{% load static %}
-
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-xl-10 col-lg-12 col-md-9">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-                    <div class="col-lg-6">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Excluir Funcionário</h1>
-                            </div>
-                            ID: {{funcionario.id}}
-                            <hr> Tem certeza?
-                            <br>
-                            <a href="{% url 'removeFinal' funcionario.id %}" class="btn "style="background-color: #faba66;" >Sim</a>
-                            <a href="/funcionarios/" class="btn btn-secondary">Não</a>
-                            <hr>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script src=" {% static 'vendor/jquery/jquery.min.js' %}"></script>
-<script src=" {% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<script src=" {% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-<script src=" {% static 'js/sb-admin-2.min.js' %}"></script>
+<div class="deleteProduto">
+    ID: {{funcionario.id}}
+
+    <hr>
+    Tem certeza que deseja excluir {{funcionario.user.username}}?
+    <hr>
+
+    <a href="{% url 'removeFinal' funcionario.id %}" class="btn "style="background-color: #faba66; margin: 50px;">SIM</a>
+    <a href="/funcionarios/funcionarios/" class="btn" style="background-color: #faba66; margin: 50px;">NÃO</a>
+</div>
 
 {% endblock %}

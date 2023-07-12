@@ -3,14 +3,14 @@
 <div style="display: flex;justify-content: space-around;">
     <div class="btn-group-toggle" data-toggle="buttons">
         <a href="/vendas/vendas/" class="btn btn-primary"
-            style="background-color: rgb(10, 10, 174); width: 210px;">Histórico
+            style="background-color: #faba66; width: 210px;">Histórico
             Diário</a>
     </div>
     <form method="POST" action="/vendas/vendas/all" style="display: inline-flex;">
         {% csrf_token %}
-        <select class="btn btn-primary" style="background-color: rgb(10, 10, 174); width: 210px; margin-right: 5px;"
+        <select class="btn btn-primary" style="background-color: #faba66; width: 210px; margin-right: 5px;"
             name="filtro" id="filtro" onchange="mostrarInput()">
-            <option value="" disabled selected style="display:none;">Filtro</option>
+            <option value="" disabled selected style="display:none;">Status</option>
             <option value="1" id="emAberto">Em Aberto</option>
             <option value="2" id="aguardandoPagamento">Aguardando pagamento</option>
             <option value="3" id="finalizado">Finalizado</option>
@@ -74,7 +74,7 @@
                                 <td>Finalizado</td>
                                 {% endif %}
                                 <td>{{comanda.data_e_hora}}</td>
-                                <td><a href="/comandas/comandas/{{comanda.cod}}" class="btn btn-primary">Detalhar</a>
+                                <td><a href="/comandas/comandas/{{comanda.cod}}"  class="btn btn" style="background-color: #faba66;">Detalhar</a>
                                 </td>
                             </tr>
                             {% empty %}
