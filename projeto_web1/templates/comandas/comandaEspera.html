@@ -61,8 +61,8 @@
                 {% if comanda.opcaoPagamento == "Dinheiro" %}
                 <h2>Troco: {{comanda.troco}}</h2>
                 {% endif %}
-                <p>Data: {{ comanda.data_e_hora|date }}</p>
-                <p>Hora: {{ comanda.data_e_hora|time }}</p>
+                <p>Data: {{ comanda.data_e_hora|date }}<br>
+                Hora: {{ comanda.data_e_hora|time }}</p>
             </div>
         </div>
     </div>
