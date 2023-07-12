@@ -45,7 +45,9 @@
   <div class="container py-5 h-100">
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-8 col-lg-7 col-xl-6">
-        <img src="{% static 'login/login.svg' %}" class="img-fluid" alt="Phone image">
+        
+        <img src="{% static 'login/login.svg' %}" class="img-fluid" alt="Phone image" style="fill: #f77c3e;">
+
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
         <form method='post'>
@@ -53,7 +55,8 @@
           <div class="formProduto">
             {{form.as_p}}
           </div>
-          <button type="submit" class="btn btn-primary btn-lg btn-block">Acessar</button>
+          <button type="submit"  class="btn btn-primary " style="background-color: #faba66;">Acessar</button>
+          
         </form>
       </div>
     </div>
