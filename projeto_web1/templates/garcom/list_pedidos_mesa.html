@@ -1,37 +1,107 @@
-{% extends 'cardapio.html' %}
 
-{% block main_title %}Pedidos da Mesa: {{mesa}}{% endblock %}
-{% block main_subtitle %}Veja todos os pedidos desta mesa neste dia!{% endblock %}
+{% extends 'painel.html' %}
+
 
 {% block content %}
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% comment %} {% for comanda in dsComanda %} {% endcomment %}
-            {% for pedido in dsPedido %}
-            <div class="col mb-5">
-                <div class="card h-100">
-                    {% comment %}
-                    <h1 class="card-img-top" src="" alt="..." />{{comanda.mesa}}</h1>
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <h5 class="fw-bolder">Pedido: {{ pedido.cod }}</h5>
-                            {% comment %} R$ {{ produto.valorUnitario }} <br>
-                            Quantidade: {{ produto.estoque }} {% endcomment %}
-                        </div>
-                    </div>
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                href="/garcom/{{comanda.mesa}}/list_pedido/">Ver Produtos</a>
+
+ <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5 card">
+        {% comment %} <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"> {% endcomment %}
+        <div class="container px-4 px-lg-5 my-5 ">
+            <h1 style="
+            background-color: cornflowerblue;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            color: aliceblue;
+            ">Comanda Nº {{comanda.cod}}</h1>
+            <hr>
+                {% for pedido in dsPedido %}
+                {% comment %} <div class="col mb-5"> {% endcomment %}
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="fs-5 mb-5" style="border: 1px solid chocolate;border-radius: 20px;padding: 0%;">
+                        <h2 style="background-color: chocolate; padding: 10px; border-radius: 20px 20px 0 0;text-align: center; color: white;"> Pedido: {{pedido.cod}}</h2>
+
+                        <div class="comanda" style="
+                        display: grid;
+                        justify-content: center;
+                        padding: 3%;
+                        ">
+                            <div class="comanda1">
+                                {% for produto in produtosPedido%} <!-- Verifico quando o produto pertencer ao pedido -->
+                                {% comment %} <h3>{{produto.cod}} e {{pedido.cod}}</h3>
+                                <h2>{{produto.nome}} : {{produto.estoque}}</h2> {% endcomment %}
+                                    {% if produto.cod == pedido.cod %}
+                                        <span>{{produto.nome}}: {{ produto.estoque }} Unidade(s) - Valor:
+                                            {{ produto.valorUnitario}}</span>
+                                        <br>
+                                    {% endif %}
+                                {% empty %}
+                                    <h1>Nenhum produto no pedido</h1>
+                                    <br>
+                                {%endfor%}
+
+                                <br>
+                                <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
+                            </div>
+                            <div class="comanda2" style=" display: grid;">
+                                {% if pedido.status == 0 %}
+                                    <span style="background-color: aliceblue;
+                                    border-radius: 20px;
+                                    padding: 12px;
+                                    }">Status: Carrinho ainda sendo montado</span>
+                                {% elif pedido.status == 1 %}
+                                    <span style="background-color: burlywood;
+                                    border-radius: 20px;
+                                    padding: 12px;
+                                    }" >Status: Pedido em preparação</span>
+                                {% elif pedido.status == 2 %}
+                                    <span style="
+                                    background-color: aquamarine;
+                                    border-radius: 20px;
+                                    padding: 12px;
+                                    }">Status: Pedido concluido</span>
+                                {% endif %}<br>
+                                
+                                <span style="
+                                background-color: antiquewhite;
+                                border-radius: 20px;
+                                padding: 12px;
+                                }"  >Observação: {{ pedido.observacao }}</span>
+                               
+                            {%if pedido.status == 1 %}
+                                <span style="background-color: chocolate; 
+                                padding: 10px; 
+                                border-radius: 20px;
+                                text-align: center;
+                                color: white;
+                                margin: 10px;
+                                box-shadow: 2px 2px 4px #91572f;"> <a href="/garcom/{{pedido.cod}}/entregar_pedido/">Entregar pedido</a></span>
+                            {% endif %}
+                               
+                            </div>
+
                         </div>
                     </div>
                 </div>
+                <hr>
+                {% empty %}
+                <h1>Nenhum produto selecionado</h1>
+                {% endfor %}
+            <div class="finalizar_comanda"> 
+                <h1 style="
+                background-color: cornflowerblue;
+                padding: 20px;
+                border-radius: 20px;
+                text-align: center;
+                color: aliceblue;
+                ">Finalizar comanda - valor <a href="">R${{comanda.valorTotal}}</a> </h1>
+                 
             </div>
-            {% empty %}
-            <h1>Nenhum produto selecionado</h1>
-            {% endfor %}
-            {% comment %} {% endfor %} {% endcomment %}
+
         </div>
     </div>
-</section>
+
+</section> 
+
 {% endblock content%}

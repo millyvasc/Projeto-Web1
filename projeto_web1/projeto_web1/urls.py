@@ -13,9 +13,13 @@ urlpatterns = [
     path('funcionarios/', include('funcionarios.urls')),
     path('pedidos/', include('pedidos.urls')),
     path('comandas/', include('comandas.urls')),
+
+
     path('<int:mesa>/cardapio/', include('produtos.urls')),
     path('produtos/', include('produtos.urls')),
-    path('garcom/', include('garcons.urls')),
+    path('cardapio/', include('produtos.urls')),
+    path('garcom/', include('pedidos.urls')),
+
     path('painel/', include('funcionarios.urls')),
     path('vendas/', include('comandas.urls')),
 ]

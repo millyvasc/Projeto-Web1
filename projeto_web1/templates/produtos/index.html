@@ -1,9 +1,5 @@
 {% extends 'cardapio.html' %}
 
-
-{% block main_title %}Cardápio Digital{% endblock %}
-{% block main_subtitle %}Faça seu pedido agora mesmo!{% endblock %}
-
 {% block content %}
 
 <header class="bg-dark py-5">
@@ -13,6 +9,22 @@
             <p class="lead fw-normal text-white-50 mb-0">Faça seu pedido agora mesmo!</p>
         </div>
     </div>
+    <script>
+        // Função para redirecionar para a URL sem o número da mesa
+        function redirecionarCardapio() {
+            // Verifica se a página já foi redirecionada
+            if (!sessionStorage.getItem('redirecionado')) {
+                var novaURL = window.location.href.replace(/\/\d+\/cardapio\//, "/cardapio/");
+                novaURL = novaURL.replace("/produtos", "");
+                window.location.href = novaURL;
+                // Marca a página como redirecionada
+                sessionStorage.setItem('redirecionado', true);
+            }
+        }
+        
+        // Chama a função de redirecionamento ao carregar a página
+        window.addEventListener("DOMContentLoaded", redirecionarCardapio);
+    </script>
 </header>
 
 <h2 class="Tdivisoria">Pratos</h2>

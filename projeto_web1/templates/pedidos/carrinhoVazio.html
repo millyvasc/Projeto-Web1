@@ -24,23 +24,30 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link active" aria-current="page"
-                            href="/{{ mesa }}/cardapio/">Início</a></li>
+
+                            href="/cardapio/cardapio/">Início</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#!">Sobre</a></li> -->
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Filtro</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/pratos/">Pratos</a></li>
-                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/bebidas/">Bebidas</a></li>
+
+                            <li><a class="dropdown-item" href="/cardapio/cardapio/pratos/">Pratos</a></li>
+                            <li><a class="dropdown-item" href="/cardapio/cardapio/bebidas/">Bebidas</a></li>
+                            <!-- <hr style="margin: 0;">
+                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/">Todos os produtos</a></li> -->
+
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" action="/pedidos/{{mesa}}/carrinho/">
+                <form class="d-flex" action="/pedidos/carrinho/">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Carrinho
                     </button>
                 </form>
-                <form class="d-flex" action="/comandas/{{ mesa }}/">
+                <form class="d-flex" action="/comandas/">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi bi-file-text-fill"></i>
                         Comanda

@@ -33,7 +33,7 @@
                                 </p>
                             </div>
                             <div class="col-md-3 col-lg-3 col-xl-3">
-                                <form action="/pedidos/{{mesa}}/carrinhoRemover/{{produto.cod}}/" method="POST"
+                                <form action="/pedidos/carrinhoRemover/{{produto.cod}}/" method="POST"
                                     style="display: flex;">
                                     {% csrf_token %}
                                     <button class="btn btn-outline-dark flex-shrink-0" type="submit">Remover
@@ -54,7 +54,7 @@
                 {% endfor %}
             </div>
             <div class="col-10">
-                <form action="/pedidos/{{mesa}}/confirmarPedidoFinal/{{pedido.cod}}/" method="POST">
+                <form action="/pedidos/confirmarPedidoFinal/{{pedido.cod}}/" method="POST">
                     {% csrf_token %}
                     <div class="card mb-4">
                         <div class="card-body p-4 d-flex flex-row">

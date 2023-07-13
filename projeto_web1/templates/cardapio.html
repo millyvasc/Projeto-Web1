@@ -30,12 +30,16 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Filtro</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/pratos/">Pratos</a></li>
-                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/bebidas/">Bebidas</a></li>
+
+                            <li><a class="dropdown-item" href="/cardapio/cardapio/pratos/">Pratos</a></li>
+                            <li><a class="dropdown-item" href="/cardapio/cardapio/bebidas/">Bebidas</a></li>
+                            <!-- <hr style="margin: 0;">
+                            <li><a class="dropdown-item" href="/{{ mesa }}/cardapio/">Todos os produtos</a></li> -->
+
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex" action="/pedidos/{{mesa}}/carrinho/">
+                <form class="d-flex" action="/pedidos/carrinho/">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Carrinho
@@ -46,7 +50,7 @@
                         <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                     </button> {% endcomment %}
                 </form>
-                <form class="d-flex" action="/comandas/{{ mesa }}/">
+                <form class="d-flex" action="/comandas/">
                     <button class="btn btn-outline-dark" type="submit">
                         <i class="bi bi-file-text-fill"></i>
                         Comanda
