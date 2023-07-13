@@ -469,6 +469,8 @@ def buscarPedidoAberto(request, mesa1):
 
 # ---------------------- Referentes a garçom --------------------------
 def list_pedidos(request):
+    if not request.user.groups.filter(name__in=['Garçon', 'Administrador']).exists():
+        return redirect('acesso_negado')
     dsComanda = Comanda.objects.all()
               
     dsPedido = Pedido.objects.filter(status=1)

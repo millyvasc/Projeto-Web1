@@ -8,7 +8,7 @@
         {% comment %} <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"> {% endcomment %}
         <div class="container px-4 px-lg-5 my-5 ">
             <h1 style="
-            background-color: cornflowerblue;
+            background-color: #faba66;
             padding: 20px;
             border-radius: 20px;
             text-align: center;
@@ -63,16 +63,12 @@
                                 background-color: antiquewhite;
                                 border-radius: 20px;
                                 padding: 12px;
-                                }"  >Observação: {{ pedido.observacao }}</span>
+                                }"  >Observação: {{ pedido.observacao }}</span><br>
                                
                             {%if pedido.status == 1 %}
-                                <span style="background-color: chocolate; 
-                                padding: 10px; 
-                                border-radius: 20px;
-                                text-align: center;
-                                color: white;
-                                margin: 10px;
-                                box-shadow: 2px 2px 4px #91572f;"> <a href="/garcom/{{pedido.cod}}/entregar_pedido/">Entregar pedido</a></span>
+                            <a href="/garcom/{{pedido.cod}}/entregar_pedido/"
+                             class="btn btn-primary" style="background-color: #faba66;">Entregar pedido</a>
+                                
                             {% endif %}
                                
                             </div>
