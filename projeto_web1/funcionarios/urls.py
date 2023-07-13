@@ -11,4 +11,6 @@ urlpatterns = [
     path("remove/final/<int:funcionarios_id>/",views.removeFinal, name="removeFinal"),
     path('', views.index2, name='dashboard'),
     path('funcionarios/', FuncionariosView.as_view(), name='funcionarios'),
+    # ------------------------------------ impressora ---------------------------------------
+    path("definir_impressora/", views.definir_impressora_padrao, name="definir_impressora")
 ]

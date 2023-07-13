@@ -19,4 +19,6 @@ urlpatterns = [
     path('<int:cod_comanda>/<int:cod_pedido>/describe_pedido/', views.describe_pedido, name='describe_pedido'),
     path("<int:codigo_pedido>/entregar_pedido/", views.changeStatusPedido, name="entregar_pedido"),
 
+     # -------------------- Impressora --------------------
+     path("definir_impressora", views.definir_impressora_padrao, name="definir_impressora")
 ]

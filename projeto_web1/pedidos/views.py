@@ -174,22 +174,38 @@ def gerar_pdf_impressao_pedido(mesa1, pedido, produtos_pedido):
     c = canvas.Canvas(os.path.join(
         "pdf_pedidos", nome_arquivo), pagesize=letter)
     if pedido is not None:
+       
+        c.setFont("Helvetica-Bold", 20)
+        c.drawString(100, 770, f"*** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ***")
+        c.setFont("Helvetica-Bold", 16) 
+
+        c.line(100, 760, 550, 760)
+        c.drawString(100, 740, f"                                            PEDIDO                                              ")
+        # linha
+        c.line(100, 730, 550, 730)
+        
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(100, 710, f"   *** Mesa Nº: {mesa1} ***     *** Comanda Nº: {pedido.comanda_id} ***     *** Pedido Nº: {pedido.cod} ***")
+        c.line(100, 700, 550, 700)
+        
         c.setFont("Helvetica", 12)
-        c.drawString(100, 760, f"PEDIDO GERADO")
-        c.drawString(100, 740, f"Mesa Nº: {mesa1}")
-        c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
-        c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
-        c.drawString(100, 660, "Produtos:")
+        #c.drawString(100, 690, f"*** Comanda Nº: {pedido.comanda_id} ***")
+        #c.drawString(100, 670, f"*** Pedido Nº: {pedido.cod} ***")
+        c.drawString(100, 680, "   *** Produtos:")
     else:
         print("Pedido é None")
-    y = 640
+    y = 660
     for produto_pedido in produtos_pedido:
         cod_produto = produto_pedido.cod_produto_id
         produto = produto_pedido.cod_produto.nome
         quantidade = produto_pedido.quantidade
+        c.setFont("Helvetica", 12)
+
         c.drawString(
-            120, y, f"-> Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade}")
+            120, y, f"   *** Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade} ***")
         y -= 20
+    
+    
     c.showPage()
     c.save()
 
@@ -207,26 +223,35 @@ def gerar_pdf_cancelamento(mesa1, pedido, produtos_pedido):
     c = canvas.Canvas(os.path.join("pdf_cancelamentos",
                       nome_arquivo), pagesize=letter)
     if pedido is not None:
+        c.setFont("Helvetica-Bold", 20)
+        c.drawString(100, 770, f"*** - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ***")
+        c.setFont("Helvetica-Bold", 16) 
+
+        c.line(100, 760, 550, 760)
+        c.drawString(100, 740, f"                                            ALERTA DE CANCELAMENTO                                              ")
+        # linha
+        c.line(100, 730, 550, 730)
+        
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(100, 710, f"   *** Mesa Nº: {mesa1} ***     *** Comanda Nº: {pedido.comanda_id} ***     *** Pedido Nº: {pedido.cod} ***")
+        c.line(100, 700, 550, 700)
+        
         c.setFont("Helvetica", 12)
-        c.drawString(
-            100, 760, f"ALERTA! CANCELAMENTO DE PEDIDO Nº {pedido.cod}")
-        c.drawString(100, 740, f"Mesa Nº: {mesa1}")
-        c.drawString(100, 720, f"Comanda Nº: {pedido.comanda_id}")
-        c.drawString(100, 700, f"Pedido Nº: {pedido.cod}")
-        c.drawString(100, 660, "Produtos:")
+        #c.drawString(100, 690, f"*** Comanda Nº: {pedido.comanda_id} ***")
+        #c.drawString(100, 670, f"*** Pedido Nº: {pedido.cod} ***")
+        c.drawString(100, 680, "   *** Produtos:")
     else:
         print("Pedido é None")
-    y = 640
+    y = 660
     for produto_pedido in produtos_pedido:
         cod_produto = produto_pedido.cod_produto_id
         produto = produto_pedido.cod_produto.nome
         quantidade = produto_pedido.quantidade
-        c.drawString(
-            120, y, f"(X) Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade}")
-        y -= 20
-    c.showPage()
-    c.save()
+        c.setFont("Helvetica", 12)
 
+        c.drawString(
+            120, y, f"   *** Código: {cod_produto} - Produto: {produto} - Quantidade: {quantidade} ***")
+        y -= 20
     
      # Verifica se a pasta "pdf_pedidos" existe
     if not os.path.exists("pdf_cancelamentos"):
@@ -265,7 +290,7 @@ def enviar_impressora():
     for arquivo_cancelamento in fila_cancelamentos:
         print("-", arquivo_cancelamento)
         
-    definir_impressora_padrao()
+    # definir_impressora_padrao()
    
     if fila_cancelamentos:
         arquivo_cancelamento = fila_cancelamentos[0]
@@ -354,7 +379,7 @@ def confirmarPedidoFinal(request, cod_pedido):
         dsProdutosPedido = Produto.objects.all()
 
     
-    # pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
+    pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
     
     # if pdf_pedido is not None:
         # fila_pedidos.append(pdf_pedido)

@@ -1,0 +1,39 @@
+{% extends 'painel.html' %}
+
+{% block content%}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="printer" style="
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+        ">
+
+                <h1>Impressora Padrão</h1>
+                <p>Impressora atual: {{ impressora_atual }}</p>
+
+                <form method="POST" action="/funcionarios/definir_impressora/" style="
+                display: flex;">
+                    {% csrf_token %}
+                    {% comment %} <label for="impressora_selecionada">Selecione uma impressora:</label> {% endcomment %}
+                    <select class="btn btn-primary" name="impressora_selecionada" id="impressora_selecionada" style="background-color: #faba66;width: 250px;margin-left: 10px;">
+                        <option value disble selected style="display: none;">Selecione uma impressora:</option>
+                        {% for impressora in impressoras %}
+                            <option value="{{ impressora }}">{{ impressora }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <button class="btn btn-primary" style="background-color: #faba66;" type="submit">Definir como padrão</button>
+                </form>
+
+                {% if mensagem %}
+                    <p>{{ mensagem }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

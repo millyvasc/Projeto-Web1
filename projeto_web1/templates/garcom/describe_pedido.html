@@ -3,88 +3,92 @@
 
 
 {% block content %}
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5 card">
-        {% comment %} <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"> {% endcomment %}
-        <div class="container px-4 px-lg-5 my-5 ">
-            <h1 style="
-            background-color: #faba66;
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            color: aliceblue;
-            ">Comanda Nº {{comanda.cod}}</h1>
-            <hr>
-                
-                {% comment %} <div class="col mb-5"> {% endcomment %}
-                <div class="row gx-4 gx-lg-5 align-items-center">
-                    <div class="fs-5 mb-5" style="border: 1px solid chocolate;border-radius: 20px;padding: 0%;">
-                        <h2 style="background-color: chocolate; padding: 10px; border-radius: 20px 20px 0 0;text-align: center; color: white;"> Pedido: {{pedido.cod}}</h2>
+<div class="row">
+    <div class="col-12">
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5 card">
+                {% comment %} <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"> {% endcomment %}
+                <div class="container px-4 px-lg-5 my-5 ">
+                    <h1 style="
+                    background-color: #faba66;
+                    padding: 20px;
+                    border-radius: 20px;
+                    text-align: center;
+                    color: aliceblue;
+                    ">Comanda Nº {{comanda.cod}}</h1>
+                    <hr>
+                        
+                        {% comment %} <div class="col mb-5"> {% endcomment %}
+                        <div class="row gx-4 gx-lg-5 align-items-center">
+                            <div class="fs-5 mb-5" style="border: 1px solid chocolate;border-radius: 20px;padding: 0%;">
+                                <h2 style="background-color: chocolate; padding: 10px; border-radius: 20px 20px 0 0;text-align: center; color: white;"> Pedido: {{pedido.cod}}</h2>
 
-                        <div class="comanda" style="
-                        display: grid;
-                        justify-content: center;
-                        padding: 3%;
-                        ">
-                            <div class="comanda1">
-                                {% for produtoPedido in produtosPedido %}
-                                    {% if produtoPedido.cod_pedido_id == pedido.cod %}
-                                        <span>{{ produtoPedido.cod_produto.nome }}: {{ produtoPedido.quantidade }} Unidade(s) - Valor: {{ produtoPedido.cod_produto.valorUnitario }}</span>
+                                <div class="comanda" style="
+                                display: grid;
+                                justify-content: center;
+                                padding: 3%;
+                                ">
+                                    <div class="comanda1">
+                                        {% for produtoPedido in produtosPedido %}
+                                            {% if produtoPedido.cod_pedido_id == pedido.cod %}
+                                                <span>{{ produtoPedido.cod_produto.nome }}: {{ produtoPedido.quantidade }} Unidade(s) - Valor: {{ produtoPedido.cod_produto.valorUnitario }}</span>
+                                                <br>
+                                            {% endif %}
+                                        {% empty %}
+                                            <h1>Nenhum produto no pedido</h1>
+                                            <br>
+                                        {%endfor%}
+
                                         <br>
+                                        <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
+                                    </div>
+                                    <div class="comanda2" style=" display: grid;">
+                                        {% if pedido.status == 0 %}
+                                            <span style="background-color: aliceblue;
+                                            border-radius: 20px;
+                                            padding: 12px;
+                                            }">Status: Carrinho ainda sendo montado</span>
+                                        {% elif pedido.status == 1 %}
+                                            <span style="background-color: burlywood;
+                                            border-radius: 20px;
+                                            padding: 12px;
+                                            }" >Status: Pedido em preparação</span>
+                                        {% elif pedido.status == 2 %}
+                                            <span style="
+                                            background-color: aquamarine;
+                                            border-radius: 20px;
+                                            padding: 12px;
+                                            }">Status: Pedido concluido</span>
+                                        {% endif %}<br>
+                                        
+                                        <span style="
+                                        background-color: antiquewhite;
+                                        border-radius: 20px;
+                                        padding: 12px;
+                                        }"  >Observação: {{ pedido.observacao }}</span><br>
+                                    
+                                    {%if pedido.status == 1 %}
+                                    <a href="/garcom/{{pedido.cod}}/entregar_pedido/"
+                                    class="btn btn-primary" style="background-color: #faba66;">Entregar pedido</a>
+                                        
                                     {% endif %}
-                                {% empty %}
-                                    <h1>Nenhum produto no pedido</h1>
-                                    <br>
-                                {%endfor%}
+                                    
+                                    </div>
 
-                                <br>
-                                <h4>Valor do pedido: R$ {{ pedido.valor }}</h4><br>
+                                </div>
+                                <!-- Ações do produto -->
+                                {% comment %} <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/{{comanda.mesa}}/list_pedido/">Ver Produtos</a>
+                                    </div>
+                                </div> {% endcomment %}
                             </div>
-                            <div class="comanda2" style=" display: grid;">
-                                {% if pedido.status == 0 %}
-                                    <span style="background-color: aliceblue;
-                                    border-radius: 20px;
-                                    padding: 12px;
-                                    }">Status: Carrinho ainda sendo montado</span>
-                                {% elif pedido.status == 1 %}
-                                    <span style="background-color: burlywood;
-                                    border-radius: 20px;
-                                    padding: 12px;
-                                    }" >Status: Pedido em preparação</span>
-                                {% elif pedido.status == 2 %}
-                                    <span style="
-                                    background-color: aquamarine;
-                                    border-radius: 20px;
-                                    padding: 12px;
-                                    }">Status: Pedido concluido</span>
-                                {% endif %}<br>
-                                
-                                <span style="
-                                background-color: antiquewhite;
-                                border-radius: 20px;
-                                padding: 12px;
-                                }"  >Observação: {{ pedido.observacao }}</span><br>
-                               
-                            {%if pedido.status == 1 %}
-                            <a href="/garcom/{{pedido.cod}}/entregar_pedido/"
-                             class="btn btn-primary" style="background-color: #faba66;">Entregar pedido</a>
-                                
-                            {% endif %}
-                               
-                            </div>
-
                         </div>
-                        <!-- Ações do produto -->
-                        {% comment %} <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/garcom/{{comanda.mesa}}/list_pedido/">Ver Produtos</a>
-                            </div>
-                        </div> {% endcomment %}
-                    </div>
+
                 </div>
+            </div>
 
-        </div>
+        </section> 
     </div>
-
-</section> 
+</div>
 
 {% endblock content%}

@@ -17,7 +17,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from django.shortcuts import render
-
+import win32print
+import win32api
 
 def acesso_negado(request):
     return render(request, "funcionarios/acesso_negado.html")
@@ -103,3 +104,58 @@ def register(request):
             perfil.save()
             return HttpResponseRedirect('/funcionarios/')
     return render(request, 'registration/register.html', {'form': form, 'formFuncionario': formFuncionario})
+
+# def listar_impressoras():
+#     impressoras = win32print.EnumPrinters(
+#         win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS)
+#     print("Impressoras Disponíveis:")
+#     for i, impressora in enumerate(impressoras):
+#         nome_impressora = impressora[2]
+#         print(f"{i+1}. {nome_impressora}")
+#     opcao = int(
+#         input("Ecolha uma das opções e digite o número da impressora desejada: "))
+#     if opcao >= 1 and opcao <= len(impressoras):
+#         return impressoras[opcao-1][2]
+#     else:
+#         print("Opção inválida.")
+#         return None
+
+# def definir_impressora_padrao(request):
+#     impressora_atual = win32print.GetDefaultPrinter()
+#     print(f"Impressora padrão atual: {impressora_atual}")
+#     opcao = input("Deseja definir outra impressora como padrão? (S/N): ")
+#     if opcao.lower() == "s":
+#         nova_impressora = listar_impressoras()
+#         if nova_impressora is not None:
+#             win32print.SetDefaultPrinter(nova_impressora)
+#             print(f"Impressora '{nova_impressora}' definida como padrão.")
+#     else:
+#         print("Nenhuma alteração realizada.")
+    
+#     contexto = {'nova_impressora' : nova_impressora}
+#     return render(request, "pedidos/deletar.html", contexto)
+
+def listar_impressoras():
+    impressoras = win32print.EnumPrinters(
+        win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS
+    )
+    return [impressora[2] for impressora in impressoras]
+
+def definir_impressora_padrao(request):
+    impressoras = listar_impressoras()
+    impressora_atual = win32print.GetDefaultPrinter()
+    
+    if request.method == 'POST':
+        impressora_selecionada = request.POST.get('impressora_selecionada')
+        if impressora_selecionada in impressoras:
+            win32print.SetDefaultPrinter(impressora_selecionada)
+            mensagem = f"Impressora '{impressora_selecionada}' definida como padrão."
+        else:
+            mensagem = "Impressora inválida."
+        contexto = {'mensagem': mensagem, 'impressora_atual': impressora_atual, 'impressoras': impressoras}
+        return render(request, 'funcionarios/definir_impressora_padrao.html', contexto)
+    
+    contexto = {'impressoras': impressoras, 'impressora_atual': impressora_atual}
+    return render(request, 'funcionarios/definir_impressora_padrao.html', contexto)
+
+
