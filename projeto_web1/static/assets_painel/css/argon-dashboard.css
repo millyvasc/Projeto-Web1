@@ -3580,8 +3580,8 @@ textarea.form-control.is-invalid {
 }
 
 .btn {
-  position: relative;
-    left: 20px;
+  position: initial;
+    
 
   --bs-btn-padding-x: 1.25rem;
   --bs-btn-padding-y: 0.625rem;

@@ -53,7 +53,7 @@
                 <td>{{ funcionario.endereco }}</td>
                 {% for group in funcionario.user.groups.all %}
                 <td>{{ group.name }}</td>
-                <td><a href="/funcionarios/edit/{{funcionario.id}}" class="btn btn"style="background-color: #faba66;">Editar</a></td>
+                <td><a href="/funcionarios/edit/{{funcionario.id}}" class="btn btn-primary"style="background-color: #faba66;">Editar</a></td>
                 <td><a href="/funcionarios/remove/{{funcionario.id}}" class="btn btn-danger">Excluir</a></td>
                 {% endfor %}
               </tr>

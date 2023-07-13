@@ -178,4 +178,4 @@ def fecharConta(request, id_comanda):
     nova_data_e_hora = datetime.now()
     comanda.data_e_hora = nova_data_e_hora
     comanda.save()
-    return redirect("/comandas/"+str(mesa)+"/")
+    return redirect("/comandas/")
