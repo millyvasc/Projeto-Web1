@@ -105,7 +105,8 @@ def detalharComanda(request, cod_comanda):
     return render(request, "comandas/detalhar.html", contexto)
 
 
-def verConta(request, mesa1):
+def verConta(request):
+    mesa1 = request.session.get('mesa')
     mesaContext = {'mesa': mesa1}
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
     if dsComanda.count() == 0:  # verifico se não há comanda

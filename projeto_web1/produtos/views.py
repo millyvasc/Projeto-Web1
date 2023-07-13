@@ -15,17 +15,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 def index(request, mesa):
+    request.session['mesa'] = mesa
+    
+    return redirect('cardapio')
+
+
+def cardapio(request):
+    mesa = request.session.get('mesa')
+    
     dsPratos = Produto.objects.filter(
         tipo__icontains="prato").exclude(estoque=0)
     dsBebidas = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
-    
-    
+     
     contexto = {'mesa': mesa, 'dsPratos': dsPratos, 'dsBebidas': dsBebidas}
     return render(request, "produtos/index.html", contexto)
+    
 
-
-def listPratos(request, mesa):
+def listPratos(request):
+    mesa = request.session.get('mesa')
     dsProdutos = Produto.objects.filter(
         tipo__icontains="prato").exclude(estoque=0)
     contexto = {
@@ -35,7 +43,8 @@ def listPratos(request, mesa):
     return render(request, "produtos/filtro.html", contexto)
 
 
-def listBebidas(request, mesa):
+def listBebidas(request):
+    mesa = request.session.get('mesa')
     dsProdutos = Produto.objects.filter(
         tipo__icontains="bebida").exclude(estoque=0)
     contexto = {
@@ -45,7 +54,8 @@ def listBebidas(request, mesa):
     return render(request, "produtos/filtro.html", contexto)
 
 
-def verProduto(request, mesa, produto_cod):
+def verProduto(request, produto_cod):
+    mesa = request.session.get('mesa')
     vProduto = Produto.objects.get(pk=produto_cod)
     dsProdutos = Produto.objects.filter(tipo__icontains=vProduto.tipo).exclude(
         estoque=0).exclude(pk=vProduto.cod)[:4]

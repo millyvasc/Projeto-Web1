@@ -57,19 +57,19 @@
                             {% if verificacaoCarrinho != 0 %}
                             {% if pedido.status == 0 %}
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                    href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
+                                    href="/pedidos/modificar/{{pedido.cod}}/">Modificar</a>
                             </div>
                             {% else %}
                             <span class="corVermelha">Esvazie o carrinho caso queira modificar!</span><br>
                             {% endif %}
                             {% else %}
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                    href="/pedidos/{{pedido.comanda.mesa}}/modificar/{{pedido.cod}}/">Modificar</a>
+                                    href="/pedidos/modificar/{{pedido.cod}}/">Modificar</a>
                             </div>
                             {% endif %}
 
                             <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                    href="/pedidos/{{pedido.comanda.mesa}}/cancelar/{{pedido.cod}}/">Cancelar</a>
+                                    href="/pedidos/cancelar/{{pedido.cod}}/">Cancelar</a>
                             </div>
                             {% endif %}
                         </div>
@@ -158,7 +158,7 @@
                     {% endif %}
                     <br>
                     {% endif %}
-                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" {% if verificacao !=0 %}
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" type="submit" {% if verificacao != 0 %}
                         disabled {% endif %}>
                         <i class="bi-cart-fill me-1"></i>
                         Pedir a conta

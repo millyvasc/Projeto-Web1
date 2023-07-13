@@ -7,10 +7,14 @@ from .views import ProdutosView
 # app_name = 'produtos'
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("<int:produto_cod>/", views.verProduto, name="detalhes"),
-    path("pratos/", views.listPratos, name="listar_pratos"),
-    path("bebidas/", views.listBebidas, name="listar_bebidas"),
+    
+    path("", views.index, name='index'),
+    
+    # path('cardapio/', views.cardapio, name='cardapio'),
+    
+    path("cardapio/<int:produto_cod>/", views.verProduto, name="detalhes"),
+    path("cardapio/pratos/", views.listPratos, name="listar_pratos"),
+    path("cardapio/bebidas/", views.listBebidas, name="listar_bebidas"),
 
     path('produtos/', ProdutosView.as_view(), name='produtos'),
 
@@ -19,6 +23,12 @@ urlpatterns = [
     path('produtos/remover/<int:produto_cod>/', views.remover, name='remover'),
     path('produtos/remover/final/<int:produto_cod>/',
          views.removerFinal, name='removerFinal'),
+
+
+    # ---------------------- Cardapio ----------------------------------------------------------------
+    path("cardapio/", views.cardapio, name="cardapio"),
+
+
 
     # path('<int:produto_cod>/', v.produto_detail, name='produto_detail'),
 ]

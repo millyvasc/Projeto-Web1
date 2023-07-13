@@ -14,7 +14,8 @@ import win32api
 
 # ------------------------------------------------------------
 
-def adicionar(request, mesa1, cod_produto):
+def adicionar(request, cod_produto):
+    mesa1 = request.session.get('mesa')
     # crio ou busco a comanda
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
     if dsComanda.count() == 0:
@@ -26,7 +27,7 @@ def adicionar(request, mesa1, cod_produto):
             comanda.save()
         else:
             #se houver, mando pra ela
-            return redirect("/comandas/"+str(mesa1)+"/")
+            return redirect("/comandas/")
     else:
         for i in dsComanda:
             if i.status == 0:
@@ -69,10 +70,11 @@ def adicionar(request, mesa1, cod_produto):
     produto.estoque = (produto.estoque-quantidade)
     produto.save()
 
-    return redirect("/"+str(mesa1)+"/cardapio/")  # retorno pro cardapio
+    return redirect("/cardapio/cardapio/")  # retorno pro cardapio
 
 # Método para listar todos pedido do carrinho (Alterei ele - Camille)
-def list_carrinho(request, mesa1):
+def list_carrinho(request):
+    mesa1 = request.session.get('mesa')
     mesaContext = {'mesa': mesa1}
     dsComanda = Comanda.objects.filter(status=0, mesa=mesa1)
     if dsComanda.count() == 0:  # verifico se não há comanda
@@ -131,7 +133,9 @@ def remover_carrinho(request, mesa1, cod_produto):
 
 # Método que confirma a remoção
 
-def remover_carrinho_confirmar(request, mesa1, cod_produto):
+def remover_carrinho_confirmar(request, cod_produto):
+
+    mesa1 = request.session.get('mesa')
     # Busco a quantidade a se remover
     quantidadeDeletar = int(request.POST.get('quantidade'))
     pedido = buscarPedidoAberto(request, mesa1)
@@ -162,15 +166,9 @@ def remover_carrinho_confirmar(request, mesa1, cod_produto):
         pedidos = Pedido.objects.filter(comanda=comanda.cod)
         if pedidos.count() == 0:
             comanda.delete()
-        return redirect("/"+str(mesa1)+"/cardapio/")
+        return redirect("/cardapio/cardapio/")
     else:
-        return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
-    
-    comanda = pedido.comanda
-    pedido.delete()
-    pedidos = Pedido.objects.filter(comanda=comanda.cod)
-    if pedidos.count() == 0:
-        comanda.delete()
+        return redirect("/pedidos/carrinho/")
         
     #deleção de pedidos e comanda caso estejam vazios
     
@@ -361,7 +359,8 @@ def obter_impressora_padrao():
 
    
 # Método que confirma o pedido
-def confirmarPedidoFinal(request, mesa1, cod_pedido):
+def confirmarPedidoFinal(request, cod_pedido):
+    mesa1 = request.session.get('mesa')
     
     #pedido = buscarPedidoAberto(request, mesa1)
     pedido = Pedido.objects.get(pk=cod_pedido)
@@ -384,18 +383,19 @@ def confirmarPedidoFinal(request, mesa1, cod_pedido):
         # filtragem :
         dsProdutosPedido = Produto.objects.all()
     
-    pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
+    # pdf_pedido = gerar_pdf_impressao_pedido(mesa1, pedido, produtosPedido)
     
-    if pdf_pedido is not None:
-        fila_pedidos.append(pdf_pedido)
+    # if pdf_pedido is not None:
+        # fila_pedidos.append(pdf_pedido)
     
-    enviar_impressora()
+    # enviar_impressora()
     #enviar_impressora(pdf_pedido) #método para enviar o pedido para a impressora
     #definir_impressora_padrao() #Método para definir uma impressora padrão para o sistema
 
-    return redirect("/"+str(mesa1)+"/cardapio/")
+    return redirect("/cardapio/cardapio")
 
-def modificarPedido(request, mesa1, cod_pedido):
+def modificarPedido(request, cod_pedido):
+    mesa1 = request.session.get('mesa')
     pedidoModificando = Pedido.objects.get(pk=cod_pedido)
     comanda = pedidoModificando.comanda
     pedidosCarrinho = Pedido.objects.filter(comanda=comanda.cod, status=0)
@@ -411,9 +411,11 @@ def modificarPedido(request, mesa1, cod_pedido):
             #
             pedidoModificando.save()
         
-    return redirect("/pedidos/"+str(mesa1)+"/carrinho/")
+    return redirect("/pedidos/carrinho/")
 
-def deletarPedido(request, mesa1, cod_pedido):
+def deletarPedido(request, cod_pedido):
+    # request.session['cod_pedido'] = cod_pedido
+    mesa1 = request.session.get('mesa')
     pedido = Pedido.objects.get(pk=cod_pedido)
     produtosAux = Produto.objects.all()
     produtos = []
@@ -435,7 +437,9 @@ def deletarPedido(request, mesa1, cod_pedido):
     
     return render(request, "pedidos/deletar.html", contexto)
 
-def deletarPedidoFinal(request, mesa1, cod_pedido):
+def deletarPedidoFinal(request, cod_pedido):
+  
+    mesa1 = request.session.get('mesa')
     pedido = Pedido.objects.get(pk=cod_pedido)
     #reaver valores e estoque
     if pedido.status!=0:
@@ -453,12 +457,12 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     #
     # Aqui a emissão do pdf
     
-    pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
+    # pdf_cancelamento = gerar_pdf_cancelamento(mesa1, pedido, produtosPedidos)
     
-    if pdf_cancelamento is not None:
-        fila_cancelamentos.append(pdf_cancelamento)
+    # if pdf_cancelamento is not None:
+        # fila_cancelamentos.append(pdf_cancelamento)
     
-    enviar_impressora()
+    # enviar_impressora()
     
     # enviar_impressora(pdf_cancelamento)
     #
@@ -471,7 +475,7 @@ def deletarPedidoFinal(request, mesa1, cod_pedido):
     if pedidos.count() == 0:
         comanda.delete()
     
-    return redirect("/"+str(mesa1)+"/cardapio/")
+    return redirect("/cardapio/cardapio/")
 
 # ----------------------------------------------> Comandas <----------------------------------------------
 

@@ -16,9 +16,15 @@ urlpatterns = [
     # --------------- CAMILLE -----------------
     path('<int:mesa>/cardapio/', include('produtos.urls')),
     path('produtos/', include('produtos.urls')),
+    path('cardapio/', include('produtos.urls')),
+    
     
     # --------------Joao V Nascimento ---------------
+
+    
+    
     path('garcom/', include('garcons.urls')),
+    
     # -----------------------------------------------
 
     path('painel/', include('funcionarios.urls')),
