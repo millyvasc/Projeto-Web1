@@ -121,13 +121,13 @@
                             if (valor === null) {
                                 return true;
                             } else {
-                                if (parseFloat(valor) < parseFloat({{ comanda.valorTotal }})) {
+                                if (parseFloat(valor) < parseFloat('{{comanda.valorTotal }}')) {
                                 alert("O valor informado é menor que {{ comanda.valorTotal }}. Não é permitida a continuação.");
                                 return false;
+                                }
                             }
+                        }
 
-                        }
-                        }
                     </script>
                     {% if verificacao != 0 %}
                     <br>
@@ -136,16 +136,20 @@
                     {% if verificacaoCarrinho == verificacao %}
                     <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
                     {% else %}
+
                     {% if verificacaoCarrinho != 0 %}
                     <span class="corVermelha">Um pedido ainda em construção, verifique o carrinho!</span><br>
                     {% endif %}
+
                     <span class="corVermelha">Possui pedidos em preparação, aguarde serem entregues, ou
                         cancele-os!</span><br>
                     {% endif %}
                     <br>
                     {% endif %}
-                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" {% if verificacao != 0 %} disabled {%
-                        endif %} type="submit">
+                    <button class="btn btn-outline-dark flex-shrink-0" id="btn" 
+                    {% if verificacao != 0 %}
+                    disabled 
+                    {% endif %} type="submit">
                         <i class="bi-cart-fill me-1"></i>
                         Pedir a conta
                     </button>
@@ -153,6 +157,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 </section>
+
 {% endblock %}
